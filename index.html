@@ -49,10 +49,17 @@
       position: sticky; top: 0; z-index: 100;
       box-shadow: var(--shadow);
       display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
     }
     [data-theme="light"] .header { background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); }
     .header h1 { font-size: 1.5rem; color: var(--accent); margin-bottom: 5px; }
     .header p { color: var(--dim); font-size: 0.9rem; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     
     .controls {
@@ -225,6 +232,29 @@
     }
     .theme-toggle:hover { background: var(--border); }
     
+    /* Craptop Banner Link */
+    .craptop-link {
+      display: inline-flex;
+      align-items: center;
+      transition: transform 0.2s, opacity 0.2s;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 2px;
+    }
+    .craptop-link:hover {
+      transform: scale(1.04);
+      opacity: 0.95;
+      border-color: var(--accent);
+    }
+    .craptop-img {
+      height: 45px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+    
     .base-label { color: var(--accent); font-size: 0.8rem; }
     .diff-faster { color: var(--green); }
     .diff-slower { color: var(--red); }
@@ -242,6 +272,7 @@
       .gpu-score { grid-row: 2; grid-column: 2; text-align: left; margin-top: 5px; }
       .api-grid { grid-template-columns: 1fr 1fr; }
       .compare-row { grid-template-columns: 1fr; }
+      .craptop-img { height: 36px; }
     }
   </style>
 </head>
@@ -252,7 +283,12 @@
     <h1>⚡ GPU Performance Database</h1>
     <p>Search 400+ GPUs (2006–2026) • Compare scores • Filter by brand</p>
   </div>
-  <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+  <div class="header-right">
+    <a href="https://www.reddit.com/r/Craptopgamingadvice/" target="_blank" rel="noopener noreferrer" class="craptop-link" title="Visit CraptopGaming Advice on Reddit">
+      <img src="craptop-banner.png" alt="Craptop Gaming Advice" class="craptop-img">
+    </a>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+  </div>
 </div>
 
 <div class="container">
