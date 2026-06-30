@@ -61,18 +61,22 @@
       color: var(--text-main);
       transition: background-color 0.3s ease;
       min-height: 100vh;
-      background-image: 
+      /* Circuit Board Pattern + Subtle Gradients */
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M20 20h40v40h-40z M100 20h40v40h-40z M20 100h40v40h-40z M100 100h40v40h-40z' fill='none' stroke='%23000000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M60 20v40 M140 20v40 M20 60h40 M100 60h40 M60 100v40 M140 100v40 M20 140h40 M100 140h40' stroke='%23000000' stroke-width='0.5' opacity='0.06'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23000000' opacity='0.12'/%3E%3Ccircle cx='140' cy='140' r='2' fill='%23000000' opacity='0.12'/%3E%3Ccircle cx='60' cy='140' r='1.5' fill='%23000000' opacity='0.08'/%3E%3Ccircle cx='140' cy='60' r='1.5' fill='%23000000' opacity='0.08'/%3E%3C/svg%3E"),
         radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
         radial-gradient(circle at 85% 100%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+      background-size: 160px 160px, 100% 100%, 100% 100%;
       background-attachment: fixed;
       line-height: 1.5;
     }
 
     /* =========================================
-       HEADER LAYOUT
+       HEADER LAYOUT (PERFECTLY CENTERED)
        ========================================= */
     .header {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
       padding: 16px 24px;
       gap: 20px;
@@ -82,25 +86,29 @@
       position: sticky; top: 0; z-index: 100;
     }
 
-    .header-left { flex: 0 0 280px; }
+    .header-left { justify-self: start; }
     .header-center { 
-      flex: 1; 
+      justify-self: center; 
       display: flex; 
       justify-content: center; 
-      align-items: center;
+      width: 100%;
+      max-width: 480px;
     }
-    .header-right { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; }
+    .header-right { justify-self: end; }
 
     .header-content h1 {
-      font-size: 1.5rem;
+      font-size: clamp(0.85rem, 1.3vw, 1.15rem);
       font-weight: 800;
       background: var(--accent-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 4px;
       letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .header-content p { color: var(--text-muted); font-size: 0.85rem; }
+    .header-content p { color: var(--text-muted); font-size: 0.8rem; }
 
     .craptop-link {
       display: inline-flex; align-items: center;
@@ -221,7 +229,6 @@
     .results-header h2 { font-size: 1.25rem; font-weight: 600; }
     .results-header span { color: var(--text-muted); font-size: 0.9rem; }
 
-    /* Reverted to original list layout */
     .gpu-list {
       display: flex;
       flex-direction: column;
@@ -378,9 +385,17 @@
     .hidden { display: none !important; }
 
     @media (max-width: 768px) {
+      .gpu-list { grid-template-columns: 1fr; }
       .compare-row { grid-template-columns: 1fr; }
-      .header { flex-direction: column; gap: 12px; text-align: center; }
-      .header-left, .header-center, .header-right { width: 100%; justify-content: center; }
+      .header { 
+        grid-template-columns: 1fr; 
+        gap: 12px; 
+        text-align: center; 
+      }
+      .header-left, .header-center, .header-right { 
+        justify-self: center; 
+        width: 100%; 
+      }
       .craptop-link img { height: 60px; max-width: 280px; }
     }
   </style>
