@@ -12,7 +12,7 @@
     :root {
       /* Dark Mode (Default) */
       --bg-body: #0b0f19;
-      --bg-panel: rgba(30, 41, 59, 0.7);
+      --bg-panel: rgba(30, 41, 59, 0.85);
       --bg-card: rgba(30, 41, 59, 0.4);
       --bg-card-hover: rgba(51, 65, 85, 0.5);
       
@@ -46,8 +46,8 @@
 
     [data-theme="light"] {
       --bg-body: #f1f5f9;
-      --bg-panel: rgba(255, 255, 255, 0.8);
-      --bg-card: rgba(255, 255, 255, 0.6);
+      --bg-panel: rgba(255, 255, 255, 0.95);
+      --bg-card: rgba(255, 255, 255, 0.7);
       --bg-card-hover: #ffffff;
       
       --border-subtle: rgba(0, 0, 0, 0.08);
@@ -86,30 +86,26 @@
     }
 
     /* =========================================
-       HEADER LAYOUT (FIXED & SHIFTER LEFT)
+       HEADER LAYOUT (FIXED CENTERING)
        ========================================= */
     .header {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      gap: 20px;
       background: var(--bg-panel);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-subtle);
       position: sticky; top: 0; z-index: 100;
-      padding: 16px 24px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 16px;
     }
 
-    .header-left { flex: 1; min-width: 220px; }
-    
+    .header-left { flex: 0 0 280px; }
     .header-center { 
+      flex: 1; 
       display: flex; 
       justify-content: center; 
       align-items: center;
-      margin-left: -20px; /* Shifted left */
     }
-    
     .header-right { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; }
 
     .header-content h1 {
@@ -149,13 +145,15 @@
     }
     
     .craptop-link img {
-      height: 75px; /* Increased from 60px */
+      height: 90px; /* Increased size */
       width: auto;
-      max-width: 320px;
-      border-radius: 8px;
+      max-width: 420px;
+      border-radius: 10px;
       display: block;
       object-fit: contain;
+      transition: transform 0.2s ease;
     }
+    .craptop-link:hover img { transform: scale(1.02); }
 
     /* =========================================
        CONTROLS & SEARCH
@@ -208,30 +206,34 @@
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
 
-    /* FIXED DROPDOWN STYLING */
+    /* =========================================
+       FIXED DROPDOWN STYLING
+       ========================================= */
     .suggestions-box {
       position: absolute;
       top: calc(100% + 8px);
       left: 0;
       right: 0;
       width: 100%;
-      background: var(--bg-panel);
+      background: var(--bg-panel); /* Fully solid */
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-glow);
-      z-index: 100;
+      z-index: 10000; /* Above everything */
       display: none;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
+      overflow-y: auto;
+      max-height: 320px;
+      opacity: 1; /* Guaranteed visible */
     }
     .suggestions-box.active { display: block; }
     
     .suggestion-item {
-      padding: 10px 16px;
+      padding: 12px 16px;
       cursor: pointer;
       border-bottom: 1px solid var(--border-subtle);
       display: flex; justify-content: space-between;
       font-size: 0.9rem;
+      transition: background 0.15s;
     }
     .suggestion-item:hover { background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); }
     .suggestion-item:last-child { border-bottom: none; }
@@ -475,16 +477,16 @@
       .gpu-list { grid-template-columns: 1fr; }
       .compare-row { grid-template-columns: 1fr; }
       .header { 
-        grid-template-columns: 1fr; 
+        flex-direction: column; 
         gap: 12px; 
         text-align: center; 
       }
       .header-left, .header-center, .header-right { 
         width: 100%; 
         justify-content: center; 
-        margin-left: 0 !important; /* Reset shift on mobile */
+        margin-left: 0 !important;
       }
-      .craptop-link img { height: 50px; }
+      .craptop-link img { height: 60px; max-width: 280px; }
     }
   </style>
 </head>
