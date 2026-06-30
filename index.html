@@ -138,14 +138,21 @@
       gap: 15px;
       transition: all 0.2s;
       cursor: pointer;
+      --brand-color: var(--dim); /* Fallback */
     }
-    .gpu-card:hover { border-color: var(--accent); transform: translateX(4px); }
-    .gpu-card.base-card { border-left: 4px solid var(--accent); background: rgba(59,130,246,0.05); }
-    .gpu-card.faster { border-left: 4px solid var(--green); }
-    .gpu-card.slower { border-left: 4px solid var(--red); }
+    .gpu-card:hover { border-color: var(--brand-color); transform: translateX(4px); }
+    
+    /* Dynamic Brand Colors */
+    .gpu-card[data-brand="nvidia"] { --brand-color: var(--green); }
+    .gpu-card[data-brand="amd"] { --brand-color: var(--red); }
+    .gpu-card[data-brand="intel"] { --brand-color: var(--accent); }
+    
+    .gpu-card.base-card { border-left: 4px solid var(--brand-color); background: color-mix(in srgb, var(--brand-color) 5%, var(--bg)); }
+    .gpu-card.faster { border-left: 4px solid var(--brand-color); }
+    .gpu-card.slower { border-left: 4px solid var(--brand-color); }
     
     .rank { font-weight: 700; color: var(--dim); text-align: center; }
-    .rank.top3 { color: var(--accent); }
+    .rank.top3 { color: var(--brand-color); }
     
     .gpu-name h3 { font-size: 1rem; color: var(--text); margin-bottom: 2px; }
     .gpu-name .meta { font-size: 0.75rem; color: var(--dim); margin-bottom: 4px; }
@@ -156,7 +163,7 @@
     }
     
     .gpu-score { text-align: right; }
-    .gpu-score .val { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+    .gpu-score .val { font-size: 1.1rem; font-weight: 700; color: var(--brand-color); }
     .gpu-score .label { font-size: 0.7rem; color: var(--dim); text-transform: uppercase; }
     
     .gpu-diff { text-align: right; }
@@ -238,7 +245,7 @@
 
     /* 🎮 GAMES FEATURE STYLES */
     .btn-games {
-      background: var(--accent);
+      background: var(--brand-color);
       color: white;
       border: none;
       padding: 6px 12px;
@@ -417,7 +424,7 @@ async function loadDatabase() {
   try {
     const [gpuRes, gameRes] = await Promise.all([
       fetch('gpus.json'),
-      fetch('games.json').catch(() => Promise.resolve(null))
+      fetch('./games.json').catch(() => Promise.resolve(null))
     ]);
     
     if (!gpuRes.ok) throw new Error('Failed to load gpus.json');
@@ -425,8 +432,9 @@ async function loadDatabase() {
     
     if (gameRes && gameRes.ok) {
       GAMES_DB = await gameRes.json();
+      console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
     } else {
-      console.warn('games.json not found. Using fallback sample data.');
+      console.warn('⚠️ games.json not found or empty. Using fallback sample data.');
       GAMES_DB = [
         {title:"Cyberpunk 2077", api:12, min_score:15000, recommended_score:35000, min_vram_mb:6144, min_year:2018, notes:"Heavy DX12/Vulkan title."},
         {title:"Elden Ring", api:12, min_score:12000, recommended_score:25000, min_vram_mb:4096, min_year:2021, notes:"DX12 required."},
@@ -563,7 +571,7 @@ function showSimilarCards(baseCard) {
     const rankClass = i < 3 ? 'top3' : '';
 
     return `
-      <div class="gpu-card ${cardClass}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+      <div class="gpu-card ${cardClass}" data-brand="${gpu.brand}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
         <div class="rank ${rankClass}">${i + 1}</div>
         <div class="gpu-name">
           <h3>${gpu.name} ${isBase ? '<span class="base-label">(BASE)</span>' : ''}</h3>
@@ -602,7 +610,7 @@ function renderList(gpus) {
   });
 
   container.innerHTML = sortedGpus.slice(0, 300).map((gpu, i) => `
-    <div class="gpu-card" data-card1='${JSON.stringify(lastSearch || gpus[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+    <div class="gpu-card" data-brand="${gpu.brand}" data-card1='${JSON.stringify(lastSearch || gpus[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
       <div class="rank">${i + 1}</div>
       <div class="gpu-name">
         <h3>${gpu.name}</h3>
@@ -631,29 +639,21 @@ function renderList(gpus) {
 }
 
 // ============================================================
-// GAMES COMPATIBILITY LOGIC (UPDATED)
+// GAMES COMPATIBILITY LOGIC
 // ============================================================
-
-// Helper to check if GPU supports a specific API
 function supportsAPI(gpu, apiLevel) {
-  // Simple logic: if GPU is newer than the API release date, it supports it
-  // DX12 released ~2015, DX11 ~2009, DX9 ~2004
   if (apiLevel === 12) return gpu.year >= 2015;
   if (apiLevel === 11) return gpu.year >= 2009;
   if (apiLevel === 10) return gpu.year >= 2006;
-  if (apiLevel === 9) return true; // Older cards usually support DX9
+  if (apiLevel === 9) return true;
   return false;
 }
 
 function getGameCompatibility(gpu, game) {
   if (gpu.year < game.min_year) return 'no';
-  
-  // Check API support first
   if (!supportsAPI(gpu, game.api)) return 'no';
-
   const gpuVramMB = gpu.vram === "Shared" ? 2048 : parseInt(gpu.vram) * 1024;
   if (gpuVramMB < game.min_vram_mb) return 'no';
-  
   if (gpu.score >= game.recommended_score) return 'recommended';
   if (gpu.score >= game.min_score) return 'compatible';
   return 'no';
@@ -663,31 +663,18 @@ function openGamesModal(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
 
-  // 1. Calculate compatibility for all games
-  const compatibleGames = GAMES_DB.map(game => {
-    return { ...game, status: getGameCompatibility(gpu, game) };
-  }).filter(g => g.status !== 'no');
+  const compatibleGames = GAMES_DB
+    .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
+    .filter(g => g.status !== 'no')
+    // Sort newest to oldest by year, then alphabetically if years match
+    .sort((a, b) => b.min_year - a.min_year || a.title.localeCompare(b.title));
 
-  // 2. SORTING LOGIC: DX Level (Desc) -> Score (Desc) -> VRAM (Desc)
-  compatibleGames.sort((a, b) => {
-    // First, sort by API version (Newer first)
-    if (b.api !== a.api) return b.api - a.api;
-    
-    // Second, sort by GPU Score (Higher first)
-    if (b.recommended_score !== a.recommended_score) return b.recommended_score - a.recommended_score;
-    
-    // Third, sort by VRAM (Higher first)
-    return b.min_vram_mb - a.min_vram_mb;
-  });
-
-  // 3. Render
   const modal = document.getElementById('gamesModal');
   const content = document.getElementById('gamesModalContent');
   const title = document.getElementById('gamesModalTitle');
   
   title.textContent = `🎮 Compatible Games for ${gpu.name}`;
   
-  // Reset tabs
   currentGameTab = 'all';
   document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('.game-tab').classList.add('active');
@@ -705,11 +692,8 @@ function renderGameList(games) {
   }
 
   content.innerHTML = games.map(game => {
-    // Determine badge style
     let badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
     let badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
-    
-    // Format VRAM for display
     const vramGB = game.min_vram_mb / 1024;
     
     return `
@@ -732,9 +716,7 @@ function renderGameList(games) {
 }
 
 function filterGamesByTab(apiLevel) {
-  // Update active tab UI
   document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-  // Find the button that was clicked (this is a bit hacky but works for this simple setup)
   const buttons = document.querySelectorAll('.game-tab');
   if(apiLevel === 'all') buttons[0].classList.add('active');
   if(apiLevel === '12') buttons[1].classList.add('active');
@@ -742,22 +724,7 @@ function filterGamesByTab(apiLevel) {
   if(apiLevel === '9') buttons[3].classList.add('active');
 
   currentGameTab = apiLevel;
-
-  // Re-get the modal content to filter the currently displayed list
-  // Note: In a real app, we'd store the full list in state, but here we'll just re-fetch from DOM or store it globally.
-  // For simplicity in this single file, we'll assume we need to re-run the compatibility check or store the list.
-  // Let's store the list in the modal element for simplicity.
-  
   const modal = document.getElementById('gamesModal');
-  const content = document.getElementById('gamesModalContent');
-  
-  // If we don't have the list cached in the modal, we can't filter. 
-  // So we need to store the full compatible list when opening the modal.
-  // Let's modify openGamesModal to store it.
-  
-  // For this demo, I'll just re-run the logic if we don't have it, but that's inefficient.
-  // Better: Store it in a variable when openGamesModal runs.
-  
   const fullList = modal.dataset.fullList ? JSON.parse(modal.dataset.fullList) : [];
   
   if (apiLevel === 'all') {
@@ -768,27 +735,25 @@ function filterGamesByTab(apiLevel) {
   }
 }
 
-// Override openGamesModal to store the full list
+// Store full list on modal open for tab filtering
 const originalOpenGamesModal = openGamesModal;
 openGamesModal = function(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
 
-  const compatibleGames = GAMES_DB.map(game => {
-    return { ...game, status: getGameCompatibility(gpu, game) };
-  }).filter(g => g.status !== 'no');
+  const compatibleGames = GAMES_DB
+    .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
+    .filter(g => g.status !== 'no')
+    .sort((a, b) => b.min_year - a.min_year || a.title.localeCompare(b.title));
 
-  // Store full list in modal dataset for filtering
   document.getElementById('gamesModal').dataset.fullList = JSON.stringify(compatibleGames);
   
-  // Call the rest of the logic
   const modal = document.getElementById('gamesModal');
   const content = document.getElementById('gamesModalContent');
   const title = document.getElementById('gamesModalTitle');
   
   title.textContent = `🎮 Compatible Games for ${gpu.name}`;
   
-  // Reset tabs
   currentGameTab = 'all';
   document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('.game-tab').classList.add('active');
@@ -801,7 +766,6 @@ function closeGamesModal() {
   document.getElementById('gamesModal').classList.remove('active');
 }
 
-// Close modal on outside click
 document.getElementById('gamesModal')?.addEventListener('click', (e) => {
   if (e.target.id === 'gamesModal') closeGamesModal();
 });
