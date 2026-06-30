@@ -595,9 +595,9 @@ async function loadDatabase() {
     } else {
       console.warn('⚠️ games.json not found. Using fallback sample data.');
       GAMES_DB = [
-        {title:"Cyberpunk 2077", api:12, min_score:15000, recommended_score:35000, min_vram_mb:6144, min_year:2018, notes:"Heavy DX12/Vulkan title."},
-        {title:"Elden Ring", api:12, min_score:12000, recommended_score:25000, min_vram_mb:4096, min_year:2021, notes:"DX12 required."},
-        {title:"Fortnite", api:12, min_score:3000, recommended_score:10000, min_vram_mb:2048, min_year:2017, notes:"Highly scalable."}
+        {title:"Cyberpunk 2077", min_score:15000, recommended_score:35000, min_vram_mb:6144, min_year:2018, notes:"Heavy DX12/Vulkan title."},
+        {title:"Elden Ring", min_score:12000, recommended_score:25000, min_vram_mb:4096, min_year:2021, notes:"DX12 required."},
+        {title:"Fortnite", min_score:3000, recommended_score:10000, min_vram_mb:2048, min_year:2017, notes:"Highly scalable."}
       ];
     }
     finalizeInit();
@@ -836,23 +836,16 @@ function renderList(gpus) {
 }
 
 // ============================================================
-// GAMES COMPATIBILITY LOGIC
+// GAMES COMPATIBILITY LOGIC (UPDATED)
 // ============================================================
-function supportsAPI(gpu, apiLevel) {
-  if (apiLevel === 12) return gpu.year >= 2015;
-  if (apiLevel === 11) return gpu.year >= 2009;
-  if (apiLevel === 10) return gpu.year >= 2006;
-  if (apiLevel === 9) return true;
-  return false;
-}
 
+// 1. SIMPLIFIED LOGIC: Only check score
 function getGameCompatibility(gpu, game) {
-  if (gpu.year < game.min_year) return 'no';
-  if (!supportsAPI(gpu, game.api)) return 'no';
-  const gpuVramMB = gpu.vram === "Shared" ? 2048 : parseInt(gpu.vram) * 1024;
-  if (gpuVramMB < game.min_vram_mb) return 'no';
-  if (gpu.score >= game.recommended_score) return 'recommended';
-  if (gpu.score >= game.min_score) return 'compatible';
+  // If GPU score meets minimum, it's compatible
+  if (gpu.score >= game.score) {
+    // If it meets recommended, it's recommended
+    return gpu.score >= game.recommended_score ? 'recommended' : 'compatible';
+  }
   return 'no';
 }
 
@@ -860,11 +853,11 @@ function openGamesModal(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
 
+  // 2. SORTING: Newest to oldest by release year
   const compatibleGames = GAMES_DB
     .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
     .filter(g => g.status !== 'no')
-    // Sort newest to oldest by year, then alphabetically if years match
-    .sort((a, b) => b.min_year - a.min_year || a.title.localeCompare(b.title));
+    .sort((a, b) => b.min_year - a.min_year); // Sort by year descending
 
   const modal = document.getElementById('gamesModal');
   const content = document.getElementById('gamesModalContent');
@@ -891,7 +884,6 @@ function renderGameList(games) {
   content.innerHTML = games.map(game => {
     let badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
     let badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
-    const vramGB = game.min_vram_mb / 1024;
     
     return `
       <div class="game-card">
@@ -901,8 +893,7 @@ function renderGameList(games) {
         </div>
         <p><span class="score-range">Min Score:</span> ${game.min_score.toLocaleString()} | <span class="score-range">Rec:</span> ${game.recommended_score.toLocaleString()}</p>
         <div class="game-tags">
-          <span class="tag api">DX ${game.api}</span>
-          <span class="tag vram">Min ${vramGB}GB VRAM</span>
+          <span class="tag vram">Min ${game.min_vram_mb}MB VRAM</span>
           <span class="tag score">Min Score ${game.min_score}</span>
           <span class="tag">Year: ${game.min_year}</span>
         </div>
@@ -941,7 +932,7 @@ openGamesModal = function(gpuName) {
   const compatibleGames = GAMES_DB
     .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
     .filter(g => g.status !== 'no')
-    .sort((a, b) => b.min_year - a.min_year || a.title.localeCompare(b.title));
+    .sort((a, b) => b.min_year - a.min_year);
 
   document.getElementById('gamesModal').dataset.fullList = JSON.stringify(compatibleGames);
   
