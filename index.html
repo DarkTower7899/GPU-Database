@@ -212,7 +212,7 @@
     }
 
     /* =========================================
-       RESULTS GRID & CARDS
+       RESULTS LIST & CARDS
        ========================================= */
     .results-header {
       display: flex; justify-content: space-between; align-items: baseline;
@@ -221,15 +221,20 @@
     .results-header h2 { font-size: 1.25rem; font-weight: 600; }
     .results-header span { color: var(--text-muted); font-size: 0.9rem; }
 
+    /* Reverted to original list layout */
     .gpu-list {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .gpu-card {
       background: var(--bg-card); border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md); padding: 16px; display: grid;
       grid-template-columns: 1fr; gap: 12px; transition: var(--transition);
-      cursor: pointer; position: relative; overflow: hidden;
+      cursor: pointer; position: relative; overflow: hidden; width: 100%;
     }
     .gpu-card:hover {
       border-color: var(--accent-primary); background: var(--bg-card-hover);
@@ -373,7 +378,6 @@
     .hidden { display: none !important; }
 
     @media (max-width: 768px) {
-      .gpu-list { grid-template-columns: 1fr; }
       .compare-row { grid-template-columns: 1fr; }
       .header { flex-direction: column; gap: 12px; text-align: center; }
       .header-left, .header-center, .header-right { width: 100%; justify-content: center; }
