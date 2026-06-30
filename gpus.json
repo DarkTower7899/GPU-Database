@@ -346,5 +346,16 @@
   {"name":"Core Ultra 3 135","brand":"intel","type":"igpu","year":2024,"score":1500,"vram":"Shared","tdp":10,"arch":"Xe2"},
   {"name":"Core Ultra 3 125","brand":"intel","type":"igpu","year":2024,"score":1000,"vram":"Shared","tdp":8,"arch":"Xe2"},
   {"name":"Core Ultra 3 115","brand":"intel","type":"igpu","year":2024,"score":800,"vram":"Shared","tdp":6,"arch":"Xe2"},
-  {"name":"Core Ultra 3 105","brand":"intel","type":"igpu","year":2024,"score":600,"vram":"Shared","tdp":5,"arch":"Xe2"}
+  {"name":"Core Ultra 3 105","brand":"intel","type":"igpu","year":2024,"score":600,"vram":"Shared","tdp":5,"arch":"Xe2"},
+  {"name":"Iris Xe Graphics G7 80EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":3200,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":80},
+  {"name":"Iris Xe Graphics G7 64EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":2800,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":64},
+  {"name":"Iris Xe Graphics G7 48EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":2200,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":48},
+  {"name":"Iris Xe Graphics G7 32EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":1800,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":32},
+  {"name":"Iris Xe Graphics G4 48EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":1500,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":48},
+  {"name":"Iris Xe Graphics G4 32EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":1200,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":32},
+  {"name":"Iris Xe Graphics G1 16EU (Mobile)","brand":"intel","type":"igpu","year":2020,"score":800,"vram":"Shared","tdp":15,"arch":"Gen 9.5","eus":16},
+  {"name":"Iris Xe Graphics Desktop 80EU","brand":"intel","type":"igpu","year":2021,"score":3500,"vram":"Shared","tdp":35,"arch":"Gen 9.5","eus":80},
+  {"name":"Iris Xe Graphics Desktop 64EU","brand":"intel","type":"igpu","year":2021,"score":3000,"vram":"Shared","tdp":35,"arch":"Gen 9.5","eus":64},
+  {"name":"Iris Xe Graphics Desktop 48EU","brand":"intel","type":"igpu","year":2021,"score":2400,"vram":"Shared","tdp":35,"arch":"Gen 9.5","eus":48},
+  {"name":"Iris Xe Graphics Desktop 32EU","brand":"intel","type":"igpu","year":2021,"score":1900,"vram":"Shared","tdp":35,"arch":"Gen 9.5","eus":32}
 ]
