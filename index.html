@@ -77,7 +77,7 @@
     }
 
     /* =========================================
-       HEADER
+       HEADER LAYOUT
        ========================================= */
     .header {
       background: var(--bg-panel);
@@ -86,10 +86,22 @@
       border-bottom: 1px solid var(--border-subtle);
       position: sticky; top: 0; z-index: 100;
       padding: 16px 24px;
-      display: flex; justify-content: space-between; align-items: center;
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
     }
+
+    .header-left { flex: 1; min-width: 220px; }
+    .header-center { 
+      flex: 1.5; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center;
+      min-width: 200px;
+    }
+    .header-right { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; }
 
     .header-content h1 {
       font-size: 1.5rem;
@@ -106,8 +118,34 @@
       font-size: 0.85rem;
     }
 
-    .header-actions {
-      display: flex; align-items: center; gap: 12px;
+    /* =========================================
+       CENTER LINK STYLING
+       ========================================= */
+    .craptop-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    [data-theme="light"] .craptop-link { background: rgba(0,0,0,0.04); }
+    
+    .craptop-link:hover { 
+      border-color: var(--accent-primary); 
+      transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+    }
+    
+    .craptop-link img {
+      height: 60px;
+      width: auto;
+      max-width: 280px;
+      border-radius: 8px;
+      display: block;
+      object-fit: contain;
     }
 
     /* =========================================
@@ -388,7 +426,7 @@
     /* =========================================
        UTILS & RESPONSIVE
        ========================================= */
-    .theme-toggle, .craptop-link {
+    .theme-toggle {
       background: var(--bg-panel); border: 1px solid var(--border-subtle);
       color: var(--text-main); padding: 8px 12px; border-radius: var(--radius-md);
       cursor: pointer; font-size: 1.1rem; transition: var(--transition);
@@ -408,22 +446,30 @@
     @media (max-width: 768px) {
       .gpu-list { grid-template-columns: 1fr; }
       .compare-row { grid-template-columns: 1fr; }
-      .header { flex-direction: column; align-items: flex-start; }
-      .header-actions { width: 100%; justify-content: space-between; }
+      .header { flex-direction: column; align-items: stretch; text-align: center; }
+      .header-left, .header-center, .header-right { width: 100%; justify-content: center; }
+      .header-right { justify-content: center; }
+      .craptop-link img { height: 50px; }
     }
   </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-content">
-    <h1>⚡ GPU Performance Database</h1>
-    <p>Search 400+ GPUs (2006–2026) • Compare scores • Filter by brand</p>
+  <div class="header-left">
+    <div class="header-content">
+      <h1>⚡ GPU Performance Database</h1>
+      <p>Search 400+ GPUs (2006–2026) • Compare scores • Filter by brand</p>
+    </div>
   </div>
-  <div class="header-actions">
+  
+  <div class="header-center">
     <a href="https://www.reddit.com/r/Craptopgamingadvice/" target="_blank" rel="noopener noreferrer" class="craptop-link" title="Visit CraptopGaming Advice">
-      <img src="craptop-banner.png" alt="Craptop Gaming Advice" style="height: 36px; border-radius: 4px;">
+      <img src="craptop-banner.png" alt="Craptop Gaming Advice">
     </a>
+  </div>
+  
+  <div class="header-right">
     <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
   </div>
 </div>
