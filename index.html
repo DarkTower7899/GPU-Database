@@ -540,7 +540,7 @@
       </div>
 
       <div id="gamesModalContent">
-        <p style="text-align:center; color:var(--dim); padding: 20px;">Loading games...</p>
+        <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
       </div>
     </div>
   </div>
@@ -590,7 +590,16 @@ async function loadDatabase() {
     GPU_DB.push(...await gpuRes.json());
     
     if (gameRes && gameRes.ok) {
-      GAMES_DB = await gameRes.json();
+      // ✅ FIX: Parse your provided JSON format and map it to the internal schema
+      const rawData = await gameRes.json();
+      GAMES_DB = rawData.map(game => ({
+        title: game.title,
+        min_score: game.score,
+        recommended_score: Math.round(game.score * 1.2), // 20% buffer for recommended
+        min_vram_mb: game.release_year < 2010 ? 512 : (game.release_year < 2015 ? 1024 : 2048),
+        min_year: game.release_year,
+        notes: `Released in ${game.release_year}.`
+      }));
       console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
     } else {
       console.warn('⚠️ games.json not found. Using fallback sample data.');
@@ -836,14 +845,11 @@ function renderList(gpus) {
 }
 
 // ============================================================
-// GAMES COMPATIBILITY LOGIC (UPDATED)
+// GAMES COMPATIBILITY LOGIC
 // ============================================================
 
-// 1. SIMPLIFIED LOGIC: Only check score
 function getGameCompatibility(gpu, game) {
-  // If GPU score meets minimum, it's compatible
-  if (gpu.score >= game.score) {
-    // If it meets recommended, it's recommended
+  if (gpu.score >= game.min_score) {
     return gpu.score >= game.recommended_score ? 'recommended' : 'compatible';
   }
   return 'no';
@@ -853,12 +859,13 @@ function openGamesModal(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
 
-  // 2. SORTING: Newest to oldest by release year
   const compatibleGames = GAMES_DB
     .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
     .filter(g => g.status !== 'no')
-    .sort((a, b) => b.min_year - a.min_year); // Sort by year descending
+    .sort((a, b) => b.min_year - a.min_year);
 
+  document.getElementById('gamesModal').dataset.fullList = JSON.stringify(compatibleGames);
+  
   const modal = document.getElementById('gamesModal');
   const content = document.getElementById('gamesModalContent');
   const title = document.getElementById('gamesModalTitle');
@@ -877,7 +884,7 @@ function renderGameList(games) {
   const content = document.getElementById('gamesModalContent');
   
   if (games.length === 0) {
-    content.innerHTML = `<p style="text-align:center; color:var(--dim); padding:20px;">No compatible games found in database for this GPU.</p>`;
+    content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No compatible games found in database for this GPU.</p>`;
     return;
   }
 
@@ -921,33 +928,6 @@ function filterGamesByTab(apiLevel) {
     const filtered = fullList.filter(g => g.api == apiLevel);
     renderGameList(filtered);
   }
-}
-
-// Store full list on modal open for tab filtering
-const originalOpenGamesModal = openGamesModal;
-openGamesModal = function(gpuName) {
-  const gpu = GPU_DB.find(g => g.name === gpuName);
-  if (!gpu) return;
-
-  const compatibleGames = GAMES_DB
-    .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
-    .filter(g => g.status !== 'no')
-    .sort((a, b) => b.min_year - a.min_year);
-
-  document.getElementById('gamesModal').dataset.fullList = JSON.stringify(compatibleGames);
-  
-  const modal = document.getElementById('gamesModal');
-  const content = document.getElementById('gamesModalContent');
-  const title = document.getElementById('gamesModalTitle');
-  
-  title.textContent = `🎮 Compatible Games for ${gpu.name}`;
-  
-  currentGameTab = 'all';
-  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.game-tab').classList.add('active');
-
-  renderGameList(compatibleGames);
-  modal.classList.add('active');
 }
 
 function closeGamesModal() {
