@@ -61,7 +61,6 @@
       color: var(--text-main);
       transition: background-color 0.3s ease;
       min-height: 100vh;
-      /* Circuit Board Pattern + Subtle Gradients */
       background-image:
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M20 20h40v40h-40z M100 20h40v40h-40z M20 100h40v40h-40z M100 100h40v40h-40z' fill='none' stroke='%23000000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M60 20v40 M140 20v40 M20 60h40 M100 60h40 M60 100v40 M140 100v40 M20 140h40 M100 140h40' stroke='%23000000' stroke-width='0.5' opacity='0.06'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23000000' opacity='0.12'/%3E%3Ccircle cx='140' cy='140' r='2' fill='%23000000' opacity='0.12'/%3E%3Ccircle cx='60' cy='140' r='1.5' fill='%23000000' opacity='0.08'/%3E%3Ccircle cx='140' cy='60' r='1.5' fill='%23000000' opacity='0.08'/%3E%3C/svg%3E"),
         radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
@@ -71,9 +70,6 @@
       line-height: 1.5;
     }
 
-    /* =========================================
-       HEADER LAYOUT (PERFECTLY CENTERED)
-       ========================================= */
     .header {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -128,9 +124,6 @@
     }
     .craptop-link:hover img { transform: scale(1.02); }
 
-    /* =========================================
-       CONTROLS & SEARCH
-       ========================================= */
     .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
     .control-panel {
@@ -160,9 +153,6 @@
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
 
-    /* =========================================
-       BULLETPROOF DROPDOWN
-       ========================================= */
     .suggestions-box {
       position: fixed;
       z-index: 10000;
@@ -219,9 +209,6 @@
       background: rgba(56, 189, 248, 0.1); border-color: var(--accent-primary); color: var(--accent-primary);
     }
 
-    /* =========================================
-       RESULTS LIST & CARDS
-       ========================================= */
     .results-header {
       display: flex; justify-content: space-between; align-items: baseline;
       margin: 24px 0 16px; padding: 0 4px;
@@ -296,7 +283,6 @@
     .gpu-specs { font-size: 0.8rem; color: var(--text-muted); text-align: right; }
     .gpu-specs span { display: block; }
 
-    /* Dynamic Brand Colors */
     .gpu-card.brand-intel::before { background: var(--brand-intel) !important; }
     .gpu-card.brand-intel .gpu-score .val { color: var(--brand-intel); }
     .gpu-card.brand-intel .gpu-rank { color: var(--brand-intel); background: rgba(14, 165, 233, 0.1); }
@@ -309,9 +295,6 @@
     .gpu-card.brand-amd .gpu-score .val { color: var(--brand-amd); }
     .gpu-card.brand-amd .gpu-rank { color: var(--brand-amd); background: rgba(239, 68, 68, 0.1); }
 
-    /* =========================================
-       MODAL
-       ========================================= */
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
@@ -385,67 +368,6 @@
 
     .hidden { display: none !important; }
 
-    /* =========================================
-       GAMES FEATURE STYLES
-       ========================================= */
-    .btn-games {
-      background: var(--accent-primary);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.2s;
-      grid-column: 1 / -1;
-      justify-self: center;
-      margin-top: 8px;
-    }
-    .btn-games:hover { filter: brightness(1.2); transform: scale(1.02); }
-
-    /* Games Modal Specifics */
-    .game-tabs {
-      display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 10px;
-    }
-    .game-tab {
-      background: transparent; border: none; color: var(--text-muted); font-weight: 600;
-      padding: 8px 16px; cursor: pointer; border-radius: 6px; transition: all 0.2s;
-    }
-    .game-tab:hover { color: var(--text-main); background: var(--border-subtle); }
-    .game-tab.active { background: var(--accent-primary); color: white; }
-
-    .game-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 12px;
-      transition: all 0.2s;
-    }
-    .game-card:hover { border-color: var(--accent-primary); transform: translateX(4px); }
-    .game-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .game-card h4 { color: var(--text-main); font-size: 1.1rem; margin: 0; }
-    .game-card p { font-size: 0.85rem; color: var(--text-muted); margin: 4px 0; }
-    .game-card .score-range { color: var(--text-main); font-weight: 600; }
-    
-    .game-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .tag {
-      font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;
-      background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle); color: var(--text-muted);
-    }
-    .tag.api { border-color: var(--accent-primary); color: var(--accent-primary); }
-    .tag.vram { border-color: var(--success); color: var(--success); }
-    .tag.score { border-color: var(--danger); color: var(--danger); }
-
-    .compat-badge {
-      display: inline-block; padding: 4px 10px; border-radius: 12px;
-      font-size: 0.8rem; font-weight: 700; margin-top: 6px;
-    }
-    .compat-badge.yes { background: rgba(16,185,129,0.2); color: var(--success); }
-    .compat-badge.rec { background: rgba(59,130,246,0.2); color: var(--accent-primary); }
-    
     @media (max-width: 768px) {
       .gpu-list { grid-template-columns: 1fr; }
       .compare-row { grid-template-columns: 1fr; }
@@ -522,40 +444,15 @@
       <div class="modal-body" id="compareContent"></div>
     </div>
   </div>
-
-  <!-- 🎮 GAMES MODAL -->
-  <div id="gamesModal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-      <div class="modal-header">
-        <h2 id="gamesModalTitle">🎮 Compatible Games</h2>
-        <button class="close-btn" onclick="closeGamesModal()">&times;</button>
-      </div>
-      
-      <!-- Tabs -->
-      <div class="game-tabs" id="gameTabs">
-        <button class="game-tab active" onclick="filterGamesByTab('all')">All Games</button>
-        <button class="game-tab" onclick="filterGamesByTab('12')">DX12</button>
-        <button class="game-tab" onclick="filterGamesByTab('11')">DX11</button>
-        <button class="game-tab" onclick="filterGamesByTab('9')">DX9/10</button>
-      </div>
-
-      <div id="gamesModalContent">
-        <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- Dropdown is now a direct child of body to avoid all overflow/positioning conflicts -->
 <div id="suggestionsBox" class="suggestions-box"></div>
 
 <script>
 let currentFilter = 'all';
 let lastSearch = null;
 let GPU_DB = [];
-let GAMES_DB = [];
 let isLoading = false;
-let currentGameTab = 'all';
 
 function init() {
   setupTheme();
@@ -581,34 +478,9 @@ function setupTheme() {
 async function loadDatabase() {
   showStatus('Initializing database...', 'loading');
   try {
-    const [gpuRes, gameRes] = await Promise.all([
-      fetch('gpus.json'),
-      fetch('games.json').catch(() => Promise.resolve(null))
-    ]);
-    
+    const gpuRes = await fetch('gpus.json');
     if (!gpuRes.ok) throw new Error('Failed to load gpus.json');
     GPU_DB.push(...await gpuRes.json());
-    
-    if (gameRes && gameRes.ok) {
-      // ✅ FIX: Parse your provided JSON format and map it to the internal schema
-      const rawData = await gameRes.json();
-      GAMES_DB = rawData.map(game => ({
-        title: game.title,
-        min_score: game.score,
-        recommended_score: Math.round(game.score * 1.2), // 20% buffer for recommended
-        min_vram_mb: game.release_year < 2010 ? 512 : (game.release_year < 2015 ? 1024 : 2048),
-        min_year: game.release_year,
-        notes: `Released in ${game.release_year}.`
-      }));
-      console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
-    } else {
-      console.warn('⚠️ games.json not found. Using fallback sample data.');
-      GAMES_DB = [
-        {title:"Cyberpunk 2077", min_score:15000, recommended_score:35000, min_vram_mb:6144, min_year:2018, notes:"Heavy DX12/Vulkan title."},
-        {title:"Elden Ring", min_score:12000, recommended_score:25000, min_vram_mb:4096, min_year:2021, notes:"DX12 required."},
-        {title:"Fortnite", min_score:3000, recommended_score:10000, min_vram_mb:2048, min_year:2017, notes:"Highly scalable."}
-      ];
-    }
     finalizeInit();
   } catch (err) {
     console.warn('Fallback dataset loaded due to error.', err);
@@ -787,7 +659,6 @@ function showSimilarCards(baseCard) {
         <div class="gpu-specs">
             <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
         </div>
-        <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
       </div>
     `;
   }).join('');
@@ -835,7 +706,6 @@ function renderList(gpus) {
             <span>${gpu.brand.toUpperCase()}</span>
         </div>
       </div>
-      <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
     </div>
   `).join('');
   
@@ -844,103 +714,6 @@ function renderList(gpus) {
   resultsCount.textContent = `${gpus.length} cards found`;
 }
 
-// ============================================================
-// GAMES COMPATIBILITY LOGIC
-// ============================================================
-
-function getGameCompatibility(gpu, game) {
-  if (gpu.score >= game.min_score) {
-    return gpu.score >= game.recommended_score ? 'recommended' : 'compatible';
-  }
-  return 'no';
-}
-
-function openGamesModal(gpuName) {
-  const gpu = GPU_DB.find(g => g.name === gpuName);
-  if (!gpu) return;
-
-  const compatibleGames = GAMES_DB
-    .map(game => ({ ...game, status: getGameCompatibility(gpu, game) }))
-    .filter(g => g.status !== 'no')
-    .sort((a, b) => b.min_year - a.min_year);
-
-  document.getElementById('gamesModal').dataset.fullList = JSON.stringify(compatibleGames);
-  
-  const modal = document.getElementById('gamesModal');
-  const content = document.getElementById('gamesModalContent');
-  const title = document.getElementById('gamesModalTitle');
-  
-  title.textContent = `🎮 Compatible Games for ${gpu.name}`;
-  
-  currentGameTab = 'all';
-  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.game-tab').classList.add('active');
-
-  renderGameList(compatibleGames);
-  modal.classList.add('active');
-}
-
-function renderGameList(games) {
-  const content = document.getElementById('gamesModalContent');
-  
-  if (games.length === 0) {
-    content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No compatible games found in database for this GPU.</p>`;
-    return;
-  }
-
-  content.innerHTML = games.map(game => {
-    let badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
-    let badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
-    
-    return `
-      <div class="game-card">
-        <div class="game-card-header">
-          <h4>${game.title}</h4>
-          <span class="compat-badge ${badgeClass}">${badgeText}</span>
-        </div>
-        <p><span class="score-range">Min Score:</span> ${game.min_score.toLocaleString()} | <span class="score-range">Rec:</span> ${game.recommended_score.toLocaleString()}</p>
-        <div class="game-tags">
-          <span class="tag vram">Min ${game.min_vram_mb}MB VRAM</span>
-          <span class="tag score">Min Score ${game.min_score}</span>
-          <span class="tag">Year: ${game.min_year}</span>
-        </div>
-        <p style="margin-top:8px;"><em>${game.notes}</em></p>
-      </div>
-    `;
-  }).join('');
-}
-
-function filterGamesByTab(apiLevel) {
-  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-  const buttons = document.querySelectorAll('.game-tab');
-  if(apiLevel === 'all') buttons[0].classList.add('active');
-  if(apiLevel === '12') buttons[1].classList.add('active');
-  if(apiLevel === '11') buttons[2].classList.add('active');
-  if(apiLevel === '9') buttons[3].classList.add('active');
-
-  currentGameTab = apiLevel;
-  const modal = document.getElementById('gamesModal');
-  const fullList = modal.dataset.fullList ? JSON.parse(modal.dataset.fullList) : [];
-  
-  if (apiLevel === 'all') {
-    renderGameList(fullList);
-  } else {
-    const filtered = fullList.filter(g => g.api == apiLevel);
-    renderGameList(filtered);
-  }
-}
-
-function closeGamesModal() {
-  document.getElementById('gamesModal').classList.remove('active');
-}
-
-document.getElementById('gamesModal')?.addEventListener('click', (e) => {
-  if (e.target.id === 'gamesModal') closeGamesModal();
-});
-
-// ============================================================
-// COMPARISON MODAL
-// ============================================================
 function showComparison(card1, card2) {
   const modal = document.getElementById('comparisonModal');
   const content = document.getElementById('compareContent');
