@@ -1,7 +1,7 @@
 Personal Use License — All Rights Reserved
 
 Copyright (c) 2026 DarkTower7899
-
+ 
 All rights reserved.
 
 Permission is granted to the individual identified above to use this software and accompanying materials only for personal, non-commercial, non-distributable purposes on devices owned or controlled by that individual. Except as expressly set forth in the previous sentence, no rights are granted.
