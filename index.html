@@ -90,7 +90,7 @@
       width: 100%;
       max-width: 480px;
     }
-    /* Modified to handle the new element */
+    /* Updated header-right to use flexbox for items */
     .header-right { justify-self: end; display: flex; gap: 10px; align-items: center; }
 
     .header-content h1 {
@@ -458,14 +458,14 @@
     </a>
   </div>
   
-  <!-- MODIFICATION START: Added flexbox to place theme toggle and link side-by-side -->
+  <!-- Added the YouTube link and image here -->
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
     <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
+      <!-- Using the provided image URL -->
       <img src="https://lh3.googleusercontent.com/proxy/g6J-9z2w0y6e3l1qXj9v0Y9s7d4F3a2B5c1D8E9f0Gh1I2jK3lM4nO5pQ6rS7tU8vW9xY0zA1bC2dE3fG4hI5jK6lM7nO8pQ" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
     </a>
   </div>
-  <!-- MODIFICATION END -->
 </div>
 
 <div class="container">
@@ -511,7 +511,7 @@
   <div id="gamesModal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
       <div class="modal-header">
-        <h2>🎮 Compatible Games</h2>
+        <h2 id="gamesModalTitle">🎮 Compatible Games</h2>
         <button class="close-btn" onclick="closeGamesModal()">&times;</button>
       </div>
       
@@ -523,7 +523,7 @@
       </div>
 
       <div id="gamesModalContent">
-        <p style="text-align:center; color:var(--dim); padding: 20px;">Loading games...</p>
+        <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
       </div>
     </div>
   </div>
