@@ -90,7 +90,8 @@
       width: 100%;
       max-width: 480px;
     }
-    .header-right { justify-self: end; }
+    /* Modified to handle the new element */
+    .header-right { justify-self: end; display: flex; gap: 10px; align-items: center; }
 
     .header-content h1 {
       font-size: clamp(0.85rem, 1.3vw, 1.15rem);
@@ -408,7 +409,7 @@
     .game-card h4 { color: var(--text-main); font-size: 1.1rem; margin: 0; }
     .game-card p { font-size: 0.85rem; color: var(--text-muted); margin: 4px 0; }
     .game-card .score-range { color: var(--text-main); font-weight: 600; }
-    
+
     .game-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .tag {
       font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;
@@ -457,9 +458,14 @@
     </a>
   </div>
   
+  <!-- MODIFICATION START: Added flexbox to place theme toggle and link side-by-side -->
   <div class="header-right">
     <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+    <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
+      <img src="https://lh3.googleusercontent.com/proxy/g6J-9z2w0y6e3l1qXj9v0Y9s7d4F3a2B5c1D8E9f0Gh1I2jK3lM4nO5pQ6rS7tU8vW9xY0zA1bC2dE3fG4hI5jK6lM7nO8pQ" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
+    </a>
   </div>
+  <!-- MODIFICATION END -->
 </div>
 
 <div class="container">
@@ -505,7 +511,7 @@
   <div id="gamesModal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
       <div class="modal-header">
-        <h2 id="gamesModalTitle">🎮 Compatible Games</h2>
+        <h2>🎮 Compatible Games</h2>
         <button class="close-btn" onclick="closeGamesModal()">&times;</button>
       </div>
       
@@ -667,7 +673,7 @@ function setupSuggestions() {
       box.classList.remove('active');
     }
   });
-  
+
   input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       searchGPU();
@@ -760,7 +766,7 @@ function showSimilarCards(baseCard) {
     `;
   }).join('');
 
-  showStatus(`Found 15 cards with similar performance to ${baseCard.name}. Click a card to compare.`, 'done');
+  showStatus(`Found ${finalList.length} cards with similar performance to ${baseCard.name}. Click a card to compare.`, 'done');
 }
 
 function renderList(gpus) {
@@ -768,7 +774,7 @@ function renderList(gpus) {
   const resultsSection = document.getElementById('resultsSection');
   const resultsTitle = document.getElementById('resultsTitle');
   const resultsCount = document.getElementById('resultsCount');
-  
+
   const sortedGpus = [...gpus].sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
     return a.name.localeCompare(b.name);
@@ -800,21 +806,17 @@ function renderList(gpus) {
         </div>
         <div class="gpu-specs">
             <span>${gpu.tdp}W</span>
-            <span>${gpu.brand.toUpperCase()}</span>
+            <span class="brand-name">${gpu.brand.toUpperCase()}</span>
         </div>
       </div>
       <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
     </div>
   `).join('');
-  
+
   resultsSection.classList.remove('hidden');
   resultsTitle.textContent = filterLabel(currentFilter);
   resultsCount.textContent = `${gpus.length} cards found`;
 }
-
-// ============================================================
-// UPDATED: Game Compatibility Logic (Highest to Lowest Score)
-// ============================================================
 
 function getGameCompatibility(gpu, game) {
   if (!game.score) return 'no';
@@ -827,7 +829,6 @@ function getGameCompatibility(gpu, game) {
   return 'no';
 }
 
-// ✅ UPDATED: Sorts by score descending (highest first)
 function openGamesModal(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
@@ -858,7 +859,6 @@ function openGamesModal(gpuName) {
   modal.classList.add('active');
 }
 
-// ✅ UPDATED: Removed DX/Vulkan tags & maintains score sort on tab switch
 function renderGameList(games) {
   const content = document.getElementById('gamesModalContent');
   
@@ -904,7 +904,7 @@ function filterGamesByTab(apiLevel) {
     renderGameList(fullList);
   } else {
     const filtered = fullList.filter(g => !g.api || g.api == apiLevel);
-    filtered.sort((a, b) => b.score - a.score); // ✅ Keep highest score first
+    filtered.sort((a, b) => b.score - a.score); // Keep highest score first
     renderGameList(filtered);
   }
 }
@@ -920,6 +920,7 @@ document.getElementById('gamesModal')?.addEventListener('click', (e) => {
 // ============================================================
 // COMPARISON MODAL
 // ============================================================
+
 function showComparison(card1, card2) {
   const modal = document.getElementById('comparisonModal');
   const content = document.getElementById('compareContent');
@@ -960,12 +961,9 @@ function showComparison(card1, card2) {
       </div>
     </div>
     <div class="comparison-verdict">
-      <p style="font-size:1.1rem; color:var(--text-muted); margin-bottom:8px;">
-        Comparison Result
-      </p>
+      <p style="font-size:1.1rem; color:var(--text-muted); margin-bottom:8px;">Comparison Result</p>
       <p style="font-size:1.2rem;">
-        ${card2.name} is <strong class="${diffClass}" style="font-size:1.4rem;">${diffIcon}${pctDiff}%</strong> 
-        ${faster ? 'faster' : 'slower'} than ${card1.name}
+        ${card2.name} is <strong class="${diffClass}" style="font-size:1.4rem;">${diffIcon}${pctDiff}%</strong> ${faster ? 'faster' : 'slower'} than ${card1.name}
       </p>
     </div>
   `;
