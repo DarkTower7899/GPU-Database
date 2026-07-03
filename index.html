@@ -872,6 +872,10 @@ function renderGameList(games) {
     let badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
     let badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
     
+    // Map to your JSON structure safely
+    const year = game.release_year || game.year || 'N/A';
+    const directX = game.directX || 'N/A';
+    
     return `
       <div class="game-card">
         <div class="game-card-header">
@@ -881,7 +885,8 @@ function renderGameList(games) {
         <p><span class="score-range">Game Score:</span> ${game.score.toLocaleString()}</p>
         <div class="game-tags">
           <span class="tag score">Min Score: ${game.score}</span>
-          <span class="tag">Year: ${game.year}</span>
+          <span class="tag">Year: ${year}</span>
+          <span class="tag">DirectX: ${directX}</span>
         </div>
         ${game.notes ? `<p style="margin-top:8px;"><em>${game.notes}</em></p>` : ''}
       </div>
