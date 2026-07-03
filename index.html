@@ -1,395 +1,1027 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GPU & Game Compatibility Checker</title>
+  <title>GPU Performance Database (2006–2026)</title>
+  <meta name="description" content="Search, compare, and analyze 400+ GPUs with live benchmark scores, API support, and performance deltas.">
   <style>
+    /* =========================================
+       THEME VARIABLES & RESET
+       ========================================= */
     :root {
-      --bg-primary: #111;
-      --bg-secondary: #1a1a1a;
-      --text-primary: #eee;
-      --text-muted: #888;
+      --bg-body: #0b0f19;
+      --bg-panel: rgba(30, 41, 59, 0.85);
+      --bg-card: rgba(30, 41, 59, 0.4);
+      --bg-card-hover: rgba(51, 65, 85, 0.5);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(56, 189, 248, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --accent-primary: #38bdf8;
-      --border-subtle: #333;
+      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --brand-intel: #0ea5e9;
+      --brand-nvidia: #76b900;
+      --brand-amd: #ef4444;
+      --success: #10b981;
+      --danger: #f43f5e;
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.15);
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-primary); margin: 0; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    h1 { text-align: center; margin-bottom: 24px; }
 
-    /* Search & Suggestions */
-    .search-section { margin-bottom: 24px; position: relative; }
-    #searchInput { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; }
-    #suggestionsBox { position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-top: none; border-radius: 0 0 8px 8px; z-index: 10; display: none; max-height: 300px; overflow-y: auto; }
-    #suggestionsBox.active { display: block; }
-    .suggestion-item { padding: 10px 12px; cursor: pointer; border-bottom: 1px solid var(--border-subtle); }
-    .suggestion-item:hover { background: rgba(56, 189, 248, 0.1); }
-    .suggestion-meta { font-size: 0.8rem; color: var(--text-muted); }
+    [data-theme="light"] {
+      --bg-body: #f1f5f9;
+      --bg-panel: rgba(255, 255, 255, 0.95);
+      --bg-card: rgba(255, 255, 255, 0.7);
+      --bg-card-hover: #ffffff;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-focus: rgba(59, 130, 246, 0.5);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent-primary: #2563eb;
+      --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      --brand-intel: #0284c7;
+      --brand-nvidia: #6aab00;
+      --brand-amd: #dc2626;
+      --success: #059669;
+      --danger: #dc2626;
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.1);
+    }
 
-    /* View Switcher Buttons */
-    .view-switcher { display: flex; justify-content: center; gap: 16px; margin: 24px 0; flex-wrap: wrap; }
-    .nav-btn { padding: 12px 28px; font-size: 1rem; font-weight: 600; border: 1px solid var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
-    .nav-btn:hover { background: var(--accent-primary); color: #000; border-color: var(--accent-primary); transform: translateY(-1px); }
-    .nav-btn.active { background: var(--accent-primary); color: #000; border-color: var(--accent-primary); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      transition: background-color 0.3s ease;
+      min-height: 100vh;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M20 20h40v40h-40z M100 20h40v40h-40z M20 100h40v40h-40z M100 100h40v40h-40z' fill='none' stroke='%23000000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M60 20v40 M140 20v40 M20 60h40 M100 60h40 M60 100v40 M140 100v40 M20 140h40 M100 140h40' stroke='%23000000' stroke-width='0.5' opacity='0.06'/%3E%3Ccircle cx='60' cy='60' r='2' fill='%23000000' opacity='0.12'/%3E%3Ccircle cx='140' cy='140' r='2' fill='%23000000' opacity='0.12'/%3E%3Ccircle cx='60' cy='140' r='1.5' fill='%23000000' opacity='0.08'/%3E%3Ccircle cx='140' cy='60' r='1.5' fill='%23000000' opacity='0.08'/%3E%3C/svg%3E"),
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 100%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+      background-size: 160px 160px, 100% 100%, 100% 100%;
+      background-attachment: fixed;
+      line-height: 1.5;
+    }
 
-    /* Shared Grid Container */
-    .gpu-list-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 16px 24px;
+      gap: 20px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky; top: 0; z-index: 100;
+    }
 
-    /* GPU Card Styles (from your citations) */
-    .gpu-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px; transition: transform 0.2s; cursor: pointer; }
-    .gpu-card:hover { transform: translateY(-2px); border-color: var(--accent-primary); }
+    .header-left { justify-self: start; }
+    .header-center { 
+      justify-self: center; 
+      display: flex; 
+      justify-content: center; 
+      width: 100%;
+      max-width: 480px;
+    }
+    /* Updated header-right to use flexbox for items */
+    .header-right { justify-self: end; display: flex; gap: 10px; align-items: center; }
+
+    .header-content h1 {
+      font-size: clamp(0.85rem, 1.3vw, 1.15rem);
+      font-weight: 800;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-content p { color: var(--text-muted); font-size: 0.8rem; }
+
+    .craptop-link {
+      display: inline-flex; align-items: center;
+      padding: 6px 8px; border-radius: 12px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease; text-decoration: none;
+    }
+    [data-theme="light"] .craptop-link { background: rgba(0,0,0,0.04); }
+    .craptop-link:hover { 
+      border-color: var(--accent-primary); transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+    }
+    .craptop-link img {
+      height: 90px; width: auto; max-width: 420px;
+      border-radius: 10px; display: block; object-fit: contain;
+      transition: transform 0.2s ease;
+    }
+    .craptop-link:hover img { transform: scale(1.02); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+    .control-panel {
+      background: var(--bg-panel); backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
+      padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-card);
+    }
+
+    .search-row { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+
+    .input-wrapper { flex: 1; position: relative; }
+
+    .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+    }
+
+    input[type="text"] {
+      width: 100%; padding: 14px 14px 14px 42px;
+      background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); color: var(--text-main);
+      font-size: 1rem; transition: var(--transition); font-family: inherit;
+    }
+    [data-theme="light"] input[type="text"] { background: rgba(255,255,255,0.5); }
+    input[type="text"]:focus {
+      outline: none; border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .suggestions-box {
+      position: fixed;
+      z-index: 10000;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      display: none;
+      overflow-y: auto;
+      max-height: 320px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .suggestions-box.active { display: block; }
+    
+    .suggestion-item {
+      padding: 12px 16px; cursor: pointer;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex; justify-content: space-between;
+      font-size: 0.9rem; color: var(--text-main);
+      transition: background 0.15s; user-select: none;
+    }
+    .suggestion-item:hover { background: rgba(56, 189, 248, 0.15); color: var(--accent-primary); }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-meta { color: var(--text-muted); font-size: 0.8rem; }
+
+    .btn {
+      padding: 0 24px; height: 48px; border: none; border-radius: var(--radius-md);
+      cursor: pointer; font-weight: 600; font-size: 0.95rem;
+      transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary {
+      background: var(--accent-gradient); color: white;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.1); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border-subtle); color: var(--text-muted);
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); color: var(--text-main); }
+
+    .filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 6px 16px; border-radius: 20px; background: transparent;
+      border: 1px solid var(--border-subtle); color: var(--text-muted);
+      cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: var(--transition);
+    }
+    .filter-btn:hover { border-color: var(--text-muted); color: var(--text-main); }
+    .filter-btn.active {
+      background: rgba(56, 189, 248, 0.1); border-color: var(--accent-primary); color: var(--accent-primary);
+    }
+
+    .results-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin: 24px 0 16px; padding: 0 4px;
+    }
+    .results-header h2 { font-size: 1.25rem; font-weight: 600; }
+    .results-header span { color: var(--text-muted); font-size: 0.9rem; }
+
+    .gpu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .gpu-card {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); padding: 16px; display: grid;
+      grid-template-columns: 1fr; gap: 12px; transition: var(--transition);
+      cursor: pointer; position: relative; overflow: hidden; width: 100%;
+    }
+    .gpu-card:hover {
+      border-color: var(--accent-primary); background: var(--bg-card-hover);
+      transform: translateY(-2px); box-shadow: var(--shadow-glow);
+    }
+    .gpu-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--border-subtle);
+    }
+    .gpu-card.base-card::before { background: var(--accent-primary); }
+    .gpu-card.faster::before { background: var(--success); }
+    .gpu-card.slower::before { background: var(--danger); }
+
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-    .gpu-rank { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; }
+    .gpu-rank {
+      font-size: 0.85rem; font-weight: 700; color: var(--text-muted);
+      background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;
+    }
     .gpu-rank.top3 { color: var(--accent-primary); background: rgba(56, 189, 248, 0.1); }
+
     .gpu-name h3 { font-size: 1.05rem; margin-bottom: 2px; line-height: 1.3; }
-    .gpu-meta { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .gpu-name .base-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--accent-primary); font-weight: 700; margin-left: 6px;
+    }
+    .gpu-meta {
+      font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 6px; flex-wrap: wrap;
+    }
     .gpu-meta span::after { content: '•'; margin-left: 6px; color: var(--border-subtle); }
     .gpu-meta span:last-child::after { content: ''; }
-    .gpu-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-    .api-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: var(--text-muted); font-family: monospace; }
-    .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
-    .gpu-score .val { font-size: 1.5rem; font-weight: 700; color: var(--accent-primary); }
-    .gpu-score .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-    .gpu-specs { margin-top: 8px; font-size: 0.8rem; color: var(--text-muted); }
 
-    /* Game Card Styles (reuses GPU card structure) */
-    .game-card { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px; transition: transform 0.2s; cursor: pointer; }
-    .game-card:hover { transform: translateY(-2px); border-color: var(--accent-primary); }
-    .game-card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    .game-card-header h4 { font-size: 1.05rem; margin: 0; line-height: 1.3; }
-    .compat-badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-    .compat-badge.rec { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-    .compat-badge.yes { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
-    .game-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-    .tag { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: var(--text-muted); }
-    .tag.score { color: var(--accent-primary); border-color: rgba(56, 189, 248, 0.3); }
-    .score-range { color: var(--text-muted); font-size: 0.85rem; }
+    .gpu-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .api-badge {
+      font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle);
+      color: var(--text-muted); font-family: monospace;
+    }
 
-    /* Modal */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; z-index: 100; justify-content: center; align-items: center; }
-    .modal-overlay.active { display: flex; }
-    .modal-content { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 12px; width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: 24px; position: relative; }
-    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
-    .game-tab-container { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .game-tab { padding: 8px 16px; border-radius: 6px; background: var(--bg-primary); border: 1px solid var(--border-subtle); color: var(--text-muted); cursor: pointer; }
-    .game-tab.active { background: var(--accent-primary); color: #000; border-color: var(--accent-primary); }
-    #gamesModalContent { display: grid; gap: 12px; }
+    .card-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-subtle);
+    }
+    .gpu-score { text-align: right; }
+    .gpu-score .val { font-size: 1.1rem; font-weight: 700; color: var(--accent-primary); }
+    .gpu-score .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* Status */
-    .status-msg { text-align: center; padding: 20px; color: var(--text-muted); }
-    .loading { color: var(--accent-primary); }
+    .gpu-diff { text-align: right; }
+    .gpu-diff .val { font-size: 0.9rem; font-weight: 600; }
+    .gpu-diff.positive .val { color: var(--success); }
+    .gpu-diff.negative .val { color: var(--danger); }
+    
+    .gpu-specs { font-size: 0.8rem; color: var(--text-muted); text-align: right; }
+    .gpu-specs span { display: block; }
+
+    .gpu-card.brand-intel::before { background: var(--brand-intel) !important; }
+    .gpu-card.brand-intel .gpu-score .val { color: var(--brand-intel); }
+    .gpu-card.brand-intel .gpu-rank { color: var(--brand-intel); background: rgba(14, 165, 233, 0.1); }
+
+    .gpu-card.brand-nvidia::before { background: var(--brand-nvidia) !important; }
+    .gpu-card.brand-nvidia .gpu-score .val { color: var(--brand-nvidia); }
+    .gpu-card.brand-nvidia .gpu-rank { color: var(--brand-nvidia); background: rgba(118, 185, 0, 0.1); }
+
+    .gpu-card.brand-amd::before { background: var(--brand-amd) !important; }
+    .gpu-card.brand-amd .gpu-score .val { color: var(--brand-amd); }
+    .gpu-card.brand-amd .gpu-rank { color: var(--brand-amd); background: rgba(239, 68, 68, 0.1); }
+
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      z-index: 200; justify-content: center; align-items: center; padding: 20px;
+    }
+    .modal.active { display: flex; animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-content {
+      background: var(--bg-panel); border: 1px solid var(--border-subtle);
+      padding: 0; border-radius: var(--radius-lg); max-width: 800px; width: 100%;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    .modal-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border-subtle);
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: rgba(30, 41, 59, 0.95); z-index: 10;
+    }
+    [data-theme="light"] .modal-header { background: rgba(255, 255, 255, 0.95); }
+    .modal-header h2 { font-size: 1.2rem; font-weight: 700; }
+    .close-btn {
+      background: transparent; border: none; color: var(--text-muted);
+      font-size: 1.5rem; cursor: pointer; padding: 4px; line-height: 1;
+    }
+    .close-btn:hover { color: var(--text-main); }
+    .modal-body { padding: 24px; }
+
+    .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .compare-item {
+      background: rgba(255,255,255,0.02); border-radius: var(--radius-md);
+      padding: 16px; border: 1px solid var(--border-subtle);
+    }
+    .compare-item h4 { 
+      color: var(--accent-primary); margin-bottom: 12px; font-size: 1.1rem; 
+      border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;
+    }
+    .compare-item p { font-size: 0.9rem; margin: 8px 0; color: var(--text-muted); }
+    .compare-item strong { color: var(--text-main); }
+
+    .api-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle);
+    }
+    .api-item { text-align: center; padding: 6px; background: rgba(0,0,0,0.2); border-radius: 4px; }
+    [data-theme="light"] .api-item { background: rgba(0,0,0,0.03); }
+    .api-item .api-label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
+    .api-item .api-val { font-size: 0.85rem; font-weight: 600; color: var(--accent-primary); }
+
+    .comparison-verdict {
+      text-align: center; padding: 16px; background: rgba(56, 189, 248, 0.05);
+      border-radius: var(--radius-md); border: 1px solid rgba(56, 189, 248, 0.1);
+    }
+    .diff-faster { color: var(--success); }
+    .diff-slower { color: var(--danger); }
+
+    .theme-toggle {
+      background: var(--bg-panel); border: 1px solid var(--border-subtle);
+      color: var(--text-main); padding: 8px 12px; border-radius: var(--radius-md);
+      cursor: pointer; font-size: 1.1rem; transition: var(--transition);
+    }
+    .theme-toggle:hover { border-color: var(--accent-primary); }
+    
+    .scrape-status {
+      margin-top: 15px; padding: 12px; border-radius: var(--radius-md);
+      font-size: 0.9rem; display: none;
+    }
+    .scrape-status.loading { background: rgba(56, 189, 248, 0.1); color: var(--accent-primary); border: 1px solid rgba(56, 189, 248, 0.1); }
+    .scrape-status.done { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.1); }
+    .scrape-status.error { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid rgba(244, 63, 94, 0.1); }
+
+    .hidden { display: none !important; }
+
+    .btn-games {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-top: 8px;
+    }
+    .btn-games:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+    .game-tabs {
+      display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+    .game-tab {
+      background: transparent; border: none; color: var(--text-muted); font-weight: 600;
+      padding: 8px 16px; cursor: pointer; border-radius: 6px; transition: all 0.2s;
+    }
+    .game-tab:hover { color: var(--text-main); background: var(--border-subtle); }
+    .game-tab.active { background: var(--accent-primary); color: white; }
+
+    .game-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .game-card:hover { border-color: var(--accent-primary); transform: translateX(4px); }
+    .game-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .game-card h4 { color: var(--text-main); font-size: 1.1rem; margin: 0; }
+    .game-card p { font-size: 0.85rem; color: var(--text-muted); margin: 4px 0; }
+    .game-card .score-range { color: var(--text-main); font-weight: 600; }
+
+    .game-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .tag {
+      font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;
+      background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle); color: var(--text-muted);
+    }
+    .tag.api { border-color: var(--accent-primary); color: var(--accent-primary); }
+    .tag.vram { border-color: var(--success); color: var(--success); }
+    .tag.score { border-color: var(--danger); color: var(--danger); }
+
+    .compat-badge {
+      display: inline-block; padding: 4px 10px; border-radius: 12px;
+      font-size: 0.8rem; font-weight: 700; margin-top: 6px;
+    }
+    .compat-badge.yes { background: rgba(16,185,129,0.2); color: var(--success); }
+    .compat-badge.rec { background: rgba(59,130,246,0.2); color: var(--accent-primary); }
+    
+    @media (max-width: 768px) {
+      .gpu-list { grid-template-columns: 1fr; }
+      .compare-row { grid-template-columns: 1fr; }
+      .header { 
+        grid-template-columns: 1fr; 
+        gap: 12px; 
+        text-align: center; 
+      }
+      .header-left, .header-center, .header-right { 
+        justify-self: center; 
+        width: 100%; 
+      }
+      .craptop-link img { height: 60px; max-width: 280px; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>GPU & Game Compatibility Checker</h1>
 
-    <div class="search-section">
-      <input type="text" id="searchInput" placeholder="Search GPU (e.g., RTX 4090, RX 7900 XTX)...">
-      <div id="suggestionsBox"></div>
+<div class="header">
+  <div class="header-left">
+    <div class="header-content">
+      <h1>⚡ GPU Performance Database</h1>
+      <p>Search 400+ GPUs (2006–2026) • Compare scores • Filter by brand</p>
     </div>
+  </div>
+  
+  <div class="header-center">
+    <a href="https://www.reddit.com/r/Craptopgamingadvice/" target="_blank" rel="noopener noreferrer" class="craptop-link" title="Visit CraptopGaming Advice">
+      <img src="craptop-banner.png" alt="Craptop Gaming Advice">
+    </a>
+  </div>
+  
+  <!-- Added the YouTube link and image here -->
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+    <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
+      <!-- Using the provided image URL -->
+      <img src="YouTube.png" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
+    </a>
+  </div>
+</div>
 
-    <div id="statusArea" class="status-msg"></div>
-
-    <!-- View Switcher Buttons -->
-    <div class="view-switcher">
-      <button id="btn-gpu-db" class="nav-btn active" onclick="switchView('gpu')">🖥️ GPU Database</button>
-      <button id="btn-games" class="nav-btn" onclick="switchView('games')">🎮 Games</button>
+<div class="container">
+  <div class="control-panel">
+    <div class="search-row">
+      <div class="input-wrapper">
+        <span class="input-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search GPU (e.g., RTX 4090, RX 6800)..." autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="searchGPU()">Search</button>
+      <button class="btn btn-secondary" onclick="clearSearch()">Clear</button>
     </div>
-
-    <!-- GPU List -->
-    <div id="gpuList" class="gpu-list-container"></div>
-
-    <!-- Games List (Main Page) -->
-    <div id="gamesList" class="gpu-list-container" style="display: none;"></div>
+    
+    <div class="filter-btns">
+      <button class="filter-btn active" onclick="filterList('all', this)">All</button>
+      <button class="filter-btn" onclick="filterList('nvidia', this)">NVIDIA</button>
+      <button class="filter-btn" onclick="filterList('amd', this)">AMD</button>
+      <button class="filter-btn" onclick="filterList('intel', this)">Intel</button>
+      <button class="filter-btn" onclick="filterList('igpu', this)">iGPUs</button>
+    </div>
   </div>
 
-  <!-- Games Modal -->
-  <div id="gamesModal" class="modal-overlay" onclick="closeGamesModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="modal-close" onclick="closeGamesModal()">&times;</button>
-      <h2>Compatible Games</h2>
-      <div class="game-tab-container">
-        <button class="game-tab active" onclick="filterGamesByTab('all')">All</button>
+  <div id="statusBar" class="scrape-status"></div>
+
+  <div id="resultsSection" class="hidden">
+    <div class="results-header">
+      <h2 id="resultsTitle">Search Results</h2>
+      <span id="resultsCount"></span>
+    </div>
+    <div class="gpu-list" id="gpuList"></div>
+  </div>
+
+  <div id="comparisonModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚖️ GPU Comparison</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="compareContent"></div>
+    </div>
+  </div>
+
+  <div id="gamesModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 id="gamesModalTitle">🎮 Compatible Games</h2>
+        <button class="close-btn" onclick="closeGamesModal()">&times;</button>
+      </div>
+      
+      <div class="game-tabs" id="gameTabs">
+        <button class="game-tab active" onclick="filterGamesByTab('all')">All Games</button>
         <button class="game-tab" onclick="filterGamesByTab('12')">DX12</button>
         <button class="game-tab" onclick="filterGamesByTab('11')">DX11</button>
-        <button class="game-tab" onclick="filterGamesByTab('9')">DX9</button>
+        <button class="game-tab" onclick="filterGamesByTab('9')">DX9/10</button>
       </div>
-      <div id="gamesModalContent"></div>
+
+      <div id="gamesModalContent">
+        <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
+      </div>
     </div>
   </div>
+</div>
 
-  <script>
-    let GPU_DB = [];
-    let GAMES_DB = [];
-    let currentGameTab = 'all';
-    let lastSearch = null;
+<div id="suggestionsBox" class="suggestions-box"></div>
 
-    // Helper to safely extract numeric DirectX version
-    function getDXLevel(directX) {
-      if (!directX) return 0;
-      const match = directX.toString().match(/(\d+)/);
-      return match ? parseInt(match[0]) : 0;
+<script>
+let currentFilter = 'all';
+let lastSearch = null;
+let GPU_DB = [];
+let GAMES_DB = [];
+let isLoading = false;
+let currentGameTab = 'all';
+
+function init() {
+  setupTheme();
+  setupSuggestions();
+  loadDatabase();
+}
+
+function setupTheme() {
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('gpu-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '🌙' : '☀️';
+  
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('gpu-theme', next);
+    toggle.textContent = next === 'dark' ? '🌙' : '☀️';
+  });
+}
+
+async function loadDatabase() {
+  showStatus('Initializing database...', 'loading');
+  try {
+    const [gpuRes, gameRes] = await Promise.all([
+      fetch('gpus.json'),
+      fetch('games.json').catch(() => Promise.resolve(null))
+    ]);
+    
+    if (!gpuRes.ok) throw new Error('Failed to load gpus.json');
+    GPU_DB.push(...await gpuRes.json());
+    
+    if (gameRes && gameRes.ok) {
+      let rawData = await gameRes.json();
+      GAMES_DB = rawData.flat();
+      console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
+    } else {
+      console.warn('⚠️ games.json not found. Using fallback sample data.');
+      GAMES_DB = [
+        {title:"Cyberpunk 2077", score:15000, release_year:2018, notes:"Heavy DX12/Vulkan title."},
+        {title:"Elden Ring", score:12000, release_year:2021, notes:"DX12 required."},
+        {title:"Fortnite", score:3000, release_year:2017, notes:"Highly scalable."}
+      ];
+    }
+    finalizeInit();
+  } catch (err) {
+    console.warn('Fallback dataset loaded due to error.', err);
+    GPU_DB.push(
+      {name:"RTX 4090",brand:"nvidia",type:"dGPU",year:2022,score:78500,vram:"24GB GDDR6X",tdp:450,arch:"Ada Lovelace"},
+      {name:"RX 7900 XTX",brand:"amd",type:"dGPU",year:2022,score:52000,vram:"24GB GDDR6",tdp:355,arch:"RDNA 3"},
+      {name:"Core Ultra 9 288V",brand:"intel",type:"igpu",year:2024,score:12000,vram:"Shared",tdp:35,arch:"Xe2"},
+      {name:"GTX 1080 Ti",brand:"nvidia",type:"dGPU",year:2017,score:24000,vram:"11GB GDDR5X",tdp:250,arch:"Pascal"},
+      {name:"RX 580 8GB",brand:"amd",type:"dGPU",year:2017,score:10000,vram:"8GB GDDR5",tdp:185,arch:"GCN 5"},
+      {name:"RTX 3080",brand:"nvidia",type:"dGPU",year:2020,score:43000,vram:"10GB GDDR6X",tdp:320,arch:"Ampere"},
+      {name:"RX 6800 XT",brand:"amd",type:"dGPU",year:2020,score:39000,vram:"16GB GDDR6",tdp:300,arch:"RDNA 2"},
+      {name:"RTX 4070 Ti",brand:"nvidia",type:"dGPU",year:2023,score:38000,vram:"12GB GDDR6X",tdp:285,arch:"Ada Lovelace"}
+    );
+    finalizeInit();
+  }
+}
+
+function finalizeInit() {
+  GPU_DB.forEach(gpu => {
+    const y = gpu.year;
+    gpu.dx_hw = y < 2006 ? "DX8.1" : y < 2009 ? "DX9.0c" : y < 2012 ? "DX10.1" : y < 2015 ? "DX11" : y < 2020 ? "DX12" : y < 2024 ? "DX12_1" : "DX12_2";
+    gpu.dx_sw = y < 2006 ? "SM 2.0" : y < 2009 ? "SM 3.0" : y < 2012 ? "SM 4.1" : y < 2015 ? "SM 5.0" : y < 2020 ? "SM 5.1" : y < 2024 ? "SM 6.3" : "SM 6.7";
+    gpu.vulkan = y < 2016 ? "N/A" : y < 2019 ? "1.0" : y < 2021 ? "1.1" : y < 2023 ? "1.2" : "1.3";
+    gpu.opengl = y < 2006 ? "2.0" : y < 2009 ? "2.1" : y < 2012 ? "3.0" : y < 2015 ? "3.3" : y < 2018 ? "4.1" : y < 2020 ? "4.5" : "4.6 (DRM)";
+  });
+  renderList(GPU_DB);
+  showStatus('Database loaded successfully.', 'done');
+}
+
+function setupSuggestions() {
+  const input = document.getElementById('searchInput');
+  const box = document.getElementById('suggestionsBox');
+  let timeout;
+
+  function positionDropdown() {
+    const rect = input.getBoundingClientRect();
+    box.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+    box.style.left = rect.left + 'px';
+    box.style.width = rect.width + 'px';
+  }
+
+  function showSuggestions(matches) {
+    box.innerHTML = '';
+    if (matches.length === 0) {
+      box.classList.remove('active');
+      return;
     }
 
-    // View Switcher Logic
-    function switchView(view) {
-      document.getElementById('btn-gpu-db').classList.toggle('active', view === 'gpu');
-      document.getElementById('btn-games').classList.toggle('active', view === 'games');
+    matches.forEach(match => {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.innerHTML = `<span>${match.name}</span><span class="suggestion-meta">${match.arch} • ${match.year}</span>`;
+      div.onclick = () => {
+        input.value = match.name;
+        box.classList.remove('active');
+        searchGPU(match);
+      };
+      box.appendChild(div);
+    });
 
-      if (view === 'gpu') {
-        renderList(GPU_DB);
-        document.getElementById('gpuList').style.display = 'grid';
-        document.getElementById('gamesList').style.display = 'none';
-      } else {
-        if (!GAMES_DB || GAMES_DB.length === 0) {
-          document.getElementById('gamesList').innerHTML = `
-            <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
-              Game database not loaded yet. Please refresh or check your network.
-            </p>`;
-          document.getElementById('gamesList').style.display = 'grid';
-          return;
-        }
+    positionDropdown();
+    box.classList.add('active');
+  }
 
-        // Sort by DirectX level (newest → oldest), then by score (highest → lowest)
-        const sortedGames = [...GAMES_DB].sort((a, b) => {
-          const dxA = getDXLevel(a.directX);
-          const dxB = getDXLevel(b.directX);
-          if (dxB !== dxA) return dxB - dxA;
-          return b.score - a.score;
-        });
+  input.addEventListener('input', function() {
+    clearTimeout(timeout);
+    const query = this.value.trim().toLowerCase();
+    if (query.length < 1) { box.classList.remove('active'); return; }
 
-        renderGamesListView(sortedGames);
-        document.getElementById('gpuList').style.display = 'none';
-        document.getElementById('gamesList').style.display = 'grid';
-      }
+    timeout = setTimeout(() => {
+      const matches = GPU_DB.filter(gpu => {
+        const nameMatch = gpu.name.toLowerCase().includes(query);
+        const archMatch = gpu.arch.toLowerCase().includes(query);
+        const yearMatch = gpu.year.toString().includes(query);
+        return nameMatch || archMatch || yearMatch;
+      }).slice(0, 8);
+      showSuggestions(matches);
+    }, 150);
+  });
+
+  input.addEventListener('focus', positionDropdown);
+  
+  window.addEventListener('scroll', positionDropdown, true);
+  window.addEventListener('resize', positionDropdown);
+
+  document.addEventListener('click', function(e) {
+    if (e.target !== input && !box.contains(e.target)) {
+      box.classList.remove('active');
     }
+  });
 
-    // Render Games List for Main Page
-    function renderGamesListView(games) {
-      const container = document.getElementById('gamesList');
-      if (!container) return;
-
-      container.innerHTML = games.map((game, i) => `
-        <div class="game-card" onclick="openGamesModal('${game.title}')">
-          <div class="game-card-header">
-            <h4>${game.title}</h4>
-            <span class="compat-badge ${game.status === 'recommended' ? 'rec' : 'yes'}">${game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible'}</span>
-          </div>
-          <p><span class="score-range">Game Score:</span> ${game.score.toLocaleString()}</p>
-          <div class="game-tags">
-            <span class="tag score">Min Score: ${game.score}</span>
-            <span class="tag">Year: ${game.release_year || game.year || 'N/A'}</span>
-            <span class="tag">DirectX: ${game.directX || 'N/A'}</span>
-          </div>
-          ${game.notes ? `<p style="margin-top:8px;"><em>${game.notes}</em></p>` : ''}
-        </div>
-      `).join('');
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      searchGPU();
+      box.classList.remove('active');
     }
+  });
+}
 
-    // Render GPU List (from your citations)
-    function renderList(gpus) {
-      const container = document.getElementById('gpuList');
-      const sortedGpus = [...gpus].sort((a, b) => {
-        if (b.score !== a.score) return b.score - a.score;
-        return a.name.localeCompare(b.name);
-      });
+function searchGPU(specificMatch = null) {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!query && !specificMatch) { clearSearch(); return; }
 
-      container.innerHTML = sortedGpus.slice(0, 300).map((gpu, i) => `
-        <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(lastSearch || gpus[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
-          <div class="card-top">
+  let baseCard = specificMatch;
+  if (!baseCard) {
+    baseCard = GPU_DB.find(g => g.name.toLowerCase() === query) || GPU_DB.find(g => g.name.toLowerCase().includes(query));
+    if (baseCard) document.getElementById('searchInput').value = baseCard.name;
+    if (!baseCard) { showStatus('No GPU found matching that name.', 'error'); return; }
+  }
+
+  lastSearch = baseCard;
+  showSimilarCards(baseCard);
+}
+
+function showSimilarCards(baseCard) {
+  const resultsSection = document.getElementById('resultsSection');
+  const resultsTitle = document.getElementById('resultsTitle');
+  const resultsCount = document.getElementById('resultsCount');
+  const gpuList = document.getElementById('gpuList');
+
+  let similar = GPU_DB
+    .map(gpu => {
+      const diff = gpu.score - baseCard.score;
+      const pctDiff = ((diff / baseCard.score) * 100).toFixed(1);
+      return { ...gpu, diff, pctDiff, isBase: gpu.name === baseCard.name };
+    })
+    .sort((a, b) => a.diff - b.diff);
+
+  const filtered = similar.filter(g => !g.isBase);
+  const faster = filtered.filter(g => g.diff < 0).sort((a, b) => b.diff - a.diff).slice(0, 7);
+  const slower = filtered.filter(g => g.diff > 0).sort((a, b) => a.diff - b.diff).slice(0, 8);
+  const finalList = [...faster, baseCard, ...slower];
+
+  resultsSection.classList.remove('hidden');
+  resultsTitle.textContent = `Similar to: ${baseCard.name}`;
+  resultsCount.textContent = `${finalList.length} cards shown`;
+
+  gpuList.innerHTML = finalList.map((gpu, i) => {
+    const isBase = gpu.isBase;
+    const isFaster = gpu.diff > 0;
+    const isSlower = gpu.diff < 0;
+    const cardClass = isBase ? 'base-card' : (isFaster ? 'faster' : 'slower');
+    const diffClass = isFaster ? 'positive' : 'negative';
+    const diffIcon = isFaster ? '+' : '';
+    const rankClass = i < 3 ? 'top3' : '';
+
+    return `
+      <div class="gpu-card ${cardClass} brand-${gpu.brand}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+        <div class="card-top">
             <div class="gpu-name">
-              <h3>${gpu.name}</h3>
-              <div class="gpu-meta">
-                <span>${gpu.arch}</span>
-                <span>${gpu.year}</span>
-                <span>${gpu.vram}</span>
-              </div>
-              <div class="gpu-tags">
-                <span class="api-badge">DX:${gpu.dx_hw}</span>
-                <span class="api-badge">VK:${gpu.vulkan}</span>
-                <span class="api-badge">GL:${gpu.opengl}</span>
-              </div>
+                <h3>${gpu.name} ${isBase ? '<span class="base-label">(BASE)</span>' : ''}</h3>
+                <div class="gpu-meta">
+                    <span>${gpu.arch}</span>
+                    <span>${gpu.year}</span>
+                    <span>${gpu.vram}</span>
+                </div>
+                <div class="gpu-tags">
+                    <span class="api-badge">DX:${gpu.dx_hw}</span>
+                    <span class="api-badge">VK:${gpu.vulkan}</span>
+                    <span class="api-badge">GL:${gpu.opengl}</span>
+                </div>
             </div>
-            <div class="gpu-rank ${i < 3 ? 'top3' : ''}">#${i + 1}</div>
-          </div>
-          <div class="card-bottom">
-            <div class="gpu-diff">
-              <div class="val">${gpu.pctDiff}%</div>
-              <div class="label">Diff</div>
+            <div class="gpu-rank ${rankClass}">#${i + 1}</div>
+        </div>
+        
+        <div class="card-bottom">
+            <div class="gpu-diff ${diffClass}">
+                <div class="val">${diffIcon}${gpu.pctDiff}%</div>
+                <div class="label">Diff</div>
             </div>
             <div class="gpu-score">
-              <div class="val">${gpu.score.toLocaleString()}</div>
-              <div class="label">Score</div>
+                <div class="val">${gpu.score.toLocaleString()}</div>
+                <div class="label">Score</div>
             </div>
-          </div>
-          <div class="gpu-specs">
+        </div>
+        <div class="gpu-specs">
             <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
-          </div>
-          <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')" style="margin-top:12px; width:100%; padding:8px; cursor:pointer;">🎮 Compatible Games</button>
         </div>
-      `).join('');
-    }
+        <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+      </div>
+    `;
+  }).join('');
 
-    // Modal Logic (from your citations)
-    function openGamesModal(gpuName = '') {
-      const modal = document.getElementById('gamesModal');
-      // Filter compatible games (adjust filter logic as needed for your use case)
-      const compatibleGames = GAMES_DB.filter(g => !gpuName || g.compatible_gpu === gpuName);
-      modal.dataset.fullList = JSON.stringify(compatibleGames);
-      renderGameList(compatibleGames);
-      modal.classList.add('active');
-    }
+  showStatus(`Found ${finalList.length} cards with similar performance to ${baseCard.name}. Click a card to compare.`, 'done');
+}
 
-    function renderGameList(games) {
-      const content = document.getElementById('gamesModalContent');
-      if (games.length === 0) {
-        content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No compatible games found.</p>`;
-        return;
-      }
-      content.innerHTML = games.map(game => `
-        <div class="game-card">
-          <div class="game-card-header">
-            <h4>${game.title}</h4>
-            <span class="compat-badge ${game.status === 'recommended' ? 'rec' : 'yes'}">${game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible'}</span>
+function renderList(gpus) {
+  const container = document.getElementById('gpuList');
+  const resultsSection = document.getElementById('resultsSection');
+  const resultsTitle = document.getElementById('resultsTitle');
+  const resultsCount = document.getElementById('resultsCount');
+
+  const sortedGpus = [...gpus].sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.name.localeCompare(b.name);
+  });
+
+  // Removed the slice(0, 300) limit to show all GPUs
+  container.innerHTML = sortedGpus.map((gpu, i) => `
+    <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(lastSearch || gpus[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+      <div class="card-top">
+        <div class="gpu-name">
+          <h3>${gpu.name}</h3>
+          <div class="gpu-meta">
+            <span>${gpu.arch}</span>
+            <span>${gpu.year}</span>
+            <span>${gpu.vram}</span>
           </div>
-          <p><span class="score-range">Game Score:</span> ${game.score.toLocaleString()}</p>
-          <div class="game-tags">
-            <span class="tag score">Min Score: ${game.score}</span>
-            <span class="tag">Year: ${game.release_year || game.year}</span>
-            <span class="tag">DirectX: ${game.directX}</span>
+          <div class="gpu-tags">
+              <span class="api-badge">DX:${gpu.dx_hw}</span>
+              <span class="api-badge">VK:${gpu.vulkan}</span>
+              <span class="api-badge">GL:${gpu.opengl}</span>
           </div>
-          ${game.notes ? `<p style="margin-top:8px;"><em>${game.notes}</em></p>` : ''}
         </div>
-      `).join('');
+        <div class="gpu-rank">${i + 1}</div>
+      </div>
+      
+      <div class="card-bottom">
+        <div class="gpu-score">
+          <div class="val">${gpu.score.toLocaleString()}</div>
+          <div class="label">Score</div>
+        </div>
+        <div class="gpu-specs">
+            <span>${gpu.tdp}W</span>
+            <span class="brand-name">${gpu.brand.toUpperCase()}</span>
+        </div>
+      </div>
+      <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+    </div>
+  `).join('');
+
+  resultsSection.classList.remove('hidden');
+  resultsTitle.textContent = filterLabel(currentFilter);
+  resultsCount.textContent = `${gpus.length} cards found`;
+}
+
+function getGameCompatibility(gpu, game) {
+  if (!game.score) return 'no';
+  if (gpu.score >= game.score) {
+    if (game.recommended_score && gpu.score >= game.recommended_score) {
+      return 'recommended';
     }
+    return 'compatible';
+  }
+  return 'no';
+}
 
-    function filterGamesByTab(apiLevel) {
-      document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-      const buttons = document.querySelectorAll('.game-tab');
-      if(apiLevel === 'all') buttons[0].classList.add('active');
-      if(apiLevel === '12') buttons[1].classList.add('active');
-      if(apiLevel === '11') buttons[2].classList.add('active');
-      if(apiLevel === '9') buttons[3].classList.add('active');
+function openGamesModal(gpuName) {
+  const gpu = GPU_DB.find(g => g.name === gpuName);
+  if (!gpu) return;
 
-      currentGameTab = apiLevel;
-      const modal = document.getElementById('gamesModal');
-      const fullList = modal.dataset.fullList ? JSON.parse(modal.dataset.fullList) : [];
+  const compatibleGames = GAMES_DB
+    .map(game => ({ 
+      ...game, 
+      status: getGameCompatibility(gpu, game),
+      score: Number(game.score) || 0,
+      year: game.release_year || 'N/A'
+    }))
+    .filter(g => g.status !== 'no')
+    .sort((a, b) => b.score - a.score);
 
-      if (apiLevel === 'all') {
-        renderGameList(fullList);
-      } else {
-        // Updated to use DirectX numeric matching instead of g.api
-        const filtered = fullList.filter(g => getDXLevel(g.directX) === parseInt(apiLevel));
-        filtered.sort((a, b) => b.score - a.score);
-        renderGameList(filtered);
-      }
-    }
+  const modal = document.getElementById('gamesModal');
+  const content = document.getElementById('gamesModalContent');
+  const title = document.getElementById('gamesModalTitle');
+  
+  title.textContent = `🎮 Compatible Games for ${gpu.name}`;
+  
+  currentGameTab = 'all';
+  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.game-tab').classList.add('active');
 
-    function closeGamesModal(e) {
-      if (!e || e.target.id === 'gamesModal' || e.target.classList.contains('modal-close')) {
-        document.getElementById('gamesModal').classList.remove('active');
-      }
-    }
+  modal.dataset.fullList = JSON.stringify(compatibleGames);
+  
+  renderGameList(compatibleGames);
+  modal.classList.add('active');
+}
 
-    // Suggestions Logic (from your citations)
-    function setupSuggestions() {
-      const input = document.getElementById('searchInput');
-      const box = document.getElementById('suggestionsBox');
-      let timeout;
+function renderGameList(games) {
+  const content = document.getElementById('gamesModalContent');
+  
+  if (games.length === 0) {
+    content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No compatible games found for this GPU.</p>`;
+    return;
+  }
 
-      function positionDropdown() {
-        const rect = input.getBoundingClientRect();
-        box.style.top = (rect.bottom + window.scrollY + 8) + 'px';
-        box.style.left = rect.left + 'px';
-        box.style.width = rect.width + 'px';
-      }
+  content.innerHTML = games.map(game => {
+    let badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
+    let badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
+    
+    // Map to your JSON structure safely
+    const year = game.release_year || game.year || 'N/A';
+    const directX = game.directX || 'N/A';
+    
+    return `
+      <div class="game-card">
+        <div class="game-card-header">
+          <h4>${game.title}</h4>
+          <span class="compat-badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <p><span class="score-range">Game Score:</span> ${game.score.toLocaleString()}</p>
+        <div class="game-tags">
+          <span class="tag score">Min Score: ${game.score}</span>
+          <span class="tag">Year: ${year}</span>
+          <span class="tag">DirectX: ${directX}</span>
+        </div>
+        ${game.notes ? `<p style="margin-top:8px;"><em>${game.notes}</em></p>` : ''}
+      </div>
+    `;
+  }).join('');
+}
 
-      function showSuggestions(matches) {
-        box.innerHTML = '';
-        if (matches.length === 0) { box.classList.remove('active'); return; }
-        matches.forEach(match => {
-          const div = document.createElement('div');
-          div.className = 'suggestion-item';
-          div.innerHTML = `<span>${match.name}</span><span class="suggestion-meta">${match.arch} • ${match.year}</span>`;
-          div.onclick = () => {
-            input.value = match.name;
-            box.classList.remove('active');
-            // searchGPU(match); // Hook into your existing search function
-          };
-          box.appendChild(div);
-        });
-        positionDropdown();
-        box.classList.add('active');
-      }
+function filterGamesByTab(apiLevel) {
+  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+  const buttons = document.querySelectorAll('.game-tab');
+  if(apiLevel === 'all') buttons[0].classList.add('active');
+  if(apiLevel === '12') buttons[1].classList.add('active');
+  if(apiLevel === '11') buttons[2].classList.add('active');
+  if(apiLevel === '9') buttons[3].classList.add('active');
 
-      input.addEventListener('input', function() {
-        clearTimeout(timeout);
-        const query = this.value.trim().toLowerCase();
-        if (query.length < 1) { box.classList.remove('active'); return; }
-        timeout = setTimeout(() => {
-          const matches = GPU_DB.filter(gpu => gpu.name.toLowerCase().includes(query));
-          showSuggestions(matches);
-        }, 150);
-      });
+  currentGameTab = apiLevel;
+  const modal = document.getElementById('gamesModal');
+  const fullList = modal.dataset.fullList ? JSON.parse(modal.dataset.fullList) : [];
+  
+  if (apiLevel === 'all') {
+    renderGameList(fullList);
+  } else {
+    const filtered = fullList.filter(g => !g.api || g.api == apiLevel);
+    filtered.sort((a, b) => b.score - a.score); // Keep highest score first
+    renderGameList(filtered);
+  }
+}
 
-      document.addEventListener('click', (e) => {
-        if (!input.contains(e.target) && !box.contains(e.target)) box.classList.remove('active');
-      });
-    }
+function closeGamesModal() {
+  document.getElementById('gamesModal').classList.remove('active');
+}
 
-    // Database Loader (from your citations)
-    async function loadDatabase() {
-      showStatus('Initializing database...', 'loading');
-      try {
-        const [gpuRes, gameRes] = await Promise.all([
-          fetch('gpus.json'),
-          fetch('games.json').catch(() => Promise.resolve(null))
-        ]);
+document.getElementById('gamesModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'gamesModal') closeGamesModal();
+});
 
-        if (!gpuRes.ok) throw new Error('Failed to load gpus.json');
-        GPU_DB.push(...await gpuRes.json());
+// ============================================================
+// COMPARISON MODAL
+// ============================================================
 
-        if (gameRes && gameRes.ok) {
-          let rawData = await gameRes.json();
-          GAMES_DB = rawData.flat();
-          console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
-        } else {
-          console.warn('⚠️ games.json not found. Using fallback sample data.');
-          // Matches your requested JSON structure exactly
-          GAMES_DB = [
-            {title:"Ready or Not", score:3500, release_year:2019, directX:"DirectX 11", notes:"Tactical shooter."},
-            {title:"Cyberpunk 2077", score:15000, release_year:2018, directX:"DirectX 12", notes:"Heavy DX12/Vulkan title."},
-            {title:"Elden Ring", score:12000, release_year:2021, directX:"DX12", notes:"DX12 required."},
-            {title:"Fortnite", score:3000, release_year:2017, directX:"DirectX 11", notes:"Highly scalable."}
-          ];
-        }
-        finalizeInit();
-      } catch (err) {
-        console.warn('Fallback dataset loaded due to error.', err);
-        GPU_DB.push(
-          {name:"RTX 4090",brand:"nvidia",type:"dGPU",year:2022,score:78500,vram:"24GB GDDR6X",tdp:450,arch:"Ada Lovelace",dx_hw:12,vulkan:1.3,opengl:4.6,pctDiff:0},
-          {name:"RX 7900 XTX",brand:"amd",type:"dGPU",year:2022,score:68000,vram:"24GB GDDR6",tdp:355,arch:"RDNA 3",dx_hw:12,vulkan:1.3,opengl:4.6,pctDiff:-13.4}
-        );
-        GAMES_DB = GAMES_DB.length ? GAMES_DB : [];
-        finalizeInit();
-      }
-    }
+function showComparison(card1, card2) {
+  const modal = document.getElementById('comparisonModal');
+  const content = document.getElementById('compareContent');
+  
+  const pctDiff = ((card2.score - card1.score) / card1.score * 100).toFixed(1);
+  const faster = card2.score > card1.score;
+  const diffClass = faster ? 'diff-faster' : 'diff-slower';
+  const diffIcon = faster ? '+' : '';
 
-    function showStatus(msg, type) {
-      const el = document.getElementById('statusArea');
-      el.textContent = msg;
-      el.className = 'status-msg ' + (type || '');
-    }
+  const renderAPI = (gpu) => `
+    <div class="api-grid">
+      <div class="api-item"><div class="api-label">DX HW</div><div class="api-val">${gpu.dx_hw || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">DX SW</div><div class="api-val">${gpu.dx_sw || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">Vulkan</div><div class="api-val">${gpu.vulkan || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">OpenGL</div><div class="api-val">${gpu.opengl || 'N/A'}</div></div>
+    </div>
+  `;
 
-    function finalizeInit() {
-      showStatus('Database loaded successfully.', 'done');
-      renderList(GPU_DB);
-      setupSuggestions();
-    }
+  content.innerHTML = `
+    <div class="compare-row">
+      <div class="compare-item">
+        <h4>${card1.name}</h4>
+        <p><strong>Score:</strong> ${card1.score.toLocaleString()}</p>
+        <p><strong>Architecture:</strong> ${card1.arch}</p>
+        <p><strong>VRAM:</strong> ${card1.vram}</p>
+        <p><strong>TDP:</strong> ${card1.tdp}W</p>
+        <p><strong>Year:</strong> ${card1.year}</p>
+        ${renderAPI(card1)}
+      </div>
+      <div class="compare-item">
+        <h4>${card2.name}</h4>
+        <p><strong>Score:</strong> ${card2.score.toLocaleString()}</p>
+        <p><strong>Architecture:</strong> ${card2.arch}</p>
+        <p><strong>VRAM:</strong> ${card2.vram}</p>
+        <p><strong>TDP:</strong> ${card2.tdp}W</p>
+        <p><strong>Year:</strong> ${card2.year}</p>
+        ${renderAPI(card2)}
+      </div>
+    </div>
+    <div class="comparison-verdict">
+      <p style="font-size:1.1rem; color:var(--text-muted); margin-bottom:8px;">Comparison Result</p>
+      <p style="font-size:1.2rem;">
+        ${card2.name} is <strong class="${diffClass}" style="font-size:1.4rem;">${diffIcon}${pctDiff}%</strong> ${faster ? 'faster' : 'slower'} than ${card1.name}
+      </p>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+}
 
-    // Initialize
-    window.addEventListener('DOMContentLoaded', loadDatabase);
-  </script>
+function closeModal() {
+  document.getElementById('comparisonModal').classList.remove('active');
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('statusBar').style.display = 'none';
+  document.getElementById('suggestionsBox').classList.remove('active');
+  lastSearch = null;
+  renderList(GPU_DB);
+}
+
+function filterList(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  
+  let filtered = GPU_DB;
+  if (filter === 'nvidia') filtered = GPU_DB.filter(g => g.brand === 'nvidia');
+  else if (filter === 'amd') filtered = GPU_DB.filter(g => g.brand === 'amd');
+  else if (filter === 'intel') filtered = GPU_DB.filter(g => g.brand === 'intel');
+  else if (filter === 'igpu') filtered = GPU_DB.filter(g => g.type === 'igpu');
+  
+  renderList(filtered);
+}
+
+function filterLabel(f) {
+  if (f === 'all') return 'All GPUs in Database';
+  if (f === 'nvidia') return 'NVIDIA GPUs';
+  if (f === 'amd') return 'AMD GPUs';
+  if (f === 'intel') return 'Intel iGPUs';
+  if (f === 'igpu') return 'Integrated GPUs';
+  return 'GPUs';
+}
+
+function showStatus(msg, type) {
+  const bar = document.getElementById('statusBar');
+  bar.textContent = msg;
+  bar.className = `scrape-status ${type}`;
+  bar.style.display = 'block';
+  setTimeout(() => { bar.style.display = 'none'; }, 5000);
+}
+
+init();
+</script>
 </body>
 </html>
