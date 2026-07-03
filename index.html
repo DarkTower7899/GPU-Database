@@ -125,30 +125,6 @@
     }
     .craptop-link:hover img { transform: scale(1.02); }
 
-    /* NEW: CSS for the YouTube Link */
-    .yt-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-subtle);
-      transition: var(--transition);
-    }
-    .yt-link:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--accent-primary);
-      transform: scale(1.1);
-    }
-    .yt-link img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-    }
-
     .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
     .control-panel {
@@ -482,13 +458,13 @@
     </a>
   </div>
   
+  <!-- Added the YouTube link and image here -->
   <div class="header-right">
-    <!-- YouTube Channel Link -->
-    <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" class="yt-link" title="Visit YouTube Channel">
-      <img src="channels4_profile.png" alt="YouTube Channel">
-    </a>
-    
     <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+    <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
+      <!-- Using the provided image URL -->
+      <img src="https://lh3.googleusercontent.com/proxy/g6J-9z2w0y6e3l1qXj9v0Y9s7d4F3a2B5c1D8E9f0Gh1I2jK3lM4nO5pQ6rS7tU8vW9xY0zA1bC2dE3fG4hI5jK6lM7nO8pQ" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
+    </a>
   </div>
 </div>
 
@@ -592,4 +568,454 @@ async function loadDatabase() {
       fetch('games.json').catch(() => Promise.resolve(null))
     ]);
     
-    if (!gpuRes.ok) throw new Error('Failed to
+    if (!gpuRes.ok) throw new Error('Failed to load gpus.json');
+    GPU_DB.push(...await gpuRes.json());
+    
+    if (gameRes && gameRes.ok) {
+      let rawData = await gameRes.json();
+      GAMES_DB = rawData.flat();
+      console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
+    } else {
+      console.warn('⚠️ games.json not found. Using fallback sample data.');
+      GAMES_DB = [
+        {title:"Cyberpunk 2077", score:15000, release_year:2018, notes:"Heavy DX12/Vulkan title."},
+        {title:"Elden Ring", score:12000, release_year:2021, notes:"DX12 required."},
+        {title:"Fortnite", score:3000, release_year:2017, notes:"Highly scalable."}
+      ];
+    }
+    finalizeInit();
+  } catch (err) {
+    console.warn('Fallback dataset loaded due to error.', err);
+    GPU_DB.push(
+      {name:"RTX 4090",brand:"nvidia",type:"dGPU",year:2022,score:78500,vram:"24GB GDDR6X",tdp:450,arch:"Ada Lovelace"},
+      {name:"RX 7900 XTX",brand:"amd",type:"dGPU",year:2022,score:52000,vram:"24GB GDDR6",tdp:355,arch:"RDNA 3"},
+      {name:"Core Ultra 9 288V",brand:"intel",type:"igpu",year:2024,score:12000,vram:"Shared",tdp:35,arch:"Xe2"},
+      {name:"GTX 1080 Ti",brand:"nvidia",type:"dGPU",year:2017,score:24000,vram:"11GB GDDR5X",tdp:250,arch:"Pascal"},
+      {name:"RX 580 8GB",brand:"amd",type:"dGPU",year:2017,score:10000,vram:"8GB GDDR5",tdp:185,arch:"GCN 5"},
+      {name:"RTX 3080",brand:"nvidia",type:"dGPU",year:2020,score:43000,vram:"10GB GDDR6X",tdp:320,arch:"Ampere"},
+      {name:"RX 6800 XT",brand:"amd",type:"dGPU",year:2020,score:39000,vram:"16GB GDDR6",tdp:300,arch:"RDNA 2"},
+      {name:"RTX 4070 Ti",brand:"nvidia",type:"dGPU",year:2023,score:38000,vram:"12GB GDDR6X",tdp:285,arch:"Ada Lovelace"}
+    );
+    finalizeInit();
+  }
+}
+
+function finalizeInit() {
+  GPU_DB.forEach(gpu => {
+    const y = gpu.year;
+    gpu.dx_hw = y < 2006 ? "DX8.1" : y < 2009 ? "DX9.0c" : y < 2012 ? "DX10.1" : y < 2015 ? "DX11" : y < 2020 ? "DX12" : y < 2024 ? "DX12_1" : "DX12_2";
+    gpu.dx_sw = y < 2006 ? "SM 2.0" : y < 2009 ? "SM 3.0" : y < 2012 ? "SM 4.1" : y < 2015 ? "SM 5.0" : y < 2020 ? "SM 5.1" : y < 2024 ? "SM 6.3" : "SM 6.7";
+    gpu.vulkan = y < 2016 ? "N/A" : y < 2019 ? "1.0" : y < 2021 ? "1.1" : y < 2023 ? "1.2" : "1.3";
+    gpu.opengl = y < 2006 ? "2.0" : y < 2009 ? "2.1" : y < 2012 ? "3.0" : y < 2015 ? "3.3" : y < 2018 ? "4.1" : y < 2020 ? "4.5" : "4.6 (DRM)";
+  });
+  renderList(GPU_DB);
+  showStatus('Database loaded successfully.', 'done');
+}
+
+function setupSuggestions() {
+  const input = document.getElementById('searchInput');
+  const box = document.getElementById('suggestionsBox');
+  let timeout;
+
+  function positionDropdown() {
+    const rect = input.getBoundingClientRect();
+    box.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+    box.style.left = rect.left + 'px';
+    box.style.width = rect.width + 'px';
+  }
+
+  function showSuggestions(matches) {
+    box.innerHTML = '';
+    if (matches.length === 0) {
+      box.classList.remove('active');
+      return;
+    }
+
+    matches.forEach(match => {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.innerHTML = `<span>${match.name}</span><span class="suggestion-meta">${match.arch} • ${match.year}</span>`;
+      div.onclick = () => {
+        input.value = match.name;
+        box.classList.remove('active');
+        searchGPU(match);
+      };
+      box.appendChild(div);
+    });
+
+    positionDropdown();
+    box.classList.add('active');
+  }
+
+  input.addEventListener('input', function() {
+    clearTimeout(timeout);
+    const query = this.value.trim().toLowerCase();
+    if (query.length < 1) { box.classList.remove('active'); return; }
+
+    timeout = setTimeout(() => {
+      const matches = GPU_DB.filter(gpu => {
+        const nameMatch = gpu.name.toLowerCase().includes(query);
+        const archMatch = gpu.arch.toLowerCase().includes(query);
+        const yearMatch = gpu.year.toString().includes(query);
+        return nameMatch || archMatch || yearMatch;
+      }).slice(0, 8);
+      showSuggestions(matches);
+    }, 150);
+  });
+
+  input.addEventListener('focus', positionDropdown);
+  
+  window.addEventListener('scroll', positionDropdown, true);
+  window.addEventListener('resize', positionDropdown);
+
+  document.addEventListener('click', function(e) {
+    if (e.target !== input && !box.contains(e.target)) {
+      box.classList.remove('active');
+    }
+  });
+
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      searchGPU();
+      box.classList.remove('active');
+    }
+  });
+}
+
+function searchGPU(specificMatch = null) {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!query && !specificMatch) { clearSearch(); return; }
+
+  let baseCard = specificMatch;
+  if (!baseCard) {
+    baseCard = GPU_DB.find(g => g.name.toLowerCase() === query) || GPU_DB.find(g => g.name.toLowerCase().includes(query));
+    if (baseCard) document.getElementById('searchInput').value = baseCard.name;
+    if (!baseCard) { showStatus('No GPU found matching that name.', 'error'); return; }
+  }
+
+  lastSearch = baseCard;
+  showSimilarCards(baseCard);
+}
+
+function showSimilarCards(baseCard) {
+  const resultsSection = document.getElementById('resultsSection');
+  const resultsTitle = document.getElementById('resultsTitle');
+  const resultsCount = document.getElementById('resultsCount');
+  const gpuList = document.getElementById('gpuList');
+
+  let similar = GPU_DB
+    .map(gpu => {
+      const diff = gpu.score - baseCard.score;
+      const pctDiff = ((diff / baseCard.score) * 100).toFixed(1);
+      return { ...gpu, diff, pctDiff, isBase: gpu.name === baseCard.name };
+    })
+    .sort((a, b) => a.diff - b.diff);
+
+  const filtered = similar.filter(g => !g.isBase);
+  const faster = filtered.filter(g => g.diff < 0).sort((a, b) => b.diff - a.diff).slice(0, 7);
+  const slower = filtered.filter(g => g.diff > 0).sort((a, b) => a.diff - b.diff).slice(0, 8);
+  const finalList = [...faster, baseCard, ...slower];
+
+  resultsSection.classList.remove('hidden');
+  resultsTitle.textContent = `Similar to: ${baseCard.name}`;
+  resultsCount.textContent = `${finalList.length} cards shown`;
+
+  gpuList.innerHTML = finalList.map((gpu, i) => {
+    const isBase = gpu.isBase;
+    const isFaster = gpu.diff > 0;
+    const isSlower = gpu.diff < 0;
+    const cardClass = isBase ? 'base-card' : (isFaster ? 'faster' : 'slower');
+    const diffClass = isFaster ? 'positive' : 'negative';
+    const diffIcon = isFaster ? '+' : '';
+    const rankClass = i < 3 ? 'top3' : '';
+
+    return `
+      <div class="gpu-card ${cardClass} brand-${gpu.brand}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+        <div class="card-top">
+            <div class="gpu-name">
+                <h3>${gpu.name} ${isBase ? '<span class="base-label">(BASE)</span>' : ''}</h3>
+                <div class="gpu-meta">
+                    <span>${gpu.arch}</span>
+                    <span>${gpu.year}</span>
+                    <span>${gpu.vram}</span>
+                </div>
+                <div class="gpu-tags">
+                    <span class="api-badge">DX:${gpu.dx_hw}</span>
+                    <span class="api-badge">VK:${gpu.vulkan}</span>
+                    <span class="api-badge">GL:${gpu.opengl}</span>
+                </div>
+            </div>
+            <div class="gpu-rank ${rankClass}">#${i + 1}</div>
+        </div>
+        
+        <div class="card-bottom">
+            <div class="gpu-diff ${diffClass}">
+                <div class="val">${diffIcon}${gpu.pctDiff}%</div>
+                <div class="label">Diff</div>
+            </div>
+            <div class="gpu-score">
+                <div class="val">${gpu.score.toLocaleString()}</div>
+                <div class="label">Score</div>
+            </div>
+        </div>
+        <div class="gpu-specs">
+            <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
+        </div>
+        <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+      </div>
+    `;
+  }).join('');
+
+  showStatus(`Found ${finalList.length} cards with similar performance to ${baseCard.name}. Click a card to compare.`, 'done');
+}
+
+function renderList(gpus) {
+  const container = document.getElementById('gpuList');
+  const resultsSection = document.getElementById('resultsSection');
+  const resultsTitle = document.getElementById('resultsTitle');
+  const resultsCount = document.getElementById('resultsCount');
+
+  const sortedGpus = [...gpus].sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.name.localeCompare(b.name);
+  });
+
+  container.innerHTML = sortedGpus.slice(0, 300).map((gpu, i) => `
+    <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(lastSearch || gpus[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+      <div class="card-top">
+        <div class="gpu-name">
+          <h3>${gpu.name}</h3>
+          <div class="gpu-meta">
+            <span>${gpu.arch}</span>
+            <span>${gpu.year}</span>
+            <span>${gpu.vram}</span>
+          </div>
+          <div class="gpu-tags">
+              <span class="api-badge">DX:${gpu.dx_hw}</span>
+              <span class="api-badge">VK:${gpu.vulkan}</span>
+              <span class="api-badge">GL:${gpu.opengl}</span>
+          </div>
+        </div>
+        <div class="gpu-rank">${i + 1}</div>
+      </div>
+      
+      <div class="card-bottom">
+        <div class="gpu-score">
+          <div class="val">${gpu.score.toLocaleString()}</div>
+          <div class="label">Score</div>
+        </div>
+        <div class="gpu-specs">
+            <span>${gpu.tdp}W</span>
+            <span class="brand-name">${gpu.brand.toUpperCase()}</span>
+        </div>
+      </div>
+      <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+    </div>
+  `).join('');
+
+  resultsSection.classList.remove('hidden');
+  resultsTitle.textContent = filterLabel(currentFilter);
+  resultsCount.textContent = `${gpus.length} cards found`;
+}
+
+function getGameCompatibility(gpu, game) {
+  if (!game.score) return 'no';
+  if (gpu.score >= game.score) {
+    if (game.recommended_score && gpu.score >= game.recommended_score) {
+      return 'recommended';
+    }
+    return 'compatible';
+  }
+  return 'no';
+}
+
+function openGamesModal(gpuName) {
+  const gpu = GPU_DB.find(g => g.name === gpuName);
+  if (!gpu) return;
+
+  const compatibleGames = GAMES_DB
+    .map(game => ({ 
+      ...game, 
+      status: getGameCompatibility(gpu, game),
+      score: Number(game.score) || 0,
+      year: game.release_year || 'N/A'
+    }))
+    .filter(g => g.status !== 'no')
+    .sort((a, b) => b.score - a.score);
+
+  const modal = document.getElementById('gamesModal');
+  const content = document.getElementById('gamesModalContent');
+  const title = document.getElementById('gamesModalTitle');
+  
+  title.textContent = `🎮 Compatible Games for ${gpu.name}`;
+  
+  currentGameTab = 'all';
+  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.game-tab').classList.add('active');
+
+  modal.dataset.fullList = JSON.stringify(compatibleGames);
+  
+  renderGameList(compatibleGames);
+  modal.classList.add('active');
+}
+
+function renderGameList(games) {
+  const content = document.getElementById('gamesModalContent');
+  
+  if (games.length === 0) {
+    content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No compatible games found for this GPU.</p>`;
+    return;
+  }
+
+  content.innerHTML = games.map(game => {
+    let badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
+    let badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
+    
+    return `
+      <div class="game-card">
+        <div class="game-card-header">
+          <h4>${game.title}</h4>
+          <span class="compat-badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <p><span class="score-range">Game Score:</span> ${game.score.toLocaleString()}</p>
+        <div class="game-tags">
+          <span class="tag score">Min Score: ${game.score}</span>
+          <span class="tag">Year: ${game.year}</span>
+        </div>
+        ${game.notes ? `<p style="margin-top:8px;"><em>${game.notes}</em></p>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function filterGamesByTab(apiLevel) {
+  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+  const buttons = document.querySelectorAll('.game-tab');
+  if(apiLevel === 'all') buttons[0].classList.add('active');
+  if(apiLevel === '12') buttons[1].classList.add('active');
+  if(apiLevel === '11') buttons[2].classList.add('active');
+  if(apiLevel === '9') buttons[3].classList.add('active');
+
+  currentGameTab = apiLevel;
+  const modal = document.getElementById('gamesModal');
+  const fullList = modal.dataset.fullList ? JSON.parse(modal.dataset.fullList) : [];
+  
+  if (apiLevel === 'all') {
+    renderGameList(fullList);
+  } else {
+    const filtered = fullList.filter(g => !g.api || g.api == apiLevel);
+    filtered.sort((a, b) => b.score - a.score); // Keep highest score first
+    renderGameList(filtered);
+  }
+}
+
+function closeGamesModal() {
+  document.getElementById('gamesModal').classList.remove('active');
+}
+
+document.getElementById('gamesModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'gamesModal') closeGamesModal();
+});
+
+// ============================================================
+// COMPARISON MODAL
+// ============================================================
+
+function showComparison(card1, card2) {
+  const modal = document.getElementById('comparisonModal');
+  const content = document.getElementById('compareContent');
+  
+  const pctDiff = ((card2.score - card1.score) / card1.score * 100).toFixed(1);
+  const faster = card2.score > card1.score;
+  const diffClass = faster ? 'diff-faster' : 'diff-slower';
+  const diffIcon = faster ? '+' : '';
+
+  const renderAPI = (gpu) => `
+    <div class="api-grid">
+      <div class="api-item"><div class="api-label">DX HW</div><div class="api-val">${gpu.dx_hw || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">DX SW</div><div class="api-val">${gpu.dx_sw || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">Vulkan</div><div class="api-val">${gpu.vulkan || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">OpenGL</div><div class="api-val">${gpu.opengl || 'N/A'}</div></div>
+    </div>
+  `;
+
+  content.innerHTML = `
+    <div class="compare-row">
+      <div class="compare-item">
+        <h4>${card1.name}</h4>
+        <p><strong>Score:</strong> ${card1.score.toLocaleString()}</p>
+        <p><strong>Architecture:</strong> ${card1.arch}</p>
+        <p><strong>VRAM:</strong> ${card1.vram}</p>
+        <p><strong>TDP:</strong> ${card1.tdp}W</p>
+        <p><strong>Year:</strong> ${card1.year}</p>
+        ${renderAPI(card1)}
+      </div>
+      <div class="compare-item">
+        <h4>${card2.name}</h4>
+        <p><strong>Score:</strong> ${card2.score.toLocaleString()}</p>
+        <p><strong>Architecture:</strong> ${card2.arch}</p>
+        <p><strong>VRAM:</strong> ${card2.vram}</p>
+        <p><strong>TDP:</strong> ${card2.tdp}W</p>
+        <p><strong>Year:</strong> ${card2.year}</p>
+        ${renderAPI(card2)}
+      </div>
+    </div>
+    <div class="comparison-verdict">
+      <p style="font-size:1.1rem; color:var(--text-muted); margin-bottom:8px;">Comparison Result</p>
+      <p style="font-size:1.2rem;">
+        ${card2.name} is <strong class="${diffClass}" style="font-size:1.4rem;">${diffIcon}${pctDiff}%</strong> ${faster ? 'faster' : 'slower'} than ${card1.name}
+      </p>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('comparisonModal').classList.remove('active');
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('statusBar').style.display = 'none';
+  document.getElementById('suggestionsBox').classList.remove('active');
+  lastSearch = null;
+  renderList(GPU_DB);
+}
+
+function filterList(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  
+  let filtered = GPU_DB;
+  if (filter === 'nvidia') filtered = GPU_DB.filter(g => g.brand === 'nvidia');
+  else if (filter === 'amd') filtered = GPU_DB.filter(g => g.brand === 'amd');
+  else if (filter === 'intel') filtered = GPU_DB.filter(g => g.brand === 'intel');
+  else if (filter === 'igpu') filtered = GPU_DB.filter(g => g.type === 'igpu');
+  
+  renderList(filtered);
+}
+
+function filterLabel(f) {
+  if (f === 'all') return 'All GPUs in Database';
+  if (f === 'nvidia') return 'NVIDIA GPUs';
+  if (f === 'amd') return 'AMD GPUs';
+  if (f === 'intel') return 'Intel iGPUs';
+  if (f === 'igpu') return 'Integrated GPUs';
+  return 'GPUs';
+}
+
+function showStatus(msg, type) {
+  const bar = document.getElementById('statusBar');
+  bar.textContent = msg;
+  bar.className = `scrape-status ${type}`;
+  bar.style.display = 'block';
+  setTimeout(() => { bar.style.display = 'none'; }, 5000);
+}
+
+init();
+</script>
+</body>
+</html>
