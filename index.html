@@ -433,17 +433,6 @@
     }
     .btn-games:hover { filter: brightness(1.3); transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 243, 255, 0.5); }
 
-    .game-tabs {
-      display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 10px;
-    }
-    .game-tab {
-      background: transparent; border: none; color: var(--text-muted); font-weight: 600;
-      padding: 8px 16px; cursor: pointer; border-radius: 6px; transition: all 0.2s;
-    }
-    .game-tab:hover { color: var(--text-main); background: var(--border-subtle); }
-    .game-tab.active { background: var(--accent-primary); color: white; box-shadow: 0 0 12px rgba(0, 243, 255, 0.4); }
-
     .game-card {
       background: rgba(0, 243, 255, 0.02);
       border: 1px solid var(--border-subtle);
@@ -563,12 +552,7 @@
         <button class="close-btn" onclick="closeGamesModal()">&times;</button>
       </div>
       
-      <div class="game-tabs" id="gameTabs">
-        <button class="game-tab active" onclick="filterGamesByTab('all')">All Games</button>
-        <button class="game-tab" onclick="filterGamesByTab('12')">DX12</button>
-        <button class="game-tab" onclick="filterGamesByTab('11')">DX11</button>
-        <button class="game-tab" onclick="filterGamesByTab('9')">DX9/10</button>
-      </div>
+      <!-- REMOVED: game-tabs div -->
 
       <div id="gamesModalContent">
         <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
@@ -596,7 +580,7 @@ let lastSearch = null;
 let GPU_DB = [];
 let GAMES_DB = [];
 let isLoading = false;
-let currentGameTab = 'all';
+// REMOVED: let currentGameTab = 'all';
 let currentView = 'gpus'; // Tracks whether we're viewing GPUs or Games
 
 function init() {
@@ -954,10 +938,12 @@ function getGameCompatibility(gpu, game) {
   return 'no';
 }
 
+// UPDATED: openGamesModal function
 function openGamesModal(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
 
+  // Filter & sort compatible games by performance score
   const compatibleGames = GAMES_DB
     .map(game => ({ 
       ...game, 
@@ -966,20 +952,14 @@ function openGamesModal(gpuName) {
       year: game.release_year || 'N/A'
     }))
     .filter(g => g.status !== 'no')
-    .sort((a, b) => b.score - a.score);
+    .sort((a, b) => b.score - a.score); // Sort by score descending
 
   const modal = document.getElementById('gamesModal');
-  const content = document.getElementById('gamesModalContent');
   const title = document.getElementById('gamesModalTitle');
   
   title.textContent = `🎮 Compatible Games for ${gpu.name}`;
   
-  currentGameTab = 'all';
-  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.game-tab').classList.add('active');
-
-  modal.dataset.fullList = JSON.stringify(compatibleGames);
-  
+  // Directly render without tab/storage overhead
   renderGameList(compatibleGames);
   modal.classList.add('active');
 }
@@ -1017,26 +997,7 @@ function renderGameList(games) {
   }).join('');
 }
 
-function filterGamesByTab(apiLevel) {
-  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
-  const buttons = document.querySelectorAll('.game-tab');
-  if(apiLevel === 'all') buttons[0].classList.add('active');
-  if(apiLevel === '12') buttons[1].classList.add('active');
-  if(apiLevel === '11') buttons[2].classList.add('active');
-  if(apiLevel === '9') buttons[3].classList.add('active');
-
-  currentGameTab = apiLevel;
-  const modal = document.getElementById('gamesModal');
-  const fullList = modal.dataset.fullList ? JSON.parse(modal.dataset.fullList) : [];
-  
-  if (apiLevel === 'all') {
-    renderGameList(fullList);
-  } else {
-    const filtered = fullList.filter(g => !g.api || g.api == apiLevel);
-    filtered.sort((a, b) => b.score - a.score);
-    renderGameList(filtered);
-  }
-}
+// REMOVED: filterGamesByTab function
 
 function closeGamesModal() {
   document.getElementById('gamesModal').classList.remove('active');
