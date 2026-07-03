@@ -780,7 +780,8 @@ function renderList(gpus) {
     return a.name.localeCompare(b.name);
   });
 
-  container.innerHTML = sortedGpus.slice(0, 300).map((gpu, i) => `
+  // Removed the slice(0, 300) limit to show all GPUs
+  container.innerHTML = sortedGpus.map((gpu, i) => `
     <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(lastSearch || gpus[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
       <div class="card-top">
         <div class="gpu-name">
