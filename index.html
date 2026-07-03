@@ -544,6 +544,17 @@
       </div>
     </div>
   </div>
+
+  <!-- NEW: Compatible GPUs Modal -->
+  <div id="compatibleGPUsModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 id="compatibleGPUsTitle">Compatible GPUs</h2>
+        <button class="close-btn" onclick="closeCompatibleGPUsModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="compatibleGPUsList" style="max-height: 60vh; overflow-y: auto;"></div>
+    </div>
+  </div>
 </div>
 
 <div id="suggestionsBox" class="suggestions-box"></div>
@@ -892,6 +903,8 @@ function renderGameListGlobal(games) {
         <div class="gpu-specs">
           <span>${game.notes || 'No additional notes.'}</span>
         </div>
+        <!-- NEW: Compatible GPUs Button -->
+        <button class="btn-games" onclick="event.stopPropagation(); showCompatibleGPUs('${game.title.replace(/'/g, "\\'")}', ${score})">🔍 Compatible GPUs</button>
       </div>
     `;
   }).join('');
@@ -1000,6 +1013,74 @@ function closeGamesModal() {
 
 document.getElementById('gamesModal')?.addEventListener('click', (e) => {
   if (e.target.id === 'gamesModal') closeGamesModal();
+});
+
+// ============================================================
+// NEW: Compatible GPUs Modal Logic
+// ============================================================
+
+function showCompatibleGPUs(title, score) {
+  const compatibleGPUs = GPU_DB.filter(gpu => gpu.score >= score)
+    .sort((a, b) => b.score - a.score);
+  
+  document.getElementById('compatibleGPUsTitle').textContent = `Compatible GPUs for ${title}`;
+  const listContainer = document.getElementById('compatibleGPUsList');
+  
+  if (compatibleGPUs.length === 0) {
+    listContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No compatible GPUs found in the database.</p>';
+  } else {
+    listContainer.innerHTML = compatibleGPUs.map((gpu, i) => {
+      const diff = gpu.score - score;
+      const pctDiff = ((diff / score) * 100).toFixed(1);
+      const isFaster = diff > 0;
+      const diffClass = isFaster ? 'positive' : 'negative';
+      const diffIcon = isFaster ? '+' : '';
+      
+      return `
+        <div class="gpu-card brand-${gpu.brand}" onclick="showComparison(lastSearch || GPU_DB[0], ${JSON.stringify(gpu).replace(/'/g, "&#39;")})">
+          <div class="card-top">
+              <div class="gpu-name">
+                  <h3>${gpu.name}</h3>
+                  <div class="gpu-meta">
+                      <span>${gpu.arch}</span>
+                      <span>${gpu.year}</span>
+                      <span>${gpu.vram}</span>
+                  </div>
+                  <div class="gpu-tags">
+                      <span class="api-badge">DX:${gpu.dx_hw}</span>
+                      <span class="api-badge">VK:${gpu.vulkan}</span>
+                      <span class="api-badge">GL:${gpu.opengl}</span>
+                  </div>
+              </div>
+              <div class="gpu-rank">#${i + 1}</div>
+          </div>
+          <div class="card-bottom">
+              <div class="gpu-diff ${diffClass}">
+                  <div class="val">${diffIcon}${pctDiff}%</div>
+                  <div class="label">Above Min</div>
+              </div>
+              <div class="gpu-score">
+                  <div class="val">${gpu.score.toLocaleString()}</div>
+                  <div class="label">Score</div>
+              </div>
+          </div>
+          <div class="gpu-specs">
+              <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  document.getElementById('compatibleGPUsModal').classList.add('active');
+}
+
+function closeCompatibleGPUsModal() {
+  document.getElementById('compatibleGPUsModal').classList.remove('active');
+}
+
+document.getElementById('compatibleGPUsModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'compatibleGPUsModal') closeCompatibleGPUsModal();
 });
 
 // ============================================================
