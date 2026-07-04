@@ -814,6 +814,7 @@ function searchGPU(specificMatch = null) {
   showSimilarCards(baseCard);
 }
 
+// 🔽 UPDATED FUNCTION: Places searched GPU at the top & fixes performance delta sorting
 function showSimilarCards(baseCard) {
   const resultsSection = document.getElementById('resultsSection');
   const resultsTitle = document.getElementById('resultsTitle');
@@ -829,9 +830,13 @@ function showSimilarCards(baseCard) {
     .sort((a, b) => a.diff - b.diff);
 
   const filtered = similar.filter(g => !g.isBase);
-  const faster = filtered.filter(g => g.diff < 0).sort((a, b) => b.diff - a.diff).slice(0, 7);
-  const slower = filtered.filter(g => g.diff > 0).sort((a, b) => a.diff - b.diff).slice(0, 8);
-  const finalList = [...faster, baseCard, ...slower];
+  
+  // Corrected sorting logic: positive diff = faster, negative = slower
+  const faster = filtered.filter(g => g.diff > 0).sort((a, b) => b.diff - a.diff).slice(0, 7);
+  const slower = filtered.filter(g => g.diff < 0).sort((a, b) => a.diff - b.diff).slice(0, 8);
+  
+  // 🔽 UPDATED: Place the searched GPU at the TOP of the list
+  const finalList = [baseCard, ...faster, ...slower];
 
   resultsSection.classList.remove('hidden');
   resultsTitle.textContent = `Similar to: ${baseCard.name}`;
