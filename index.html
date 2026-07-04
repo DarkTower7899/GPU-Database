@@ -36,15 +36,16 @@
       --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* FORCE DARK MODE */
     [data-theme="light"] {
-      --bg-body: #0a0a14;
-      --bg-panel: rgba(15, 15, 30, 0.95);
-      --bg-card: rgba(20, 20, 40, 0.6);
-      --bg-card-hover: rgba(25, 25, 55, 0.8);
-      --border-subtle: rgba(0, 243, 255, 0.18);
-      --border-focus: rgba(0, 243, 255, 0.7);
-      --text-main: #f0f4ff;
-      --text-muted: #8b92b8;
+      --bg-body: #05050a;
+      --bg-panel: rgba(10, 10, 20, 0.85);
+      --bg-card: rgba(15, 15, 30, 0.5);
+      --bg-card-hover: rgba(20, 20, 45, 0.7);
+      --border-subtle: rgba(0, 243, 255, 0.12);
+      --border-focus: rgba(0, 243, 255, 0.6);
+      --text-main: #e0e6ff;
+      --text-muted: #6b7294;
       --accent-primary: #00f3ff;
       --accent-gradient: linear-gradient(135deg, #00f3ff 0%, #bc13fe 100%);
       --brand-intel: #00f3ff;
@@ -52,8 +53,8 @@
       --brand-amd: #ff003c;
       --success: #00ff41;
       --danger: #ff003c;
-      --shadow-card: 0 0 20px rgba(0, 243, 255, 0.12);
-      --shadow-glow: 0 0 30px rgba(0, 243, 255, 0.25);
+      --shadow-card: 0 0 15px rgba(0, 243, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(188, 19, 254, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -404,6 +405,28 @@
       cursor: pointer; font-size: 1.1rem; transition: var(--transition);
     }
     .theme-toggle:hover { border-color: var(--accent-primary); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+
+    /* Contact Button Styles */
+    .contact-btn {
+      background: var(--accent-gradient);
+      color: white;
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+    .contact-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+      transform: translateY(-1px);
+    }
     
     .scrape-status {
       margin-top: 15px; padding: 12px; border-radius: var(--radius-md);
@@ -542,10 +565,12 @@
   </div>
   
   <div class="header-right">
-    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
-    <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
-      <img src="YouTube.png" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
+    <!-- Contact Button -->
+    <a href="mailto:craptopgamingadvice@gmail.com" class="contact-btn" title="Email Us">
+      ✉️ Contact
     </a>
+    
+    <!-- Theme Toggle Removed to enforce Dark Mode -->
   </div>
 </div>
 
@@ -643,24 +668,9 @@ let isLoading = false;
 let currentView = 'gpus'; // Tracks whether we're viewing GPUs or Games
 
 function init() {
-  setupTheme();
+  // Theme toggle removed to enforce dark mode
   setupSuggestions();
   loadDatabase();
-}
-
-function setupTheme() {
-  const toggle = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('gpu-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
-  toggle.textContent = saved === 'dark' ? '🌙' : '☀️';
-  
-  toggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('gpu-theme', next);
-    toggle.textContent = next === 'dark' ? '🌙' : '☀️';
-  });
 }
 
 async function loadDatabase() {
