@@ -462,6 +462,52 @@
     }
     .compat-badge.yes { background: rgba(0, 255, 65, 0.15); color: var(--success); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
     .compat-badge.rec { background: rgba(0, 243, 255, 0.15); color: var(--accent-primary); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
+
+    /* =========================================
+       SOFTWARE MODAL CARD STYLES
+       ========================================= */
+    .software-item {
+      background: rgba(0, 243, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .software-item:hover { 
+      border-color: var(--accent-primary); 
+      transform: translateX(4px); 
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); 
+    }
+    .software-item h4 { 
+      color: var(--accent-primary); 
+      margin: 0 0 8px 0; 
+      font-size: 1.1rem; 
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+    }
+    .software-item p { 
+      font-size: 0.85rem; 
+      color: var(--text-muted); 
+      margin: 0 0 12px 0; 
+      line-height: 1.5; 
+    }
+    .software-item a {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--accent-primary);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .software-item a:hover { 
+      background: var(--accent-primary); 
+      color: #000; 
+      box-shadow: 0 0 10px var(--accent-primary); 
+    }
     
     @media (max-width: 768px) {
       .gpu-list { grid-template-columns: 1fr; }
@@ -522,6 +568,8 @@
       <button class="filter-btn" onclick="filterList('igpu', this)">iGPUs</button>
       <!-- New Button for All Games -->
       <button class="filter-btn" onclick="showAllGames()" id="btnAllGames">🎮 All Games</button>
+      <!-- NEW: Software Button -->
+      <button class="filter-btn" onclick="openSoftwareModal()" id="btnSoftware">🛠️ Software</button>
     </div>
   </div>
 
@@ -568,6 +616,17 @@
         <button class="close-btn" onclick="closeCompatibleGPUsModal()">&times;</button>
       </div>
       <div class="modal-body" id="compatibleGPUsList" style="max-height: 60vh; overflow-y: auto;"></div>
+    </div>
+  </div>
+
+  <!-- NEW: Software Modal -->
+  <div id="softwareModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2>🛠️ Recommended Software</h2>
+        <button class="close-btn" onclick="closeSoftwareModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="softwareList" style="max-height: 60vh; overflow-y: auto;"></div>
     </div>
   </div>
 </div>
@@ -1073,6 +1132,40 @@ function closeCompatibleGPUsModal() {
 
 document.getElementById('compatibleGPUsModal')?.addEventListener('click', (e) => {
   if (e.target.id === 'compatibleGPUsModal') closeCompatibleGPUsModal();
+});
+
+// ============================================================
+// SOFTWARE MODAL LOGIC
+// ============================================================
+const SOFTWARE_LIST = [
+  { name: "Ninite", desc: "Streamlines installing/updating multiple desktop apps simultaneously. Silently downloads official installers, applies safe defaults, and blocks bundled software.", link: "https://ninite.com/" },
+  { name: "ThrottleStop", desc: "Advanced power management & undervolting utility for Intel laptops. Disables turbo boost, adjusts power limits, and creates custom fan curves to reduce heat/throttling.", link: "https://www.techpowerup.com/download/techpowerup-throttlestop/" },
+  { name: "GPU-Z", desc: "Lightweight, detailed hardware information & verification tool for GPUs. Displays real-time sensors, driver details, and verifies hardware authenticity.", link: "https://www.techpowerup.com/gpuz/" },
+  { name: "HWMonitor", desc: "Comprehensive hardware monitoring program reading real-time sensor data from CPUs, GPUs, motherboards, and storage drives for live health tracking.", link: "https://www.cpuid.com/softwares/hwmonitor.html" },
+  { name: "CPU-Z", desc: "Detailed system information utility reporting accurate data about processors, cache, mainboard, RAM, and SPD modules. Validates specs and provides hardware IDs.", link: "https://www.cpuid.com/softwares/cpu-z.html" },
+  { name: "UXTU", desc: "Open-source, cross-platform tuning tool unifying laptop performance management for AMD & Intel. Consolidates power limits, profiles, and fan curves.", link: "https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases" },
+  { name: "G-Helper", desc: "Lightweight, open-source alternative to OEM bloatware. Manages fan control, performance modes, RGB, monitoring, and battery limits in a clean interface.", link: "https://g-helper.com/" },
+  { name: "MSI Afterburner", desc: "Industry-standard GPU overclocking & monitoring utility compatible with all NVIDIA/AMD cards. Adjusts clocks/voltage/fan curves with real-time OSD.", link: "https://www.msi.com/Landing/afterburner/graphics-cards" }
+];
+
+function openSoftwareModal() {
+  const listContainer = document.getElementById('softwareList');
+  listContainer.innerHTML = SOFTWARE_LIST.map(s => `
+    <div class="software-item">
+      <h4>${s.name}</h4>
+      <p>${s.desc}</p>
+      <a href="${s.link}" target="_blank" rel="noopener noreferrer">🔗 Download / Visit Official Site</a>
+    </div>
+  `).join('');
+  document.getElementById('softwareModal').classList.add('active');
+}
+
+function closeSoftwareModal() {
+  document.getElementById('softwareModal').classList.remove('active');
+}
+
+document.getElementById('softwareModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'softwareModal') closeSoftwareModal();
 });
 
 // ============================================================
