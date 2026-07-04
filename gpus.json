@@ -3124,7 +3124,7 @@
     "brand": "intel",
     "type": "igpu",
     "year": 2016,
-    "score": 350,
+    "score": 550,
     "vram": "Shared",
     "tdp": 15,
     "arch": "Gen 9",
