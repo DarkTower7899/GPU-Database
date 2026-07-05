@@ -272,10 +272,46 @@ const player = {
   invincible: 0,
   powerLevel: 1,
   powerTimer: 0,
-  shieldActive: false, shieldTimer: 0, shieldAngle: 0
+  shieldActive: false, shieldTimer: 0, shieldAngle: 0,
+  lives: 3 // ✨ NEW: Lives system
 };
 
 let bullets = [], enemies = [], particles = [], stars = [], powerups = [], enemyBullets = [], floatingTexts = [], shards = [];
+
+// ✨ NEW: Galaxy System
+let galaxies = [];
+
+function initGalaxies() {
+  galaxies = [];
+  // Create between 10 and 20 galaxies
+  const count = 10 + Math.floor(Math.random() * 10);
+  
+  for (let i = 0; i < count; i++) {
+    // ✨ DEPTH LOGIC: Determine if this galaxy is "far" or "near"
+    const isNear = Math.random() > 0.7; // 30% chance to be near
+    
+    let size = isNear ? 150 + Math.random() * 150 : 40 + Math.random() * 60;
+    let speed = isNear ? 0.3 : 0.05; // Near ones move faster (parallax)
+    let opacity = isNear ? 0.4 : 0.1;
+    
+    // Random colors for nebula/galaxy effect
+    const hue = Math.random() * 360;
+    const color1 = `hsla(${hue}, 80%, 60%, 0.8)`;
+    const color2 = `hsla(${hue + 40}, 80%, 40%, 0.2)`;
+    
+    galaxies.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: size,
+      speed: speed,
+      opacity: opacity,
+      color1: color1,
+      color2: color2,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.005
+    });
+  }
+}
 
 function initStars() {
   stars = [];
@@ -318,9 +354,14 @@ function startGame() {
   gameState = 'playing';
   score = 0; wave = 1; waveTimer = WAVE_DURATION; waveSpawnTimer = 0;
   isBossWave = false; bossWaveTimer = 0;
+  
+  // ✨ NEW: Reset lives and power level on start
+  player.lives = 3;
+  player.powerLevel = 1;
+  player.hp = player.maxHp;
+  
   player.x = canvas.width / 2; player.y = canvas.height - 80;
-  player.hp = 100; player.powerLevel = 1; player.powerTimer = 0;
-  player.shieldActive = false; player.shieldTimer = 0; player.invincible = 0;
+  player.invincible = 60; // Brief invincibility on start
   bullets = []; enemies = []; particles = []; powerups = []; enemyBullets = []; floatingTexts = []; shards = [];
   
   overlay.classList.add('hidden');
@@ -363,18 +404,40 @@ function spawnBoss(x) {
   });
 }
 
+// ✨ UPDATED: Extended to 5 power levels with backward shots for 4 & 5
 function shoot() {
   if (player.fireTimer > 0) return;
   player.fireTimer = player.fireRate;
   const bSpeed = -10;
-  if (player.powerLevel >= 3) {
+  const bSpeedBack = 8; // Backward bullet speed
+
+  if (player.powerLevel >= 5) {
+    // Level 5: Triple front + Triple back
+    bullets.push({ x: player.x - 14, y: player.y - 18, vx: -2.5, vy: bSpeed, damage: 10, color: '#00ffcc' });
+    bullets.push({ x: player.x, y: player.y - 20, vx: 0, vy: bSpeed, damage: 15, color: '#00d4ff' });
+    bullets.push({ x: player.x + 14, y: player.y - 18, vx: 2.5, vy: bSpeed, damage: 10, color: '#00ffcc' });
+    // Backward spread
+    bullets.push({ x: player.x - 14, y: player.y + 18, vx: -2.5, vy: bSpeedBack, damage: 8, color: '#ffaa00' });
+    bullets.push({ x: player.x, y: player.y + 20, vx: 0, vy: bSpeedBack, damage: 10, color: '#ff8800' });
+    bullets.push({ x: player.x + 14, y: player.y + 18, vx: 2.5, vy: bSpeedBack, damage: 8, color: '#ffaa00' });
+  } else if (player.powerLevel >= 4) {
+    // Level 4: Double front + Double back
+    bullets.push({ x: player.x - 10, y: player.y - 18, vx: -1.8, vy: bSpeed, damage: 12, color: '#00d4ff' });
+    bullets.push({ x: player.x + 10, y: player.y - 18, vx: 1.8, vy: bSpeed, damage: 12, color: '#00d4ff' });
+    // Backward spread
+    bullets.push({ x: player.x - 10, y: player.y + 18, vx: -1.8, vy: bSpeedBack, damage: 8, color: '#ff8800' });
+    bullets.push({ x: player.x + 10, y: player.y + 18, vx: 1.8, vy: bSpeedBack, damage: 8, color: '#ff8800' });
+  } else if (player.powerLevel >= 3) {
+    // Level 3: Triple front
     bullets.push({ x: player.x - 14, y: player.y - 18, vx: -2.5, vy: bSpeed, damage: 10, color: '#00ffcc' });
     bullets.push({ x: player.x, y: player.y - 20, vx: 0, vy: bSpeed, damage: 15, color: '#00d4ff' });
     bullets.push({ x: player.x + 14, y: player.y - 18, vx: 2.5, vy: bSpeed, damage: 10, color: '#00ffcc' });
   } else if (player.powerLevel >= 2) {
+    // Level 2: Double front
     bullets.push({ x: player.x - 10, y: player.y - 18, vx: -1.8, vy: bSpeed, damage: 12, color: '#00d4ff' });
     bullets.push({ x: player.x + 10, y: player.y - 18, vx: 1.8, vy: bSpeed, damage: 12, color: '#00d4ff' });
   } else {
+    // Level 1: Single front
     bullets.push({ x: player.x, y: player.y - 18, vx: 0, vy: bSpeed, damage: 10, color: '#00d4ff' });
   }
   for (let i = 0; i < 3; i++) particles.push(createParticle(player.x, player.y - 20, '#00d4ff', 3, 15));
@@ -554,14 +617,37 @@ function update() {
         else { player.hp -= 25; tookDamage = true; player.invincible = 45; screenShake = 12; explode(player.x, player.y, '#ff4444', 20); e.hp -= 20; if (e.hp <= 0) { score += e.score; explode(e.x, e.y, e.color, 30); } }
       }
     });
-    if (tookDamage) player.powerLevel = 1;
+    
+    // ✨ UPDATED: Power level now decrements by 1 instead of resetting to 1
+    if (tookDamage) {
+      player.powerLevel = Math.max(1, player.powerLevel - 1);
+    }
+  }
+
+  // ✨ UPDATED: Handle lives instead of instant game over
+  if (player.hp <= 0) {
+    player.lives--;
+    if (player.lives > 0) {
+      player.hp = player.maxHp;
+      player.invincible = 120; // 2 seconds invincibility on respawn
+      player.x = canvas.width / 2;
+      player.y = canvas.height - 80;
+      screenShake = 15;
+      addFloatingText(player.x, player.y, "LIVES: " + player.lives, "#00ff88");
+    } else {
+      showGameOver();
+    }
   }
 
   powerups = powerups.filter(p => {
     p.y += p.vy; p.angle += 0.05;
     if (p.y > canvas.height + 20) return false;
     if (Math.abs(p.x - player.x) < 25 && Math.abs(p.y - player.y) < 25) {
-      if (p.type === 'power') { player.powerLevel = Math.min(3, player.powerLevel + 1); addFloatingText(p.x, p.y, 'SPREAD GUN!', '#ffdd00'); }
+      if (p.type === 'power') { 
+        // ✨ UPDATED: Cap power level at 5
+        player.powerLevel = Math.min(5, player.powerLevel + 1); 
+        addFloatingText(p.x, p.y, `POWER LV: ${player.powerLevel}`, '#ffdd00'); 
+      }
       else if (p.type === 'health') { player.hp = Math.min(player.maxHp, player.hp + 30); addFloatingText(p.x, p.y, '+30 HP', '#00ff66'); }
       else if (p.type === 'shield') { player.shieldActive = true; player.shieldTimer = 300; addFloatingText(p.x, p.y, 'SHIELD!', '#00aaff'); }
       else if (p.type === 'nuke') {
@@ -586,8 +672,15 @@ function update() {
   });
 
   floatingTexts = floatingTexts.filter(t => { t.y += t.vy; t.life -= dt; return t.life > 0; });
+  
+  // ✨ UPDATED: Update galaxies
+  galaxies.forEach(g => {
+    g.x += g.speed * dt;
+    if (g.x > canvas.width + g.size) g.x = -g.size;
+    g.rotation += g.rotSpeed;
+  });
+  
   stars.forEach(s => { s.y += s.speed * dt; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; } s.brightness = 0.5 + Math.sin(Date.now() * 0.003 + s.x) * 0.3; });
-  if (player.hp <= 0) showGameOver();
 }
 
 function draw() {
@@ -596,6 +689,28 @@ function draw() {
   const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
   grad.addColorStop(0, '#050510'); grad.addColorStop(0.5, '#0a0a2e'); grad.addColorStop(1, '#0f0f1a');
   ctx.fillStyle = grad; ctx.fillRect(-10, -10, canvas.width + 20, canvas.height + 20);
+  
+  // ✨ NEW: Draw Galaxies
+  galaxies.forEach(g => {
+    ctx.save();
+    ctx.translate(g.x, g.y);
+    ctx.rotate(g.rotation);
+    ctx.globalAlpha = g.opacity;
+    
+    // Create a glowing nebula/galaxy effect
+    let radialGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size);
+    radialGrad.addColorStop(0, g.color1);
+    radialGrad.addColorStop(0.4, g.color2);
+    radialGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = radialGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, g.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+  
+  ctx.globalAlpha = 1;
   stars.forEach(s => { ctx.globalAlpha = s.brightness; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill(); });
   ctx.globalAlpha = 1;
 
@@ -738,6 +853,10 @@ function draw() {
     ctx.fillStyle = hpRatio > 0.5 ? '#00ff66' : hpRatio > 0.25 ? '#ffaa00' : '#ff4444'; ctx.fillRect(hpX, hpY, hpBarW * hpRatio, hpBarH);
     ctx.strokeStyle = '#334'; ctx.lineWidth = 1; ctx.strokeRect(hpX, hpY, hpBarW, hpBarH);
     ctx.fillStyle = '#fff'; ctx.font = '11px Courier New'; ctx.textAlign = 'center'; ctx.fillText(`HP ${Math.ceil(player.hp)}/${player.maxHp}`, hpX + hpBarW / 2, hpY + 11);
+    
+    // ✨ UPDATED: Display lives in HUD
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Courier New'; ctx.textAlign = 'left'; ctx.fillText(`LIVES: ${player.lives}`, hpX, hpY + 30);
+    
     ctx.textAlign = 'right'; ctx.font = 'bold 22px Courier New'; ctx.fillStyle = '#00d4ff'; ctx.shadowColor = '#00d4ff'; ctx.shadowBlur = 10;
     ctx.fillText(`${score.toLocaleString()}`, canvas.width - 20, 35); ctx.shadowBlur = 0;
     if (isBossWave) {
@@ -753,7 +872,8 @@ function draw() {
     }
     if (player.powerLevel > 1) {
       ctx.textAlign = 'center'; ctx.font = 'bold 14px Courier New'; ctx.fillStyle = '#ffdd00'; ctx.shadowColor = '#ffdd00'; ctx.shadowBlur = 8;
-      ctx.fillText(`SPREAD GUN [ACTIVE]`, canvas.width / 2, canvas.height - 40); ctx.shadowBlur = 0;
+      // ✨ UPDATED: Show current power level instead of static text
+      ctx.fillText(`POWER LV: ${player.powerLevel}`, canvas.width / 2, canvas.height - 40); ctx.shadowBlur = 0;
     }
   }
   ctx.restore();
@@ -765,6 +885,7 @@ function gameLoop() { update(); draw(); requestAnimationFrame(gameLoop); }
 window.addEventListener('load', () => {
   setResolution(1280, 720);
   initStars();
+  initGalaxies(); // ✨ NEW: Initialize galaxies
   loadHighScores();
   updateScale();
   gameLoop();
