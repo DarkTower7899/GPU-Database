@@ -632,7 +632,15 @@
         <button class="close-btn" onclick="closeGamesModal()">&times;</button>
       </div>
       
-      <!-- REMOVED: game-tabs div -->
+      <!-- NEW: Game Search Bar -->
+      <div style="padding: 0 24px 16px 24px; display: flex; gap: 10px;">
+        <div class="input-wrapper" style="flex: 1;">
+          <span class="input-icon">🔍</span>
+          <input type="text" id="modalSearchInput" placeholder="Filter games..." autocomplete="off" style="background: rgba(0,0,0,0.3);">
+        </div>
+        <button class="btn btn-primary" style="height: 48px;" onclick="filterGameList()">Filter</button>
+        <button class="btn btn-secondary" style="height: 48px;" onclick="clearModalSearch()">Clear</button>
+      </div>
 
       <div id="gamesModalContent">
         <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
@@ -673,6 +681,7 @@ let GAMES_DB = [];
 let isLoading = false;
 // REMOVED: let currentGameTab = 'all';
 let currentView = 'gpus'; // Tracks whether we're viewing GPUs or Games
+let currentCompatibleGames = []; // Store compatible games for filtering
 
 function init() {
   // Theme toggle removed to enforce dark mode
@@ -818,76 +827,121 @@ function searchGPU(specificMatch = null) {
   showSimilarCards(baseCard);
 }
 
+// ============================================================
+// UPDATED: showSimilarCards Logic
+// ============================================================
 function showSimilarCards(baseCard) {
   const resultsSection = document.getElementById('resultsSection');
   const resultsTitle = document.getElementById('resultsTitle');
   const resultsCount = document.getElementById('resultsCount');
   const gpuList = document.getElementById('gpuList');
 
-  let similar = GPU_DB
+  // Configurable threshold for "Similar Speed" (± percentage)
+  const THRESHOLD = 15;
+
+  // Filter and calculate differences
+  const similarCards = GPU_DB
+    .filter(gpu => gpu.name !== baseCard.name)
     .map(gpu => {
       const diff = gpu.score - baseCard.score;
       const pctDiff = ((diff / baseCard.score) * 100).toFixed(1);
-      return { ...gpu, diff, pctDiff, isBase: gpu.name === baseCard.name };
+      return { ...gpu, diff, pctDiff };
     })
+    .filter(gpu => Math.abs(gpu.pctDiff) <= THRESHOLD)
     .sort((a, b) => a.diff - b.diff);
 
-  const filtered = similar.filter(g => !g.isBase);
-  const faster = filtered.filter(g => g.diff < 0).sort((a, b) => b.diff - a.diff).slice(0, 7);
-  const slower = filtered.filter(g => g.diff > 0).sort((a, b) => a.diff - b.diff).slice(0, 8);
-  const finalList = [...faster, baseCard, ...slower];
+  // Build the HTML structure
+  let html = `
+    <!-- 1. Searched GPU at the Very Top -->
+    <div class="gpu-card base-card brand-${baseCard.brand}" style="border: 2px solid var(--accent-primary); box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);">
+      <div class="card-top">
+          <div class="gpu-name">
+              <h3>${baseCard.name} <span class="base-label">(SEARCHED)</span></h3>
+              <div class="gpu-meta">
+                  <span>${baseCard.arch}</span>
+                  <span>${baseCard.year}</span>
+                  <span>${baseCard.vram}</span>
+              </div>
+              <div class="gpu-tags">
+                  <span class="api-badge">DX:${baseCard.dx_hw}</span>
+                  <span class="api-badge">VK:${baseCard.vulkan}</span>
+                  <span class="api-badge">GL:${baseCard.opengl}</span>
+              </div>
+          </div>
+          <div class="gpu-rank">#1</div>
+      </div>
+      <div class="card-bottom">
+          <div class="gpu-score">
+              <div class="val">${baseCard.score.toLocaleString()}</div>
+              <div class="label">Score</div>
+          </div>
+          <div class="gpu-specs">
+              <span>${baseCard.tdp}W • ${baseCard.brand.toUpperCase()}</span>
+          </div>
+      </div>
+      <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${baseCard.name}')">🎮 Compatible Games</button>
+    </div>
+
+    <!-- 2. Similar Speed Title -->
+    <div style="margin: 24px 0 16px; padding: 0 4px;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);">⚖️ Similar Speed</h2>
+    </div>
+
+    <!-- 3. Similar Speed Cards Container -->
+    <div class="gpu-list" style="max-width: 900px; margin: 0 auto;">
+  `;
+
+  if (similarCards.length === 0) {
+    html += `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No cards found within ±${THRESHOLD}% performance of the searched GPU.</p>`;
+  } else {
+    similarCards.forEach((gpu, i) => {
+      const diffClass = gpu.diff >= 0 ? 'positive' : 'negative';
+      const diffIcon = gpu.diff >= 0 ? '+' : '';
+      html += `
+        <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+          <div class="card-top">
+              <div class="gpu-name">
+                  <h3>${gpu.name}</h3>
+                  <div class="gpu-meta">
+                      <span>${gpu.arch}</span>
+                      <span>${gpu.year}</span>
+                      <span>${gpu.vram}</span>
+                  </div>
+                  <div class="gpu-tags">
+                      <span class="api-badge">DX:${gpu.dx_hw}</span>
+                      <span class="api-badge">VK:${gpu.vulkan}</span>
+                      <span class="api-badge">GL:${gpu.opengl}</span>
+                  </div>
+              </div>
+              <div class="gpu-rank">#${i + 1}</div>
+          </div>
+          <div class="card-bottom">
+              <div class="gpu-diff ${diffClass}">
+                  <div class="val">${diffIcon}${gpu.pctDiff}%</div>
+                  <div class="label">Diff</div>
+              </div>
+              <div class="gpu-score">
+                  <div class="val">${gpu.score.toLocaleString()}</div>
+                  <div class="label">Score</div>
+              </div>
+          </div>
+          <div class="gpu-specs">
+              <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
+          </div>
+          <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+        </div>
+      `;
+    });
+  }
+
+  html += `</div>`;
 
   resultsSection.classList.remove('hidden');
-  resultsTitle.textContent = `Similar to: ${baseCard.name}`;
-  resultsCount.textContent = `${finalList.length} cards shown`;
+  resultsTitle.textContent = `Results for: ${baseCard.name}`;
+  resultsCount.textContent = `${similarCards.length} similar cards shown`;
+  gpuList.innerHTML = html;
 
-  gpuList.innerHTML = finalList.map((gpu, i) => {
-    const isBase = gpu.isBase;
-    const isFaster = gpu.diff > 0;
-    const isSlower = gpu.diff < 0;
-    const cardClass = isBase ? 'base-card' : (isFaster ? 'faster' : 'slower');
-    const diffClass = isFaster ? 'positive' : 'negative';
-    const diffIcon = isFaster ? '+' : '';
-    const rankClass = i < 3 ? 'top3' : '';
-
-    return `
-      <div class="gpu-card ${cardClass} brand-${gpu.brand}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
-        <div class="card-top">
-            <div class="gpu-name">
-                <h3>${gpu.name} ${isBase ? '<span class="base-label">(BASE)</span>' : ''}</h3>
-                <div class="gpu-meta">
-                    <span>${gpu.arch}</span>
-                    <span>${gpu.year}</span>
-                    <span>${gpu.vram}</span>
-                </div>
-                <div class="gpu-tags">
-                    <span class="api-badge">DX:${gpu.dx_hw}</span>
-                    <span class="api-badge">VK:${gpu.vulkan}</span>
-                    <span class="api-badge">GL:${gpu.opengl}</span>
-                </div>
-            </div>
-            <div class="gpu-rank ${rankClass}">#${i + 1}</div>
-        </div>
-        
-        <div class="card-bottom">
-            <div class="gpu-diff ${diffClass}">
-                <div class="val">${diffIcon}${gpu.pctDiff}%</div>
-                <div class="label">Diff</div>
-            </div>
-            <div class="gpu-score">
-                <div class="val">${gpu.score.toLocaleString()}</div>
-                <div class="label">Score</div>
-            </div>
-        </div>
-        <div class="gpu-specs">
-            <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
-        </div>
-        <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
-      </div>
-    `;
-  }).join('');
-
-  showStatus(`Found ${finalList.length} cards with similar performance to ${baseCard.name}. Click a card to compare.`, 'done');
+  showStatus(`Found ${similarCards.length} cards with similar performance to ${baseCard.name}.`, 'done');
 }
 
 function renderList(gpus) {
@@ -1030,12 +1084,19 @@ function openGamesModal(gpuName) {
     .filter(g => g.status !== 'no')
     .sort((a, b) => b.score - a.score); // Sort by score descending
 
+  // Store for filtering later
+  currentCompatibleGames = compatibleGames;
+
   const modal = document.getElementById('gamesModal');
   const title = document.getElementById('gamesModalTitle');
+  const searchInput = document.getElementById('modalSearchInput');
   
   title.textContent = `🎮 Compatible Games for ${gpu.name}`;
   
-  // Directly render without tab/storage overhead
+  // Reset search input
+  searchInput.value = '';
+
+  // Render initial list
   renderGameList(compatibleGames);
   modal.classList.add('active');
 }
@@ -1082,6 +1143,30 @@ function closeGamesModal() {
 document.getElementById('gamesModal')?.addEventListener('click', (e) => {
   if (e.target.id === 'gamesModal') closeGamesModal();
 });
+
+// ============================================================
+// NEW: Game Search Functionality
+// ============================================================
+function filterGameList() {
+  const query = document.getElementById('modalSearchInput').value.toLowerCase();
+  
+  if (!query) {
+    // If empty, show all
+    renderGameList(currentCompatibleGames);
+    return;
+  }
+
+  const filtered = currentCompatibleGames.filter(game => 
+    game.title.toLowerCase().includes(query)
+  );
+
+  renderGameList(filtered);
+}
+
+function clearModalSearch() {
+  document.getElementById('modalSearchInput').value = '';
+  renderGameList(currentCompatibleGames);
+}
 
 // ============================================================
 // NEW: Compatible GPUs Modal Logic
