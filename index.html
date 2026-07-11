@@ -531,6 +531,33 @@
       color: #000; 
       box-shadow: 0 0 10px var(--accent-primary); 
     }
+
+    /* =========================================
+       PERFORMANCE & ACCESSIBILITY OVERRIDES
+       ========================================= */
+    *,
+    *::before,
+    *::after {
+      /* Disable animations and transitions */
+      animation: none !important;
+      transition: none !important;
+
+      /* Remove shadows */
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    /* Pause any running `@keyframes` at the root level */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
     
     @media (max-width: 768px) {
       .gpu-list { grid-template-columns: 1fr; }
@@ -751,6 +778,9 @@ function finalizeInit() {
   });
   currentGPUPage = 0;
   renderList(GPU_DB);
+  
+  // ✅ FIX: Ensure the results container is visible on initial load
+  document.getElementById('resultsSection').classList.remove('hidden');
   showStatus('Database loaded successfully.', 'done');
 }
 
@@ -962,6 +992,9 @@ function renderList(gpus) {
   });
   currentGPUPage = 0;
   renderGPUPage(currentGPUPage);
+  
+  // ✅ FIX: Ensure results container is visible when rendering lists
+  document.getElementById('resultsSection').classList.remove('hidden');
 }
 
 function renderGPUPage(page) {
