@@ -5,38 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GPU Performance Database (2006–2026)</title>
   <meta name="description" content="Search, compare, and analyze 400+ GPUs with live benchmark scores, API support, and performance deltas.">
+  
   <style>
     /* =========================================
-       THEME VARIABLES & RESET (CYBERPUNK EDITION)
+       SECTION 1: THEME VARIABLES (The "Color Palette")
        ========================================= */
     :root {
-      --bg-body: #05050a;
-      --bg-panel: rgba(10, 10, 20, 0.85);
-      --bg-card: rgba(15, 15, 30, 0.5);
-      --bg-card-hover: rgba(20, 20, 45, 0.7);
-      --border-subtle: rgba(0, 243, 255, 0.12);
-      --border-focus: rgba(0, 243, 255, 0.6);
-      --text-main: #e0e6ff;
-      --text-muted: #6b7294;
-      --accent-primary: #00f3ff;
-      --accent-gradient: linear-gradient(135deg, #00f3ff 0%, #bc13fe 100%);
+      /* These variables control the colors of the entire site. 
+         Change these hex codes to re-theme the app. */
+      --bg-body: #05050a;           /* Main background color */
+      --bg-panel: rgba(10, 10, 20, 0.85); /* Semi-transparent background for panels */
+      --bg-card: rgba(15, 15, 30, 0.5);    /* Background for individual cards */
+      --bg-card-hover: rgba(20, 20, 45, 0.7); /* Card background when hovered */
       
-      /* NEON BRAND COLORS */
-      --brand-intel: #00f3ff; /* Neon Cyan */
-      --brand-nvidia: #39ff14; /* Neon Green */
-      --brand-amd: #ff003c;   /* Neon Red/Pink */
+      --border-subtle: rgba(0, 243, 255, 0.12); /* Faint border color */
+      --border-focus: rgba(0, 243, 255, 0.6);   /* Bright border when clicking input */
       
-      --success: #00ff41;
-      --danger: #ff003c;
-      --shadow-card: 0 0 15px rgba(0, 243, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.4);
-      --shadow-glow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(188, 19, 254, 0.15);
+      --text-main: #e0e6ff;       /* Main text color */
+      --text-muted: #6b7294;      /* Secondary text (dates, specs) color */
+      
+      --accent-primary: #00f3ff;  /* The main "Cyberpunk Cyan" color */
+      --accent-gradient: linear-gradient(135deg, #00f3ff 0%, #bc13fe 100%); /* Button gradients */
+      
+      /* NEON BRAND COLORS (Used for GPU logos/borders) */
+      --brand-intel: #00f3ff; /* Intel Cyan */
+      --brand-nvidia: #39ff14; /* Nvidia Green */
+      --brand-amd: #ff003c;   /* AMD Red */
+      
+      --success: #00ff41;     /* Green for "Faster" */
+      --danger: #ff003c;      /* Red for "Slower" */
+      
+      --shadow-card: 0 0 15px rgba(0, 243, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.4); /* Card glow */
+      --shadow-glow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(188, 19, 254, 0.15); /* Hover glow */
+      
       --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-      --radius-lg: 12px;
-      --radius-md: 8px;
-      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-lg: 12px;      /* Rounded corners for large boxes */
+      --radius-md: 8px;       /* Rounded corners for small boxes/buttons */
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* Animation speed for everything */
     }
 
-    /* FORCE DARK MODE */
+    /* FORCE DARK MODE (Currently set to dark by default, logic kept for future light mode) */
     [data-theme="light"] {
       --bg-body: #05050a;
       --bg-panel: rgba(10, 10, 20, 0.85);
@@ -57,6 +65,9 @@
       --shadow-glow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(188, 19, 254, 0.15);
     }
 
+    /* =========================================
+       SECTION 2: RESET & BODY (The Foundation)
+       ========================================= */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
@@ -65,6 +76,7 @@
       color: var(--text-main);
       transition: background-color 0.3s ease;
       min-height: 100vh;
+      /* This creates the grid background pattern */
       background-image:
         linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px),
@@ -75,6 +87,7 @@
       line-height: 1.5;
       position: relative;
     }
+    /* Adds the scanline effect over the whole screen */
     body::before {
       content: "";
       position: fixed;
@@ -90,6 +103,9 @@
       z-index: 9998;
     }
 
+    /* =========================================
+       SECTION 3: HEADER & LAYOUT
+       ========================================= */
     .header {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -97,7 +113,7 @@
       padding: 16px 24px;
       gap: 20px;
       background: var(--bg-panel);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px); /* Blurs content behind header */
       border-bottom: 1px solid var(--border-subtle);
       position: sticky; top: 0; z-index: 100;
     }
@@ -117,13 +133,13 @@
       font-weight: 800;
       background: var(--accent-gradient);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-text-fill-color: transparent; /* Makes text gradient */
       margin-bottom: 4px;
       letter-spacing: -0.02em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4));
+      filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4)); /* Neon glow on text */
     }
     .header-content p { color: var(--text-muted); font-size: 0.8rem; }
 
@@ -147,6 +163,9 @@
 
     .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
+    /* =========================================
+       SECTION 4: CONTROL PANEL (Search & Filters)
+       ========================================= */
     .control-panel {
       background: var(--bg-panel); backdrop-filter: blur(10px);
       border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
@@ -233,6 +252,9 @@
       box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
     }
 
+    /* =========================================
+       SECTION 5: RESULTS AREA (The List)
+       ========================================= */
     .results-header {
       display: flex; justify-content: space-between; align-items: baseline;
       margin: 24px 0 16px; padding: 0 4px;
@@ -309,7 +331,7 @@
     .gpu-specs { font-size: 0.8rem; color: var(--text-muted); text-align: right; }
     .gpu-specs span { display: block; }
 
-    /* NEON BRAND OVERRIDES */
+    /* NEON BRAND OVERRIDES (Specific colors for Intel, Nvidia, AMD cards) */
     .gpu-card.brand-intel::before { background: var(--brand-intel) !important; box-shadow: 0 0 15px var(--brand-intel) !important; }
     .gpu-card.brand-intel .gpu-score .val { color: var(--brand-intel); text-shadow: 0 0 8px var(--brand-intel); }
     .gpu-card.brand-intel .gpu-rank { color: var(--brand-intel); background: rgba(0, 243, 255, 0.1); }
@@ -323,24 +345,8 @@
     .gpu-card.brand-amd .gpu-rank { color: var(--brand-amd); background: rgba(255, 0, 60, 0.1); }
 
     /* =========================================
-       GAME CARD STYLES (Cyberpunk Updated)
+       SECTION 6: MODALS (Popups)
        ========================================= */
-    .game-card-list {
-      background: var(--bg-card); border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md); padding: 16px; display: grid;
-      grid-template-columns: 1fr; gap: 12px; transition: var(--transition);
-      cursor: pointer; position: relative; overflow: hidden; width: 100%;
-    }
-    .game-card-list:hover {
-      border-color: var(--accent-primary); background: var(--bg-card-hover);
-      transform: translateY(-2px); box-shadow: var(--shadow-glow), inset 0 0 15px rgba(0, 243, 255, 0.05);
-    }
-    .game-card-list::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-      background: var(--accent-primary);
-      box-shadow: 2px 0 10px var(--accent-primary);
-    }
-
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
@@ -487,7 +493,7 @@
     .compat-badge.rec { background: rgba(0, 243, 255, 0.15); color: var(--accent-primary); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
 
     /* =========================================
-       SOFTWARE MODAL CARD STYLES
+       SECTION 7: SOFTWARE MODAL CARD STYLES
        ========================================= */
     .software-item {
       background: rgba(0, 243, 255, 0.02);
@@ -533,7 +539,7 @@
     }
 
     /* =========================================
-       PERFORMANCE & ACCESSIBILITY OVERRIDES
+       SECTION 8: PERFORMANCE & ACCESSIBILITY OVERRIDES
        ========================================= */
     *,
     *::before,
@@ -577,6 +583,9 @@
 </head>
 <body>
 
+<!-- =========================================
+     HTML SECTION 1: HEADER
+     ========================================= -->
 <div class="header">
   <div class="header-left">
     <div class="header-content">
@@ -586,6 +595,7 @@
   </div>
   
   <div class="header-center">
+    <!-- External Banner Link -->
     <a href="https://www.reddit.com/r/Craptopgamingadvice/" target="_blank" rel="noopener noreferrer" class="craptop-link" title="Visit CraptopGaming Advice">
       <img src="craptop-banner.png" alt="Craptop Gaming Advice">
     </a>
@@ -597,18 +607,22 @@
       ✉️ Contact
     </a>
     
-    <!-- YouTube Link Restored -->
+    <!-- YouTube Link -->
     <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
       <img src="YouTube.png" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
     </a>
   </div>
 </div>
 
+<!-- =========================================
+     HTML SECTION 2: CONTROL PANEL (Search & Filters)
+     ========================================= -->
 <div class="container">
   <div class="control-panel">
     <div class="search-row">
       <div class="input-wrapper">
         <span class="input-icon">🔍</span>
+        <!-- The ID 'searchInput' is used by JavaScript to listen for typing -->
         <input type="text" id="searchInput" placeholder="Search GPU (e.g., RTX 4090, RX 6800)..." autocomplete="off">
       </div>
       <button class="btn btn-primary" onclick="searchGPU()">Search</button>
@@ -616,6 +630,7 @@
     </div>
     
     <div class="filter-btns">
+      <!-- Buttons call JavaScript functions to filter the list -->
       <button class="filter-btn active" onclick="filterList('all', this)">🖥️ All GPUs</button>
       <button class="filter-btn" onclick="filterList('nvidia', this)">NVIDIA</button>
       <button class="filter-btn" onclick="filterList('amd', this)">AMD</button>
@@ -634,8 +649,13 @@
     </div>
   </div>
 
+  <!-- Status Bar (Shows "Loading..." or "Database Loaded") -->
   <div id="statusBar" class="scrape-status"></div>
 
+  <!-- =========================================
+       HTML SECTION 3: RESULTS AREA (The List)
+       This is where the GPU/Game cards appear
+       ========================================= -->
   <div id="resultsSection" class="hidden">
     <div class="results-header">
       <h2 id="resultsTitle">Search Results</h2>
@@ -646,6 +666,11 @@
     <button id="loadMoreBtn" class="btn btn-primary hidden" style="margin: 24px auto; display: block; width: 200px;" onclick="loadMoreItems()">Load More</button>
   </div>
 
+  <!-- =========================================
+       HTML SECTION 4: MODALS (Popups)
+       ========================================= -->
+  
+  <!-- Comparison Modal (Appears when clicking a card) -->
   <div id="comparisonModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -656,6 +681,7 @@
     </div>
   </div>
 
+  <!-- Games Modal (Appears when clicking "Compatible Games") -->
   <div id="gamesModal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
       <div class="modal-header">
@@ -681,7 +707,7 @@
     </div>
   </div>
 
-  <!-- Compatible GPUs Modal -->
+  <!-- Compatible GPUs Modal (Appears when clicking "Compatible GPUs" on a game) -->
   <div id="compatibleGPUsModal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
       <div class="modal-header">
@@ -704,35 +730,49 @@
   </div>
 </div>
 
+<!-- Suggestions Dropdown (Hidden by default) -->
 <div id="suggestionsBox" class="suggestions-box"></div>
 
+<!-- =========================================
+     JAVASCRIPT SECTION: LOGIC
+     ========================================= -->
 <script>
+// ==========================================
+// 1. VARIABLES & STATE (Global Settings)
+// ==========================================
 let currentFilter = 'all';
 let lastSearch = null;
-let GPU_DB = [];
-let GAMES_DB = [];
+let GPU_DB = [];       // Array to hold GPU data loaded from gpus.json
+let GAMES_DB = [];     // Array to hold Game data loaded from games.json
 let isLoading = false;
-let currentView = 'gpus';
+let currentView = 'gpus'; // Tracks if we are viewing 'gpus' or 'games'
 let currentCompatibleGames = [];
 
 // ==========================================
-// PAGINATION STATE & CONFIGURATION
+// 2. PAGINATION CONFIGURATION
 // ==========================================
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 50; // How many items to show per page
 let currentGPUPage = 0;
 let currentGPUs = [];
 let currentGamePage = 0;
 let currentAllGames = [];
 let currentCompatibleGamePage = 0;
 
+// ==========================================
+// 3. INITIALIZATION (Runs on Page Load)
+// ==========================================
 function init() {
-  setupSuggestions();
-  loadDatabase();
+  setupSuggestions(); // Sets up the search dropdown
+  loadDatabase();     // Fetches the JSON files
 }
 
+// ==========================================
+// 4. DATABASE LOADING (Fetches JSON)
+// ==========================================
 async function loadDatabase() {
   showStatus('Initializing database...', 'loading');
   try {
+    // Fetches both files simultaneously
     const [gpuRes, gameRes] = await Promise.all([
       fetch('gpus.json'),
       fetch('games.json').catch(() => Promise.resolve(null))
@@ -756,6 +796,7 @@ async function loadDatabase() {
     finalizeInit();
   } catch (err) {
     console.warn('Fallback dataset loaded due to error.', err);
+    // Fallback data if JSON fails
     GPU_DB.push(
       {name:"RTX 4090",brand:"nvidia",type:"dGPU",year:2022,score:78500,vram:"24GB GDDR6X",tdp:450,arch:"Ada Lovelace"},
       {name:"RX 7900 XTX",brand:"amd",type:"dGPU",year:2022,score:52000,vram:"24GB GDDR6",tdp:355,arch:"RDNA 3"},
@@ -770,7 +811,11 @@ async function loadDatabase() {
   }
 }
 
+// ==========================================
+// 5. FINAL INITIALIZATION & DATA PROCESSING
+// ==========================================
 function finalizeInit() {
+  // Adds calculated fields to every GPU (DX version, Vulkan version, etc.) based on Year
   GPU_DB.forEach(gpu => {
     const y = gpu.year;
     gpu.dx_hw = y < 2006 ? "DX8.1" : y < 2009 ? "DX9.0c" : y < 2012 ? "DX10.1" : y < 2015 ? "DX11" : y < 2020 ? "DX12" : y < 2024 ? "DX12_1" : "DX12_2";
@@ -781,11 +826,14 @@ function finalizeInit() {
   currentGPUPage = 0;
   renderList(GPU_DB);
   
-  // ✅ FIX: Ensure the results container is visible on initial load
+  // FIX: Ensure the results container is visible on initial load
   document.getElementById('resultsSection').classList.remove('hidden');
   showStatus('Database loaded successfully.', 'done');
 }
 
+// ==========================================
+// 6. SEARCH SUGGESTIONS LOGIC
+// ==========================================
 function setupSuggestions() {
   const input = document.getElementById('searchInput');
   const box = document.getElementById('suggestionsBox');
@@ -856,6 +904,9 @@ function setupSuggestions() {
   });
 }
 
+// ==========================================
+// 7. SEARCH FUNCTION
+// ==========================================
 function searchGPU(specificMatch = null) {
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
   if (!query && !specificMatch) { clearSearch(); return; }
@@ -872,9 +923,9 @@ function searchGPU(specificMatch = null) {
   showSimilarCards(baseCard);
 }
 
-// ============================================================
-// SEARCH RESULTS (Unchanged, renders all matches)
-// ============================================================
+// ==========================================
+// 8. RENDER SIMILAR CARDS (Search Results)
+// ==========================================
 function showSimilarCards(baseCard) {
   const resultsSection = document.getElementById('resultsSection');
   const resultsTitle = document.getElementById('resultsTitle');
@@ -884,7 +935,7 @@ function showSimilarCards(baseCard) {
 
   loadMoreBtn.classList.add('hidden');
 
-  const THRESHOLD = 15;
+  const THRESHOLD = 15; // +/- 15% performance difference
 
   const similarCards = GPU_DB
     .filter(gpu => gpu.name !== baseCard.name)
@@ -984,9 +1035,9 @@ function showSimilarCards(baseCard) {
   showStatus(`Found ${similarCards.length} cards with similar performance to ${baseCard.name}.`, 'done');
 }
 
-// ============================================================
-// PAGINATED MAIN GPU LIST
-// ============================================================
+// ==========================================
+// 9. RENDER MAIN GPU LIST (Pagination)
+// ==========================================
 function renderList(gpus) {
   currentGPUs = [...gpus].sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
@@ -995,7 +1046,7 @@ function renderList(gpus) {
   currentGPUPage = 0;
   renderGPUPage(currentGPUPage);
   
-  // ✅ FIX: Ensure results container is visible when rendering lists
+  // FIX: Ensure results container is visible when rendering lists
   document.getElementById('resultsSection').classList.remove('hidden');
 }
 
@@ -1046,9 +1097,9 @@ function renderGPUPage(page) {
   }
 }
 
-// ============================================================
-// PAGINATED ALL GAMES LIST
-// ============================================================
+// ==========================================
+// 10. RENDER ALL GAMES LIST
+// ==========================================
 function showAllGames() {
   currentView = 'games';
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1136,9 +1187,9 @@ function getGameCompatibility(gpu, game) {
   return 'no';
 }
 
-// ============================================================
-// PAGINATED COMPATIBLE GAMES MODAL
-// ============================================================
+// ==========================================
+// 11. COMPATIBLE GAMES MODAL LOGIC
+// ==========================================
 function openGamesModal(gpuName) {
   const gpu = GPU_DB.find(g => g.name === gpuName);
   if (!gpu) return;
@@ -1242,9 +1293,9 @@ function clearModalSearch() {
   renderModalGamePage(currentCompatibleGamePage);
 }
 
-// ============================================================
-// Compatible GPUs Modal Logic
-// ============================================================
+// ==========================================
+// 12. COMPATIBLE GPUS MODAL LOGIC
+// ==========================================
 function showCompatibleGPUs(title, score) {
   const compatibleGPUs = GPU_DB.filter(gpu => gpu.score >= score)
     .sort((a, b) => b.score - a.score);
@@ -1309,9 +1360,9 @@ document.getElementById('compatibleGPUsModal')?.addEventListener('click', (e) =>
   if (e.target.id === 'compatibleGPUsModal') closeCompatibleGPUsModal();
 });
 
-// ============================================================
-// SOFTWARE MODAL LOGIC
-// ============================================================
+// ==========================================
+// 13. SOFTWARE MODAL LOGIC
+// ==========================================
 const SOFTWARE_LIST = [
   { name: "Ninite", desc: "Streamlines installing/updating multiple desktop apps simultaneously. Silently downloads official installers, applies safe defaults, and blocks bundled software.", link: "https://ninite.com/" },
   { name: "ThrottleStop", desc: "Advanced power management & undervolting utility for Intel laptops. Disables turbo boost, adjusts power limits, and creates custom fan curves to reduce heat/throttling.", link: "https://www.techpowerup.com/download/techpowerup-throttlestop/" },
@@ -1343,9 +1394,9 @@ document.getElementById('softwareModal')?.addEventListener('click', (e) => {
   if (e.target.id === 'softwareModal') closeSoftwareModal();
 });
 
-// ============================================================
-// COMPARISON MODAL
-// ============================================================
+// ==========================================
+// 14. COMPARISON MODAL LOGIC
+// ==========================================
 function showComparison(card1, card2) {
   const modal = document.getElementById('comparisonModal');
   const content = document.getElementById('compareContent');
@@ -1412,6 +1463,9 @@ function clearSearch() {
   renderList(GPU_DB);
 }
 
+// ==========================================
+// 15. FILTER LOGIC (Brand Buttons)
+// ==========================================
 function filterList(filter, btn) {
   currentView = 'gpus';
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1426,7 +1480,7 @@ function filterList(filter, btn) {
   else if (filter === 'intel') filtered = GPU_DB.filter(g => g.brand === 'intel');
   else if (filter === 'igpu') filtered = GPU_DB.filter(g => g.type === 'igpu');
   
-  // ✅ Update Title and Count based on filter
+  // Update Title and Count based on filter
   if (filter === 'all') {
       document.getElementById('resultsTitle').textContent = "All GPUs in Database";
       document.getElementById('resultsCount').textContent = `${GPU_DB.length} GPUs found`;
