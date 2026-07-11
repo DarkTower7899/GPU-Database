@@ -623,6 +623,8 @@
       <button class="filter-btn" onclick="filterList('igpu', this)">iGPUs</button>
       <!-- New Button for All Games -->
       <button class="filter-btn" onclick="showAllGames()" id="btnAllGames">🎮 All Games</button>
+      <!-- NEW: All GPUs in Database Button -->
+      <button class="filter-btn" onclick="filterList('all', this)" id="btnAllGPUs">🖥️ All GPUs in Database</button>
       <!-- NEW: Software Button -->
       <button class="filter-btn" onclick="openSoftwareModal()" id="btnSoftware">🛠️ Software</button>
       <!-- NEW: Play Pointer Blaster Button -->
@@ -1423,6 +1425,15 @@ function filterList(filter, btn) {
   else if (filter === 'amd') filtered = GPU_DB.filter(g => g.brand === 'amd');
   else if (filter === 'intel') filtered = GPU_DB.filter(g => g.brand === 'intel');
   else if (filter === 'igpu') filtered = GPU_DB.filter(g => g.type === 'igpu');
+  
+  // ✅ Update Title and Count based on filter
+  if (filter === 'all') {
+      document.getElementById('resultsTitle').textContent = "All GPUs in Database";
+      document.getElementById('resultsCount').textContent = `${GPU_DB.length} GPUs found`;
+  } else {
+      document.getElementById('resultsTitle').textContent = `${filter.charAt(0).toUpperCase() + filter.slice(1)} GPUs`;
+      document.getElementById('resultsCount').textContent = `${filtered.length} GPUs found`;
+  }
   
   currentGPUPage = 0;
   renderList(filtered);
