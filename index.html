@@ -116,6 +116,13 @@
       backdrop-filter: blur(12px); /* Blurs content behind header */
       border-bottom: 1px solid var(--border-subtle);
       position: sticky; top: 0; z-index: 100;
+      /* CHANGE: Added transition for smooth hiding/showing */
+      transition: transform 0.3s ease-out;
+    }
+
+    /* CHANGE: New class for hiding the header */
+    .header.scroll-hidden {
+      transform: translateY(-100%);
     }
 
     .header-left { justify-self: start; }
@@ -1509,6 +1516,39 @@ function showStatus(msg, type) {
 }
 
 init();
+
+// ==========================================
+// 16. SCROLL HEADER HIDE/SHOW LOGIC
+// ==========================================
+(function initScrollHeader() {
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+  const header = document.querySelector('.header');
+  const scrollThreshold = 50; // Prevents jitter when scrolling slowly
+
+  function updateHeaderVisibility() {
+    const currentScrollY = window.scrollY;
+    
+    // Hide when scrolling down (past threshold)
+    if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+      header.classList.add('scroll-hidden');
+    } 
+    // Show when scrolling up
+    else {
+      header.classList.remove('scroll-hidden');
+    }
+    
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateHeaderVisibility);
+      ticking = true;
+    }
+  });
+})();
 </script>
 </body>
 </html>
