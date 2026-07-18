@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPU Performance Database (2006–2026)</title>
+  <meta name="description" content="Search, compare, and analyze 550+ GPUs with live benchmark scores, API support, and performance deltas.">
+  
+  <style>
+    /* =========================================
+       SECTION 1: THEME VARIABLES (The "Color Palette")
+       ========================================= */
+    :root {
+      /* These variables control the colors of the entire site. 
+         Change these hex codes to re-theme the app. */
+      --bg-body: #05050a;           /* Main background color */
+      --bg-panel: rgba(10, 10, 20, 0.85); /* Semi-transparent background for panels */
+      --bg-card: rgba(15, 15, 30, 0.5);    /* Background for individual cards */
+      --bg-card-hover: rgba(20, 20, 45, 0.7); /* Card background when hovered */
+      
+      --border-subtle: rgba(0, 243, 255, 0.12); /* Faint border color */
+      --border-focus: rgba(0, 243, 255, 0.6);   /* Bright border when clicking input */
+      
+      --text-main: #e0e6ff;       /* Main text color */
+      --text-muted: #6b7294;      /* Secondary text (dates, specs) color */
+      
+      --accent-primary: #00f3ff;  /* The main "Cyberpunk Cyan" color */
+      --accent-gradient: linear-gradient(135deg, #00f3ff 0%, #bc13fe 100%); /* Button gradients */
+      
+      /* NEON BRAND COLORS (Used for GPU logos/borders) */
+      --brand-intel: #00f3ff; /* Intel Cyan */
+      --brand-nvidia: #39ff14; /* Nvidia Green */
+      --brand-amd: #ff003c;   /* AMD Red */
+      
+      --success: #00ff41;     /* Green for "Faster" */
+      --danger: #ff003c;      /* Red for "Slower" */
+      
+      --shadow-card: 0 0 15px rgba(0, 243, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.4); /* Card glow */
+      --shadow-glow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(188, 19, 254, 0.15); /* Hover glow */
+      
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --radius-lg: 12px;      /* Rounded corners for large boxes */
+      --radius-md: 8px;       /* Rounded corners for small boxes/buttons */
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* Animation speed for everything */
+    }
+
+    /* FORCE DARK MODE (Currently set to dark by default, logic kept for future light mode) */
+    [data-theme="light"] {
+      --bg-body: #05050a;
+      --bg-panel: rgba(10, 10, 20, 0.85);
+      --bg-card: rgba(15, 15, 30, 0.5);
+      --bg-card-hover: rgba(20, 20, 45, 0.7);
+      --border-subtle: rgba(0, 243, 255, 0.12);
+      --border-focus: rgba(0, 243, 255, 0.6);
+      --text-main: #e0e6ff;
+      --text-muted: #6b7294;
+      --accent-primary: #00f3ff;
+      --accent-gradient: linear-gradient(135deg, #00f3ff 0%, #bc13fe 100%);
+      --brand-intel: #00f3ff;
+      --brand-nvidia: #39ff14;
+      --brand-amd: #ff003c;
+      --success: #00ff41;
+      --danger: #ff003c;
+      --shadow-card: 0 0 15px rgba(0, 243, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 25px rgba(0, 243, 255, 0.2), 0 0 10px rgba(188, 19, 254, 0.15);
+    }
+
+    /* =========================================
+       SECTION 2: RESET & BODY (The Foundation)
+       ========================================= */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      transition: background-color 0.3s ease;
+      min-height: 100vh;
+      /* This creates the grid background pattern */
+      background-image:
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 15% 0%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 100%, rgba(188, 19, 254, 0.08) 0%, transparent 40%);
+      background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+      background-attachment: fixed;
+      line-height: 1.5;
+      position: relative;
+    }
+    /* Adds the scanline effect over the whole screen */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 243, 255, 0.02) 2px,
+        rgba(0, 243, 255, 0.02) 4px
+      );
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* =========================================
+       SECTION 3: HEADER & LAYOUT
+       ========================================= */
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 16px 24px;
+      gap: 20px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px); /* Blurs content behind header */
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky; top: 0; z-index: 100;
+      /* CHANGE: Added transition for smooth hiding/showing */
+      transition: transform 0.3s ease-out;
+    }
+
+    /* CHANGE: New class for hiding the header */
+    .header.scroll-hidden {
+      transform: translateY(-100%);
+    }
+
+    .header-left { justify-self: start; }
+    .header-center { 
+      justify-self: center; 
+      display: flex; 
+      justify-content: center; 
+      width: 100%;
+      max-width: 480px;
+    }
+    .header-right { justify-self: end; display: flex; gap: 10px; align-items: center; }
+
+    .header-content h1 {
+      font-size: clamp(0.85rem, 1.3vw, 1.15rem);
+      font-weight: 800;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; /* Makes text gradient */
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4)); /* Neon glow on text */
+    }
+    .header-content p { color: var(--text-muted); font-size: 0.8rem; }
+
+    .craptop-link {
+      display: inline-flex; align-items: center;
+      padding: 6px 8px; border-radius: 12px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease; text-decoration: none;
+    }
+    [data-theme="light"] .craptop-link { background: rgba(0,0,0,0.04); }
+    .craptop-link:hover { 
+      border-color: var(--accent-primary); transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(0, 243, 255, 0.2);
+    }
+    .craptop-link img {
+      height: 90px; width: auto; max-width: 420px;
+      border-radius: 10px; display: block; object-fit: contain;
+      transition: transform 0.2s ease;
+    }
+    .craptop-link:hover img { transform: scale(1.02); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+    /* =========================================
+       SECTION 4: CONTROL PANEL (Search & Filters)
+       ========================================= */
+    .control-panel {
+      background: var(--bg-panel); backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
+      padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-card);
+    }
+
+    .search-row { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+
+    .input-wrapper { flex: 1; position: relative; }
+
+    .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+    }
+
+    input[type="text"] {
+      width: 100%; padding: 14px 14px 14px 42px;
+      background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); color: var(--text-main);
+      font-size: 1rem; transition: var(--transition); font-family: inherit;
+    }
+    [data-theme="light"] input[type="text"] { background: rgba(255,255,255,0.5); }
+    input[type="text"]:focus {
+      outline: none; border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.2), 0 0 15px rgba(0, 243, 255, 0.3);
+    }
+
+    .suggestions-box {
+      position: fixed;
+      z-index: 10000;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      display: none;
+      overflow-y: auto;
+      max-height: 320px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .suggestions-box.active { display: block; }
+    
+    .suggestion-item {
+      padding: 12px 16px; cursor: pointer;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex; justify-content: space-between;
+      font-size: 0.9rem; color: var(--text-main);
+      transition: background 0.15s; user-select: none;
+    }
+    .suggestion-item:hover { background: rgba(0, 243, 255, 0.15); color: var(--accent-primary); }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-meta { color: var(--text-muted); font-size: 0.8rem; }
+
+    .btn {
+      padding: 0 24px; height: 48px; border: none; border-radius: var(--radius-md);
+      cursor: pointer; font-weight: 600; font-size: 0.95rem;
+      transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary {
+      background: var(--accent-gradient); color: white;
+      box-shadow: 0 4px 15px rgba(0, 243, 255, 0.4);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      text-shadow: 0 0 5px rgba(255,255,255,0.5);
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.2); box-shadow: 0 6px 20px rgba(0, 243, 255, 0.6); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border-subtle); color: var(--text-muted);
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); color: var(--text-main); }
+
+    .filter-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 6px 16px; border-radius: 20px; background: transparent;
+      border: 1px solid var(--border-subtle); color: var(--text-muted);
+      cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: var(--transition);
+    }
+    .filter-btn:hover { border-color: var(--text-muted); color: var(--text-main); }
+    .filter-btn.active {
+      background: rgba(0, 243, 255, 0.1); border-color: var(--accent-primary); color: var(--accent-primary);
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+
+    /* =========================================
+       SECTION 5: RESULTS AREA (The List)
+       ========================================= */
+    .results-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin: 24px 0 16px; padding: 0 4px;
+    }
+    .results-header h2 { font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); text-shadow: 0 0 8px rgba(0, 243, 255, 0.3); }
+    .results-header span { color: var(--text-muted); font-size: 0.9rem; }
+
+    .gpu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .gpu-card {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); padding: 16px; display: grid;
+      grid-template-columns: 1fr; gap: 12px; transition: var(--transition);
+      cursor: pointer; position: relative; overflow: hidden; width: 100%;
+    }
+    .gpu-card:hover {
+      border-color: var(--accent-primary); background: var(--bg-card-hover);
+      transform: translateY(-2px); box-shadow: var(--shadow-glow), inset 0 0 15px rgba(0, 243, 255, 0.05);
+    }
+    .gpu-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--border-subtle);
+      box-shadow: 2px 0 8px var(--border-subtle);
+    }
+    .gpu-card.base-card::before { background: var(--accent-primary); box-shadow: 0 0 12px var(--accent-primary); }
+    .gpu-card.faster::before { background: var(--success); box-shadow: 0 0 12px var(--success); }
+    .gpu-card.slower::before { background: var(--danger); box-shadow: 0 0 12px var(--danger); }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .gpu-rank {
+      font-size: 0.85rem; font-weight: 700; color: var(--text-muted);
+      background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;
+    }
+    .gpu-rank.top3 { color: var(--accent-primary); background: rgba(0, 243, 255, 0.1); }
+
+    .gpu-name h3 { font-size: 1.05rem; margin-bottom: 2px; line-height: 1.3; text-shadow: 0 0 5px rgba(255,255,255,0.1); }
+    .gpu-name .base-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--accent-primary); font-weight: 700; margin-left: 6px;
+    }
+    .gpu-meta {
+      font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .gpu-meta span::after { content: '•'; margin-left: 6px; color: var(--border-subtle); }
+    .gpu-meta span:last-child::after { content: ''; }
+
+    .gpu-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .api-badge {
+      font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;
+      background: rgba(0, 243, 255, 0.05); border: 1px solid var(--border-subtle);
+      color: var(--text-muted); font-family: monospace;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+    }
+
+    .card-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-subtle);
+    }
+    .gpu-score { text-align: right; }
+    .gpu-score .val { font-size: 1.1rem; font-weight: 700; color: var(--accent-primary); text-shadow: 0 0 8px rgba(0, 243, 255, 0.4); }
+    .gpu-score .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .gpu-diff { text-align: right; }
+    .gpu-diff .val { font-size: 0.9rem; font-weight: 600; }
+    .gpu-diff.positive .val { color: var(--success); text-shadow: 0 0 6px var(--success); }
+    .gpu-diff.negative .val { color: var(--danger); text-shadow: 0 0 6px var(--danger); }
+    
+    .gpu-specs { font-size: 0.8rem; color: var(--text-muted); text-align: right; }
+    .gpu-specs span { display: block; }
+
+    /* NEON BRAND OVERRIDES (Specific colors for Intel, Nvidia, AMD cards) */
+    .gpu-card.brand-intel::before { background: var(--brand-intel) !important; box-shadow: 0 0 15px var(--brand-intel) !important; }
+    .gpu-card.brand-intel .gpu-score .val { color: var(--brand-intel); text-shadow: 0 0 8px var(--brand-intel); }
+    .gpu-card.brand-intel .gpu-rank { color: var(--brand-intel); background: rgba(0, 243, 255, 0.1); }
+
+    .gpu-card.brand-nvidia::before { background: var(--brand-nvidia) !important; box-shadow: 0 0 15px var(--brand-nvidia) !important; }
+    .gpu-card.brand-nvidia .gpu-score .val { color: var(--brand-nvidia); text-shadow: 0 0 8px var(--brand-nvidia); }
+    .gpu-card.brand-nvidia .gpu-rank { color: var(--brand-nvidia); background: rgba(57, 255, 20, 0.1); }
+
+    .gpu-card.brand-amd::before { background: var(--brand-amd) !important; box-shadow: 0 0 15px var(--brand-amd) !important; }
+    .gpu-card.brand-amd .gpu-score .val { color: var(--brand-amd); text-shadow: 0 0 8px var(--brand-amd); }
+    .gpu-card.brand-amd .gpu-rank { color: var(--brand-amd); background: rgba(255, 0, 60, 0.1); }
+
+    /* =========================================
+       SECTION 6: MODALS (Popups)
+       ========================================= */
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+      z-index: 200; justify-content: center; align-items: center; padding: 20px;
+    }
+    .modal.active { display: flex; animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-content {
+      background: var(--bg-panel); border: 1px solid var(--border-subtle);
+      padding: 0; border-radius: var(--radius-lg); max-width: 800px; width: 100%;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0, 243, 255, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .modal-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border-subtle);
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: rgba(10, 10, 20, 0.95); z-index: 10;
+    }
+    [data-theme="light"] .modal-header { background: rgba(15, 15, 30, 0.95); }
+    .modal-header h2 { font-size: 1.2rem; font-weight: 700; color: var(--accent-primary); text-shadow: 0 0 8px rgba(0, 243, 255, 0.3); }
+    .close-btn {
+      background: transparent; border: none; color: var(--text-muted);
+      font-size: 1.5rem; cursor: pointer; padding: 4px; line-height: 1;
+    }
+    .close-btn:hover { color: var(--text-main); }
+    .modal-body { padding: 24px; }
+
+    .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .compare-item {
+      background: rgba(0, 243, 255, 0.03); border-radius: var(--radius-md);
+      padding: 16px; border: 1px solid var(--border-subtle);
+    }
+    .compare-item h4 { 
+      color: var(--accent-primary); margin-bottom: 12px; font-size: 1.1rem; 
+      border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+    }
+    .compare-item p { font-size: 0.9rem; margin: 8px 0; color: var(--text-muted); }
+    .compare-item strong { color: var(--text-main); }
+
+    .api-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-subtle);
+    }
+    .api-item { text-align: center; padding: 6px; background: rgba(0,0,0,0.2); border-radius: 4px; }
+    [data-theme="light"] .api-item { background: rgba(0,0,0,0.03); }
+    .api-item .api-label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
+    .api-item .api-val { font-size: 0.85rem; font-weight: 600; color: var(--accent-primary); text-shadow: 0 0 5px rgba(0, 243, 255, 0.3); }
+
+    .comparison-verdict {
+      text-align: center; padding: 16px; background: rgba(0, 243, 255, 0.05);
+      border-radius: var(--radius-md); border: 1px solid rgba(0, 243, 255, 0.2);
+      box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.05);
+    }
+    .diff-faster { color: var(--success); text-shadow: 0 0 10px var(--success); }
+    .diff-slower { color: var(--danger); text-shadow: 0 0 10px var(--danger); }
+
+    .theme-toggle {
+      background: var(--bg-panel); border: 1px solid var(--border-subtle);
+      color: var(--text-main); padding: 8px 12px; border-radius: var(--radius-md);
+      cursor: pointer; font-size: 1.1rem; transition: var(--transition);
+    }
+    .theme-toggle:hover { border-color: var(--accent-primary); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+
+    /* Contact Button Styles */
+    .contact-btn {
+      background: var(--accent-gradient);
+      color: white;
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+    .contact-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+      transform: translateY(-1px);
+    }
+    
+    .scrape-status {
+      margin-top: 15px; padding: 12px; border-radius: var(--radius-md);
+      font-size: 0.9rem; display: none;
+    }
+    .scrape-status.loading { background: rgba(0, 243, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 243, 255, 0.1); box-shadow: 0 0 10px rgba(0, 243, 255, 0.1); }
+    .scrape-status.done { background: rgba(0, 255, 65, 0.1); color: var(--success); border: 1px solid rgba(0, 255, 65, 0.1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
+    .scrape-status.error { background: rgba(255, 0, 60, 0.1); color: var(--danger); border: 1px solid rgba(255, 0, 60, 0.1); box-shadow: 0 0 10px rgba(255, 0, 60, 0.1); }
+
+    .hidden { display: none !important; }
+
+    .btn-games {
+      background: var(--accent-primary);
+      color: white;
+      border: 1px solid rgba(0, 243, 255, 0.4);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-top: 8px;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+      text-shadow: 0 0 4px rgba(255,255,255,0.5);
+    }
+    .btn-games:hover { filter: brightness(1.3); transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 243, 255, 0.5); }
+
+    .game-card {
+      background: rgba(0, 243, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .game-card:hover { border-color: var(--accent-primary); transform: translateX(4px); box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); }
+    .game-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .game-card h4 { color: var(--text-main); font-size: 1.1rem; margin: 0; }
+    .game-card p { font-size: 0.85rem; color: var(--text-muted); margin: 4px 0; }
+    .game-card .score-range { color: var(--text-main); font-weight: 600; }
+
+    .game-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .tag {
+      font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;
+      background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle); color: var(--text-muted);
+    }
+    .tag.api { border-color: var(--accent-primary); color: var(--accent-primary); box-shadow: 0 0 8px rgba(0, 243, 255, 0.2); }
+    .tag.vram { border-color: var(--success); color: var(--success); box-shadow: 0 0 8px rgba(0, 255, 65, 0.2); }
+    .tag.score { border-color: var(--danger); color: var(--danger); box-shadow: 0 0 8px rgba(255, 0, 60, 0.2); }
+
+    .compat-badge {
+      display: inline-block; padding: 4px 10px; border-radius: 12px;
+      font-size: 0.8rem; font-weight: 700; margin-top: 6px;
+    }
+    .compat-badge.yes { background: rgba(0, 255, 65, 0.15); color: var(--success); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
+    .compat-badge.rec { background: rgba(0, 243, 255, 0.15); color: var(--accent-primary); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
+
+    /* Edition-aware game cards with local artwork */
+    .game-card-list {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg); padding: 14px; display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(290px, 40%); gap: 18px;
+      box-shadow: var(--shadow-card); transition: var(--transition); overflow: hidden;
+      align-items: stretch;
+    }
+    .game-card-list:hover { border-color: var(--accent-primary); transform: translateY(-2px); box-shadow: 0 8px 26px rgba(0,243,255,.13); }
+    .game-art-link {
+      display:flex; flex-direction:column; align-self:stretch; justify-content:center;
+      min-height:160px; border-radius:10px; overflow:hidden;
+      border:1px solid var(--border-subtle); background:#080b12; text-decoration:none;
+    }
+    .game-art {
+      width:100%; height:auto; max-height:230px; min-height:150px; display:block;
+      object-fit:contain; object-position:center; background:#080b12;
+    }
+    .game-card-main { min-width:0; display:flex; flex-direction:column; gap:9px; }
+    .game-title-link { color:var(--text-main); text-decoration:none; }
+    .game-title-link:hover { color:var(--accent-primary); text-decoration:underline; }
+    .game-title-row { display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px; align-items:start; }
+    .game-title-row h3 { margin:0; overflow-wrap:anywhere; }
+    .game-title-row .gpu-rank { grid-column:1; grid-row:1; margin:0; align-self:start; }
+    .game-title-row .gpu-name { grid-column:2; grid-row:1; min-width:0; }
+    .game-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; }
+    .game-actions .btn-games, .game-link-btn { margin:0; justify-self:auto; text-decoration:none; }
+    .game-link-btn { background:rgba(0,243,255,.09); color:var(--accent-primary); border:1px solid var(--accent-primary); padding:8px 14px; border-radius:var(--radius-md); font-size:.85rem; font-weight:700; display:inline-flex; align-items:center; justify-content:center; transition:all .2s; }
+    .game-link-btn:hover { background:rgba(0,243,255,.2); box-shadow:0 0 16px rgba(0,243,255,.25); }
+    .edition-note { color:var(--text-muted); font-size:.78rem; line-height:1.35; }
+    .confidence-high { border-color:rgba(0,255,65,.45)!important; color:var(--success)!important; }
+    .confidence-low { border-color:rgba(255,174,0,.55)!important; color:#ffbd3c!important; }
+    .art-source-label { position:relative; margin-top:0; padding:4px 7px; background:rgba(0,0,0,.74); color:#d9e8ef; font-size:.65rem; text-align:right; pointer-events:none; }
+    .modal-game-layout { display:grid; grid-template-columns:132px minmax(0,1fr); gap:13px; }
+    .modal-game-art { width:132px; height:92px; object-fit:contain; background:#080b12; border-radius:8px; border:1px solid var(--border-subtle); }
+    .audit-banner { padding:12px 15px; margin:0 0 14px; border:1px solid rgba(0,243,255,.25); border-radius:var(--radius-md); background:rgba(0,243,255,.055); color:var(--text-muted); font-size:.82rem; line-height:1.45; }
+    @media (max-width: 760px) {
+      .game-card-list { grid-template-columns:1fr; }
+      .game-card-main { grid-row:1; }
+      .game-art-link { grid-row:2; min-height:150px; }
+      .game-art { min-height:140px; max-height:240px; }
+      .modal-game-layout { grid-template-columns:1fr; }
+      .modal-game-art { width:100%; height:auto; max-height:220px; object-fit:contain; }
+    }
+
+
+    /* =========================================
+       SECTION 7: SOFTWARE MODAL CARD STYLES
+       ========================================= */
+    .software-item {
+      background: rgba(0, 243, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .software-item:hover { 
+      border-color: var(--accent-primary); 
+      transform: translateX(4px); 
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); 
+    }
+    .software-item h4 { 
+      color: var(--accent-primary); 
+      margin: 0 0 8px 0; 
+      font-size: 1.1rem; 
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+    }
+    .software-item p { 
+      font-size: 0.85rem; 
+      color: var(--text-muted); 
+      margin: 0 0 12px 0; 
+      line-height: 1.5; 
+    }
+    .software-item a {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--accent-primary);
+      border-radius: 6px;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .software-item a:hover { 
+      background: var(--accent-primary); 
+      color: #000; 
+      box-shadow: 0 0 10px var(--accent-primary); 
+    }
+
+    /* =========================================
+       SECTION 8: PERFORMANCE & ACCESSIBILITY OVERRIDES
+       ========================================= */
+    *,
+    *::before,
+    *::after {
+      /* Disable animations and transitions */
+      animation: none !important;
+      transition: none !important;
+
+      /* Remove shadows */
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    /* Pause any running `@keyframes` at the root level */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .gpu-list { grid-template-columns: 1fr; }
+      .compare-row { grid-template-columns: 1fr; }
+      .header { 
+        grid-template-columns: 1fr; 
+        gap: 12px; 
+        text-align: center; 
+      }
+      .header-left, .header-center, .header-right { 
+        justify-self: center; 
+        width: 100%; 
+      }
+      .craptop-link img { height: 60px; max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =========================================
+     HTML SECTION 1: HEADER
+     ========================================= -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-content">
+      <h1>⚡ GPU Performance Database</h1>
+      <p>Search 550+ GPUs (2006–2026) • Compare scores • Filter by brand</p>
+    </div>
+  </div>
+  
+  <div class="header-center">
+    <!-- External Banner Link -->
+    <a href="https://www.reddit.com/r/Craptopgamingadvice/" target="_blank" rel="noopener noreferrer" class="craptop-link" title="Visit CraptopGaming Advice">
+      <img src="craptop-banner.png" alt="Craptop Gaming Advice">
+    </a>
+  </div>
+  
+  <div class="header-right">
+    <!-- Contact Button -->
+    <a href="mailto:craptopgamingadvice@gmail.com" class="contact-btn" title="Email Us">
+      ✉️ Contact
+    </a>
+    
+    <!-- YouTube Link -->
+    <a href="https://www.youtube.com/channel/UCYFVWOHTv5_7nMd8B_5fAqg" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 10px;">
+      <img src="YouTube.png" alt="YouTube Channel" style="height: 48px; width: 48px; border-radius: 50%;">
+    </a>
+  </div>
+</div>
+
+<!-- =========================================
+     HTML SECTION 2: CONTROL PANEL (Search & Filters)
+     ========================================= -->
+<div class="container">
+  <div class="control-panel">
+    <div class="search-row">
+      <div class="input-wrapper">
+        <span class="input-icon">🔍</span>
+        <!-- The ID 'searchInput' is used by JavaScript to listen for typing -->
+        <input type="text" id="searchInput" placeholder="Search GPU (e.g., RTX 4090, RX 6800)..." autocomplete="off">
+      </div>
+      <button class="btn btn-primary" onclick="searchGPU()">Search</button>
+      <button class="btn btn-secondary" onclick="clearSearch()">Clear</button>
+    </div>
+    
+    <div class="filter-btns">
+      <!-- Buttons call JavaScript functions to filter the list -->
+      <button class="filter-btn active" onclick="filterList('all', this)">🖥️ All GPUs</button>
+      <button class="filter-btn" onclick="filterList('nvidia', this)">NVIDIA</button>
+      <button class="filter-btn" onclick="filterList('amd', this)">AMD</button>
+      <button class="filter-btn" onclick="filterList('intel', this)">Intel</button>
+      <button class="filter-btn" onclick="filterList('igpu', this)">iGPUs</button>
+      <!-- New Button for All Games -->
+      <button class="filter-btn" onclick="showAllGames()" id="btnAllGames">🎮 All Games</button>
+      <!-- NEW: Software Button -->
+      <button class="filter-btn" onclick="openSoftwareModal()" id="btnSoftware">🛠️ Software</button>
+      <!-- NEW: Play Pointer Blaster Button -->
+      <button class="filter-btn" onclick="window.open('Pointer Blaster.html', '_blank')" style="display: inline-flex; align-items: center; gap: 6px;">
+        🕹️ Play Pointer Blaster
+      </button>
+    </div>
+  </div>
+
+  <!-- Status Bar (Shows "Loading..." or "Database Loaded") -->
+  <div id="statusBar" class="scrape-status"></div>
+
+  <!-- =========================================
+       HTML SECTION 3: RESULTS AREA (The List)
+       This is where the GPU/Game cards appear
+       ========================================= -->
+  <div id="resultsSection" class="hidden">
+    <div class="results-header">
+      <h2 id="resultsTitle">Search Results</h2>
+      <span id="resultsCount"></span>
+    </div>
+    <div class="gpu-list" id="gpuList"></div>
+    <!-- Unified Load More Button -->
+    <button id="loadMoreBtn" class="btn btn-primary hidden" style="margin: 24px auto; display: block; width: 200px;" onclick="loadMoreItems()">Load More</button>
+  </div>
+
+  <!-- =========================================
+       HTML SECTION 4: MODALS (Popups)
+       ========================================= -->
+  
+  <!-- Comparison Modal (Appears when clicking a card) -->
+  <div id="comparisonModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚖️ GPU Comparison</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="compareContent"></div>
+    </div>
+  </div>
+
+  <!-- Games Modal (Appears when clicking "Compatible Games") -->
+  <div id="gamesModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 id="gamesModalTitle">🎮 Compatible Games</h2>
+        <button class="close-btn" onclick="closeGamesModal()">&times;</button>
+      </div>
+      
+      <!-- Game Search Bar -->
+      <div style="padding: 0 24px 16px 24px; display: flex; gap: 10px;">
+        <div class="input-wrapper" style="flex: 1;">
+          <span class="input-icon">🔍</span>
+          <input type="text" id="modalSearchInput" placeholder="Filter games..." autocomplete="off" style="background: rgba(0,0,0,0.3);">
+        </div>
+        <button class="btn btn-primary" style="height: 48px;" onclick="filterGameList()">Filter</button>
+        <button class="btn btn-secondary" style="height: 48px;" onclick="clearModalSearch()">Clear</button>
+      </div>
+
+      <div id="gamesModalContent">
+        <p style="text-align:center; color:var(--text-muted); padding: 20px;">Loading games...</p>
+      </div>
+      <!-- Modal Load More Button -->
+      <button id="modalLoadMoreBtn" class="btn btn-primary hidden" style="margin: 24px auto; display: block; width: 200px;" onclick="loadMoreCompatibleGames()">Load More Games</button>
+    </div>
+  </div>
+
+  <!-- Compatible GPUs Modal (Appears when clicking "Compatible GPUs" on a game) -->
+  <div id="compatibleGPUsModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 id="compatibleGPUsTitle">Compatible GPUs</h2>
+        <button class="close-btn" onclick="closeCompatibleGPUsModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="compatibleGPUsList" style="max-height: 60vh; overflow-y: auto;"></div>
+    </div>
+  </div>
+
+  <!-- Software Modal -->
+  <div id="softwareModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2>🛠️ Recommended Software</h2>
+        <button class="close-btn" onclick="closeSoftwareModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="softwareList" style="max-height: 60vh; overflow-y: auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Suggestions Dropdown (Hidden by default) -->
+<div id="suggestionsBox" class="suggestions-box"></div>
+
+<!-- =========================================
+     JAVASCRIPT SECTION: LOGIC
+     ========================================= -->
+<script>
+// ==========================================
+// 1. VARIABLES & STATE (Global Settings)
+// ==========================================
+let currentFilter = 'all';
+let lastSearch = null;
+let GPU_DB = [];       // Array to hold GPU data loaded from gpus.json
+let GAMES_DB = [];     // Array to hold Game data loaded from games.json
+let isLoading = false;
+let currentView = 'gpus'; // Tracks if we are viewing 'gpus' or 'games'
+let currentCompatibleGames = [];
+
+// ==========================================
+// 2. PAGINATION CONFIGURATION
+// ==========================================
+const PAGE_SIZE = 50; // How many items to show per page
+let currentGPUPage = 0;
+let currentGPUs = [];
+let currentGamePage = 0;
+let currentAllGames = [];
+let currentCompatibleGamePage = 0;
+
+// ==========================================
+// 3. INITIALIZATION (Runs on Page Load)
+// ==========================================
+function init() {
+  setupSuggestions(); // Sets up the search dropdown
+  loadDatabase();     // Fetches the JSON files
+}
+
+// ==========================================
+// 4. DATABASE LOADING (Fetches JSON)
+// ==========================================
+async function loadDatabase() {
+  showStatus('Initializing database...', 'loading');
+  try {
+    // Fetches both files simultaneously
+    const [gpuRes, gameRes] = await Promise.all([
+      fetch('gpus.json'),
+      fetch('games.json').catch(() => Promise.resolve(null))
+    ]);
+    
+    if (!gpuRes.ok) throw new Error('Failed to load gpus.json');
+    GPU_DB.push(...await gpuRes.json());
+    
+    if (gameRes && gameRes.ok) {
+      let rawData = await gameRes.json();
+      GAMES_DB = rawData.flat();
+      console.log(`✅ Successfully loaded ${GAMES_DB.length} games from games.json`);
+    } else {
+      console.warn('⚠️ games.json not found. Using fallback sample data.');
+      GAMES_DB = [
+        {title:"Cyberpunk 2077", score:15000, release_year:2018, directX:"12", notes:"Heavy DX12/Vulkan title."},
+        {title:"Elden Ring", score:12000, release_year:2021, directX:"12", notes:"DX12 required."},
+        {title:"Fortnite", score:3000, release_year:2017, directX:"11", notes:"Highly scalable."}
+      ];
+    }
+    finalizeInit();
+  } catch (err) {
+    console.warn('Fallback dataset loaded due to error.', err);
+    // Fallback data if JSON fails
+    GPU_DB.push(
+      {name:"RTX 4090",brand:"nvidia",type:"dGPU",year:2022,score:78500,vram:"24GB GDDR6X",tdp:450,arch:"Ada Lovelace"},
+      {name:"RX 7900 XTX",brand:"amd",type:"dGPU",year:2022,score:52000,vram:"24GB GDDR6",tdp:355,arch:"RDNA 3"},
+      {name:"Intel Arc 140V GPU (Core Ultra 9 288V)",brand:"intel",type:"igpu",year:2024,score:7500,vram:"Shared",tdp:30,arch:"Xe2-LPG"},
+      {name:"GTX 1080 Ti",brand:"nvidia",type:"dGPU",year:2017,score:24000,vram:"11GB GDDR5X",tdp:250,arch:"Pascal"},
+      {name:"RX 580 8GB",brand:"amd",type:"dGPU",year:2017,score:10000,vram:"8GB GDDR5",tdp:185,arch:"GCN 5"},
+      {name:"RTX 3080",brand:"nvidia",type:"dGPU",year:2020,score:43000,vram:"10GB GDDR6X",tdp:320,arch:"Ampere"},
+      {name:"RX 6800 XT",brand:"amd",type:"dGPU",year:2020,score:39000,vram:"16GB GDDR6",tdp:300,arch:"RDNA 2"},
+      {name:"RTX 4070 Ti",brand:"nvidia",type:"dGPU",year:2023,score:38000,vram:"12GB GDDR6X",tdp:285,arch:"Ada Lovelace"}
+    );
+    finalizeInit();
+  }
+}
+
+// ==========================================
+// 5. FINAL INITIALIZATION & DATA PROCESSING
+// ==========================================
+function finalizeInit() {
+  // Adds calculated fields to every GPU (DX version, Vulkan version, etc.) based on Year
+  GPU_DB.forEach(gpu => {
+    const y = gpu.year;
+    gpu.dx_hw = y < 2006 ? "DX8.1" : y < 2009 ? "DX9.0c" : y < 2012 ? "DX10.1" : y < 2015 ? "DX11" : y < 2020 ? "DX12" : y < 2024 ? "DX12_1" : "DX12_2";
+    gpu.dx_sw = y < 2006 ? "SM 2.0" : y < 2009 ? "SM 3.0" : y < 2012 ? "SM 4.1" : y < 2015 ? "SM 5.0" : y < 2020 ? "SM 5.1" : y < 2024 ? "SM 6.3" : "SM 6.7";
+    gpu.vulkan = y < 2016 ? "N/A" : y < 2019 ? "1.0" : y < 2021 ? "1.1" : y < 2023 ? "1.2" : "1.3";
+    gpu.opengl = y < 2006 ? "2.0" : y < 2009 ? "2.1" : y < 2012 ? "3.0" : y < 2015 ? "3.3" : y < 2018 ? "4.1" : y < 2020 ? "4.5" : "4.6 (DRM)";
+  });
+  currentGPUPage = 0;
+  renderList(GPU_DB);
+  
+  // FIX: Ensure the results container is visible on initial load
+  document.getElementById('resultsSection').classList.remove('hidden');
+  showStatus('Database loaded successfully.', 'done');
+}
+
+// ==========================================
+// 6. SEARCH SUGGESTIONS LOGIC
+// ==========================================
+function setupSuggestions() {
+  const input = document.getElementById('searchInput');
+  const box = document.getElementById('suggestionsBox');
+  let timeout;
+
+  function positionDropdown() {
+    const rect = input.getBoundingClientRect();
+    box.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+    box.style.left = rect.left + 'px';
+    box.style.width = rect.width + 'px';
+  }
+
+  function showSuggestions(matches) {
+    box.innerHTML = '';
+    if (matches.length === 0) {
+      box.classList.remove('active');
+      return;
+    }
+
+    matches.forEach(match => {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.innerHTML = `<span>${match.name}</span><span class="suggestion-meta">${match.arch} • ${match.year}</span>`;
+      div.onclick = () => {
+        input.value = match.name;
+        box.classList.remove('active');
+        searchGPU(match);
+      };
+      box.appendChild(div);
+    });
+
+    positionDropdown();
+    box.classList.add('active');
+  }
+
+  input.addEventListener('input', function() {
+    clearTimeout(timeout);
+    const query = this.value.trim().toLowerCase();
+    if (query.length < 1) { box.classList.remove('active'); return; }
+
+    timeout = setTimeout(() => {
+      const matches = GPU_DB.filter(gpu => {
+        const nameMatch = gpu.name.toLowerCase().includes(query);
+        const archMatch = gpu.arch.toLowerCase().includes(query);
+        const yearMatch = gpu.year.toString().includes(query);
+        return nameMatch || archMatch || yearMatch;
+      }).slice(0, 8);
+      showSuggestions(matches);
+    }, 150);
+  });
+
+  input.addEventListener('focus', positionDropdown);
+  
+  window.addEventListener('scroll', positionDropdown, true);
+  window.addEventListener('resize', positionDropdown);
+
+  document.addEventListener('click', function(e) {
+    if (e.target !== input && !box.contains(e.target)) {
+      box.classList.remove('active');
+    }
+  });
+
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      searchGPU();
+      box.classList.remove('active');
+    }
+  });
+}
+
+// ==========================================
+// 7. SEARCH FUNCTION
+// ==========================================
+function searchGPU(specificMatch = null) {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!query && !specificMatch) { clearSearch(); return; }
+
+  let baseCard = specificMatch;
+  if (!baseCard) {
+    baseCard = GPU_DB.find(g => g.name.toLowerCase() === query) || GPU_DB.find(g => g.name.toLowerCase().includes(query));
+    if (baseCard) document.getElementById('searchInput').value = baseCard.name;
+    if (!baseCard) { showStatus('No GPU found matching that name.', 'error'); return; }
+  }
+
+  lastSearch = baseCard;
+  currentView = 'gpus';
+  showSimilarCards(baseCard);
+}
+
+// ==========================================
+// 8. RENDER SIMILAR CARDS (Search Results)
+// ==========================================
+function showSimilarCards(baseCard) {
+  const resultsSection = document.getElementById('resultsSection');
+  const resultsTitle = document.getElementById('resultsTitle');
+  const resultsCount = document.getElementById('resultsCount');
+  const gpuList = document.getElementById('gpuList');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+  loadMoreBtn.classList.add('hidden');
+
+  const THRESHOLD = 15; // +/- 15% performance difference
+
+  const similarCards = GPU_DB
+    .filter(gpu => gpu.name !== baseCard.name)
+    .map(gpu => {
+      const diff = gpu.score - baseCard.score;
+      const pctDiff = ((diff / baseCard.score) * 100).toFixed(1);
+      return { ...gpu, diff, pctDiff };
+    })
+    .filter(gpu => Math.abs(gpu.pctDiff) <= THRESHOLD)
+    .sort((a, b) => a.diff - b.diff);
+
+  let html = `
+    <div class="gpu-card base-card brand-${baseCard.brand}" style="border: 2px solid var(--accent-primary); box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);">
+      <div class="card-top">
+          <div class="gpu-name">
+              <h3>${baseCard.name} <span class="base-label">(SEARCHED)</span></h3>
+              <div class="gpu-meta">
+                  <span>${baseCard.arch}</span>
+                  <span>${baseCard.year}</span>
+                  <span>${baseCard.vram}</span>
+              </div>
+              <div class="gpu-tags">
+                  <span class="api-badge">DX:${baseCard.dx_hw}</span>
+                  <span class="api-badge">VK:${baseCard.vulkan}</span>
+                  <span class="api-badge">GL:${baseCard.opengl}</span>
+              </div>
+          </div>
+          <div class="gpu-rank">#1</div>
+      </div>
+      <div class="card-bottom">
+          <div class="gpu-score">
+              <div class="val">${baseCard.score.toLocaleString()}</div>
+              <div class="label">Score</div>
+          </div>
+          <div class="gpu-specs">
+              <span>${baseCard.tdp}W • ${baseCard.brand.toUpperCase()}</span>
+          </div>
+      </div>
+      <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${baseCard.name}')">🎮 Compatible Games</button>
+    </div>
+    <div style="margin: 24px 0 16px; padding: 0 4px;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);">⚖️ Similar Speed</h2>
+    </div>
+    <div class="gpu-list" style="max-width: 900px; margin: 0 auto;">
+  `;
+
+  if (similarCards.length === 0) {
+    html += `<p style="text-align:center; color:var(--text-muted); padding: 20px;">No cards found within ±${THRESHOLD}% performance of the searched GPU.</p>`;
+  } else {
+    similarCards.forEach((gpu, i) => {
+      const diffClass = gpu.diff >= 0 ? 'positive' : 'negative';
+      const diffIcon = gpu.diff >= 0 ? '+' : '';
+      html += `
+        <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(baseCard).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+          <div class="card-top">
+              <div class="gpu-name">
+                  <h3>${gpu.name}</h3>
+                  <div class="gpu-meta">
+                      <span>${gpu.arch}</span>
+                      <span>${gpu.year}</span>
+                      <span>${gpu.vram}</span>
+                  </div>
+                  <div class="gpu-tags">
+                      <span class="api-badge">DX:${gpu.dx_hw}</span>
+                      <span class="api-badge">VK:${gpu.vulkan}</span>
+                      <span class="api-badge">GL:${gpu.opengl}</span>
+                  </div>
+              </div>
+              <div class="gpu-rank">#${i + 1}</div>
+          </div>
+          <div class="card-bottom">
+              <div class="gpu-diff ${diffClass}">
+                  <div class="val">${diffIcon}${gpu.pctDiff}%</div>
+                  <div class="label">Diff</div>
+              </div>
+              <div class="gpu-score">
+                  <div class="val">${gpu.score.toLocaleString()}</div>
+                  <div class="label">Score</div>
+              </div>
+          </div>
+          <div class="gpu-specs">
+              <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
+          </div>
+          <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+        </div>
+      `;
+    });
+  }
+
+  html += `</div>`;
+
+  resultsSection.classList.remove('hidden');
+  resultsTitle.textContent = `Results for: ${baseCard.name}`;
+  resultsCount.textContent = `${similarCards.length} similar cards shown`;
+  gpuList.innerHTML = html;
+
+  showStatus(`Found ${similarCards.length} cards with similar performance to ${baseCard.name}.`, 'done');
+}
+
+// ==========================================
+// 9. RENDER MAIN GPU LIST (Pagination)
+// ==========================================
+function renderList(gpus) {
+  currentGPUs = [...gpus].sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.name.localeCompare(b.name);
+  });
+  currentGPUPage = 0;
+  renderGPUPage(currentGPUPage);
+  
+  // FIX: Ensure results container is visible when rendering lists
+  document.getElementById('resultsSection').classList.remove('hidden');
+}
+
+function renderGPUPage(page) {
+  const start = page * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pageItems = currentGPUs.slice(start, end);
+  const container = document.getElementById('gpuList');
+  const btn = document.getElementById('loadMoreBtn');
+
+  container.innerHTML = pageItems.map((gpu, i) => `
+    <div class="gpu-card brand-${gpu.brand}" data-card1='${JSON.stringify(lastSearch || currentGPUs[0] || GPU_DB[0]).replace(/'/g, "&#39;")}' data-card2='${JSON.stringify(gpu).replace(/'/g, "&#39;")}' onclick="showComparison(JSON.parse(this.dataset.card1), JSON.parse(this.dataset.card2))">
+      <div class="card-top">
+        <div class="gpu-name">
+          <h3>${gpu.name}</h3>
+          <div class="gpu-meta">
+            <span>${gpu.arch}</span>
+            <span>${gpu.year}</span>
+            <span>${gpu.vram}</span>
+          </div>
+          <div class="gpu-tags">
+              <span class="api-badge">DX:${gpu.dx_hw}</span>
+              <span class="api-badge">VK:${gpu.vulkan}</span>
+              <span class="api-badge">GL:${gpu.opengl}</span>
+          </div>
+        </div>
+        <div class="gpu-rank">${i + 1 + page * PAGE_SIZE}</div>
+      </div>
+      <div class="card-bottom">
+        <div class="gpu-score">
+          <div class="val">${gpu.score.toLocaleString()}</div>
+          <div class="label">Score</div>
+        </div>
+        <div class="gpu-specs">
+            <span>${gpu.tdp}W</span>
+            <span class="brand-name">${gpu.brand.toUpperCase()}</span>
+        </div>
+      </div>
+      <button class="btn-games" onclick="event.stopPropagation(); openGamesModal('${gpu.name}')">🎮 Compatible Games</button>
+    </div>
+  `).join('');
+
+  if (end < currentGPUs.length) {
+    btn.classList.remove('hidden');
+    btn.textContent = `Load More GPUs (${currentGPUs.length - end} remaining)`;
+  } else {
+    btn.classList.add('hidden');
+  }
+}
+
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+}
+function safeGameUrl(game) {
+  const url = String(game.game_url || '');
+  return /^https:\/\//i.test(url) ? url : '#';
+}
+function confidenceClass(game) {
+  return game.metadata_confidence === 'high' ? 'confidence-high' : (game.metadata_confidence === 'low' ? 'confidence-low' : '');
+}
+function gameArtMarkup(game, compact = false) {
+  const title = escapeHtml(game.edition_name || game.title);
+  const src = escapeHtml(game.image || '');
+  const label = escapeHtml(game.image_type || 'local artwork');
+  const cls = compact ? 'modal-game-art' : 'game-art';
+  return `<img class="${cls}" src="${src}" loading="lazy" decoding="async" alt="Artwork for ${title}">` + (compact ? '' : `<div class="art-source-label">${label}</div>`);
+}
+
+// ==========================================
+// 10. RENDER ALL GAMES LIST
+// ==========================================
+function showAllGames() {
+  currentView = 'games';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btnAllGames').classList.add('active');
+  currentAllGames = [...GAMES_DB].sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+  currentGamePage = 0;
+  renderGamePage(currentGamePage);
+  
+  document.getElementById('loadMoreBtn').classList.remove('hidden');
+  document.getElementById('modalLoadMoreBtn').classList.add('hidden');
+  document.getElementById('resultsSection').classList.remove('hidden');
+  document.getElementById('resultsTitle').textContent = 'All Games in Database';
+  document.getElementById('resultsCount').textContent = `${currentAllGames.length} games found`;
+}
+
+function renderGamePage(page) {
+  const items = currentAllGames || [];
+  const start = page * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pageItems = items.slice(start, end);
+  const container = document.getElementById('gpuList');
+  const btn = document.getElementById('loadMoreBtn');
+
+  const banner = page === 0 ? `<div class="audit-banner" style="grid-column:1/-1;">Edition-aware audit: reviewed scores are preserved. Links and local artwork follow the selected original, port, remaster, or remake. A card labeled “local edition card fallback” is an identification fallback—not official box art or a gameplay screenshot.</div>` : '';
+  container.innerHTML = banner + pageItems.map((game, i) => {
+    const score = Number(game.score) || 0;
+    const year = game.release_year || game.year || 'N/A';
+    const directX = game.directX || 'Unknown';
+    const url = safeGameUrl(game);
+    const title = escapeHtml(game.title);
+    const edition = escapeHtml(game.edition_name || game.title);
+    const editionType = escapeHtml(game.edition_type || 'edition unclassified');
+    const source = escapeHtml(game.game_url_source || 'external game reference');
+    const note = escapeHtml(game.metadata_notes || game.notes || 'No additional metadata notes.');
+    const conf = escapeHtml(game.metadata_confidence || 'medium');
+    return `
+      <article class="game-card-list">
+        <div class="game-card-main">
+          <div class="game-title-row">
+            <div class="gpu-rank">#${i + 1 + page * PAGE_SIZE}</div>
+            <div class="gpu-name">
+              <h3><a class="game-title-link" href="${url}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+              ${edition !== title ? `<div class="edition-note">Selected edition: ${edition}</div>` : ''}
+            </div>
+          </div>
+          <div class="gpu-meta">
+            <span>${escapeHtml(year)}</span>
+            <span>${escapeHtml(directX)}</span>
+            <span>Min Score: ${score.toLocaleString()}</span>
+          </div>
+          <div class="game-tags">
+            <span class="tag score">Score: ${score.toLocaleString()}</span>
+            <span class="tag">${editionType}</span>
+            <span class="tag ${confidenceClass(game)}">Confidence: ${conf}</span>
+          </div>
+          <div class="edition-note">Link: ${source}</div>
+          <div class="edition-note">${note}</div>
+          <div class="game-actions">
+            <a class="game-link-btn" href="${url}" target="_blank" rel="noopener noreferrer">🔗 Open Game Page</a>
+            <button class="btn-games" onclick="event.stopPropagation(); showCompatibleGPUs(decodeURIComponent('${encodeURIComponent(game.title).replace(/'/g, '%27')}'), ${score})">🔍 Compatible GPUs</button>
+          </div>
+        </div>
+        <a class="game-art-link" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Open ${edition}">
+          ${gameArtMarkup(game)}
+        </a>
+      </article>
+    `;
+  }).join('');
+
+  if (end < items.length) {
+    btn.classList.remove('hidden');
+    btn.textContent = `Load More Games (${items.length - end} remaining)`;
+  } else {
+    btn.classList.add('hidden');
+  }
+}
+
+// Unified Load More Handler
+function loadMoreItems() {
+  if (currentView === 'games') {
+    currentGamePage++;
+    renderGamePage(currentGamePage);
+  } else {
+    currentGPUPage++;
+    renderGPUPage(currentGPUPage);
+  }
+}
+
+function getGameCompatibility(gpu, game) {
+  if (!game.score) return 'no';
+  if (gpu.score >= game.score) {
+    if (game.recommended_score && gpu.score >= game.recommended_score) {
+      return 'recommended';
+    }
+    return 'compatible';
+  }
+  return 'no';
+}
+
+// ==========================================
+// 11. COMPATIBLE GAMES MODAL LOGIC
+// ==========================================
+function openGamesModal(gpuName) {
+  const gpu = GPU_DB.find(g => g.name === gpuName);
+  if (!gpu) return;
+
+  currentCompatibleGames = GAMES_DB
+    .map(game => ({ 
+      ...game, 
+      status: getGameCompatibility(gpu, game),
+      score: Number(game.score) || 0,
+      year: game.release_year || 'N/A'
+    }))
+    .filter(g => g.status !== 'no')
+    .sort((a, b) => b.score - a.score);
+
+  currentCompatibleGamePage = 0;
+  renderModalGamePage(currentCompatibleGamePage);
+
+  const modal = document.getElementById('gamesModal');
+  const title = document.getElementById('gamesModalTitle');
+  const searchInput = document.getElementById('modalSearchInput');
+  
+  title.textContent = `🎮 Compatible Games for ${gpu.name}`;
+  searchInput.value = '';
+  modal.classList.add('active');
+  document.getElementById('modalLoadMoreBtn').classList.remove('hidden');
+}
+
+function renderModalGamePage(page, itemsOverride = null) {
+  const items = itemsOverride !== null ? itemsOverride : currentCompatibleGames;
+  const start = page * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pageItems = items.slice(start, end);
+  const content = document.getElementById('gamesModalContent');
+  const btn = document.getElementById('modalLoadMoreBtn');
+
+  if (pageItems.length === 0) {
+    content.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No compatible games found for this GPU.</p>`;
+    btn.classList.add('hidden');
+    return;
+  }
+
+  content.innerHTML = pageItems.map(game => {
+    const badgeClass = game.status === 'recommended' ? 'rec' : 'yes';
+    const badgeText = game.status === 'recommended' ? '✅ Recommended' : '✔️ Compatible';
+    const year = game.release_year || game.year || 'N/A';
+    const directX = game.directX || 'Unknown';
+    const url = safeGameUrl(game);
+    const title = escapeHtml(game.title);
+    const edition = escapeHtml(game.edition_name || game.title);
+    return `
+      <article class="game-card">
+        <div class="modal-game-layout">
+          <a href="${url}" target="_blank" rel="noopener noreferrer">${gameArtMarkup(game, true)}</a>
+          <div>
+            <div class="game-card-header">
+              <h4><a class="game-title-link" href="${url}" target="_blank" rel="noopener noreferrer">${title}</a></h4>
+              <span class="compat-badge ${badgeClass}">${badgeText}</span>
+            </div>
+            ${edition !== title ? `<p>Edition: ${edition}</p>` : ''}
+            <p><span class="score-range">Game Score:</span> ${game.score.toLocaleString()}</p>
+            <div class="game-tags">
+              <span class="tag score">Min Score: ${game.score}</span>
+              <span class="tag">Year: ${escapeHtml(year)}</span>
+              <span class="tag">${escapeHtml(directX)}</span>
+              <span class="tag ${confidenceClass(game)}">${escapeHtml(game.metadata_confidence || 'medium')} confidence</span>
+            </div>
+            <p><a class="game-link-btn" href="${url}" target="_blank" rel="noopener noreferrer">🔗 Open Game Page</a></p>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  if (end < items.length) {
+    btn.classList.remove('hidden');
+    btn.textContent = `Load More Games (${items.length - end} remaining)`;
+  } else {
+    btn.classList.add('hidden');
+  }
+}
+
+function loadMoreCompatibleGames() {
+  currentCompatibleGamePage++;
+  renderModalGamePage(currentCompatibleGamePage);
+}
+
+function closeGamesModal() {
+  document.getElementById('gamesModal').classList.remove('active');
+}
+
+document.getElementById('gamesModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'gamesModal') closeGamesModal();
+});
+
+function filterGameList() {
+  const query = document.getElementById('modalSearchInput').value.toLowerCase();
+  if (!query) {
+    currentCompatibleGamePage = 0;
+    renderModalGamePage(currentCompatibleGamePage);
+    return;
+  }
+  const filtered = currentCompatibleGames.filter(game => game.title.toLowerCase().includes(query));
+  currentCompatibleGamePage = 0;
+  renderModalGamePage(currentCompatibleGamePage, filtered);
+}
+
+function clearModalSearch() {
+  document.getElementById('modalSearchInput').value = '';
+  currentCompatibleGamePage = 0;
+  renderModalGamePage(currentCompatibleGamePage);
+}
+
+// ==========================================
+// 12. COMPATIBLE GPUS MODAL LOGIC
+// ==========================================
+function showCompatibleGPUs(title, score) {
+  const compatibleGPUs = GPU_DB.filter(gpu => gpu.score >= score)
+    .sort((a, b) => b.score - a.score);
+  
+  document.getElementById('compatibleGPUsTitle').textContent = `Compatible GPUs for ${title}`;
+  const listContainer = document.getElementById('compatibleGPUsList');
+  
+  if (compatibleGPUs.length === 0) {
+    listContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">No compatible GPUs found in the database.</p>';
+  } else {
+    listContainer.innerHTML = compatibleGPUs.map((gpu, i) => {
+      const diff = gpu.score - score;
+      const pctDiff = ((diff / score) * 100).toFixed(1);
+      const isFaster = diff > 0;
+      const diffClass = isFaster ? 'positive' : 'negative';
+      const diffIcon = isFaster ? '+' : '';
+      
+      return `
+        <div class="gpu-card brand-${gpu.brand}" onclick="showComparison(lastSearch || GPU_DB[0], ${JSON.stringify(gpu).replace(/'/g, "&#39;")})">
+          <div class="card-top">
+              <div class="gpu-name">
+                  <h3>${gpu.name}</h3>
+                  <div class="gpu-meta">
+                      <span>${gpu.arch}</span>
+                      <span>${gpu.year}</span>
+                      <span>${gpu.vram}</span>
+                  </div>
+                  <div class="gpu-tags">
+                      <span class="api-badge">DX:${gpu.dx_hw}</span>
+                      <span class="api-badge">VK:${gpu.vulkan}</span>
+                      <span class="api-badge">GL:${gpu.opengl}</span>
+                  </div>
+              </div>
+              <div class="gpu-rank">#${i + 1}</div>
+          </div>
+          <div class="card-bottom">
+              <div class="gpu-diff ${diffClass}">
+                  <div class="val">${diffIcon}${pctDiff}%</div>
+                  <div class="label">Above Min</div>
+              </div>
+              <div class="gpu-score">
+                  <div class="val">${gpu.score.toLocaleString()}</div>
+                  <div class="label">Score</div>
+              </div>
+          </div>
+          <div class="gpu-specs">
+              <span>${gpu.tdp}W • ${gpu.brand.toUpperCase()}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  document.getElementById('compatibleGPUsModal').classList.add('active');
+}
+
+function closeCompatibleGPUsModal() {
+  document.getElementById('compatibleGPUsModal').classList.remove('active');
+}
+
+document.getElementById('compatibleGPUsModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'compatibleGPUsModal') closeCompatibleGPUsModal();
+});
+
+// ==========================================
+// 13. SOFTWARE MODAL LOGIC
+// ==========================================
+const SOFTWARE_LIST = [
+  { name: "Ninite", desc: "Streamlines installing/updating multiple desktop apps simultaneously. Silently downloads official installers, applies safe defaults, and blocks bundled software.", link: "https://ninite.com/" },
+  { name: "ThrottleStop", desc: "Advanced power management & undervolting utility for Intel laptops. Disables turbo boost, adjusts power limits, and creates custom fan curves to reduce heat/throttling.", link: "https://www.techpowerup.com/download/techpowerup-throttlestop/" },
+  { name: "GPU-Z", desc: "Lightweight, detailed hardware information & verification tool for GPUs. Displays real-time sensors, driver details, and verifies hardware authenticity.", link: "https://www.techpowerup.com/gpuz/" },
+  { name: "HWMonitor", desc: "Comprehensive hardware monitoring program reading real-time sensor data from CPUs, GPUs, motherboards, and storage drives for live health tracking.", link: "https://www.cpuid.com/softwares/hwmonitor.html" },
+  { name: "CPU-Z", desc: "Detailed system information utility reporting accurate data about processors, cache, mainboard, RAM, and SPD modules. Validates specs and provides hardware IDs.", link: "https://www.cpuid.com/softwares/cpu-z.html" },
+  { name: "UXTU", desc: "Open-source, cross-platform tuning tool unifying laptop performance management for AMD & Intel. Consolidates power limits, profiles, and fan curves.", link: "https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases" },
+  { name: "G-Helper", desc: "Lightweight, open-source alternative to OEM bloatware. Manages fan control, performance modes, RGB, monitoring, and battery limits in a clean interface.", link: "https://g-helper.com/" },
+  { name: "MSI Afterburner", desc: "Industry-standard GPU overclocking & monitoring utility compatible with all NVIDIA/AMD cards. Adjusts clocks/voltage/fan curves with real-time OSD.", link: "https://www.msi.com/Landing/afterburner/graphics-cards" }
+];
+
+function openSoftwareModal() {
+  const listContainer = document.getElementById('softwareList');
+  listContainer.innerHTML = SOFTWARE_LIST.map(s => `
+    <div class="software-item">
+      <h4>${s.name}</h4>
+      <p>${s.desc}</p>
+      <a href="${s.link}" target="_blank" rel="noopener noreferrer">🔗 Download / Visit Official Site</a>
+    </div>
+  `).join('');
+  document.getElementById('softwareModal').classList.add('active');
+}
+
+function closeSoftwareModal() {
+  document.getElementById('softwareModal').classList.remove('active');
+}
+
+document.getElementById('softwareModal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'softwareModal') closeSoftwareModal();
+});
+
+// ==========================================
+// 14. COMPARISON MODAL LOGIC
+// ==========================================
+function showComparison(card1, card2) {
+  const modal = document.getElementById('comparisonModal');
+  const content = document.getElementById('compareContent');
+  
+  const pctDiff = ((card2.score - card1.score) / card1.score * 100).toFixed(1);
+  const faster = card2.score > card1.score;
+  const diffClass = faster ? 'diff-faster' : 'diff-slower';
+  const diffIcon = faster ? '+' : '';
+
+  const renderAPI = (gpu) => `
+    <div class="api-grid">
+      <div class="api-item"><div class="api-label">DX HW</div><div class="api-val">${gpu.dx_hw || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">DX SW</div><div class="api-val">${gpu.dx_sw || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">Vulkan</div><div class="api-val">${gpu.vulkan || 'N/A'}</div></div>
+      <div class="api-item"><div class="api-label">OpenGL</div><div class="api-val">${gpu.opengl || 'N/A'}</div></div>
+    </div>
+  `;
+
+  content.innerHTML = `
+    <div class="compare-row">
+      <div class="compare-item">
+        <h4>${card1.name}</h4>
+        <p><strong>Score:</strong> ${card1.score.toLocaleString()}</p>
+        <p><strong>Architecture:</strong> ${card1.arch}</p>
+        <p><strong>VRAM:</strong> ${card1.vram}</p>
+        <p><strong>TDP:</strong> ${card1.tdp}W</p>
+        <p><strong>Year:</strong> ${card1.year}</p>
+        ${renderAPI(card1)}
+      </div>
+      <div class="compare-item">
+        <h4>${card2.name}</h4>
+        <p><strong>Score:</strong> ${card2.score.toLocaleString()}</p>
+        <p><strong>Architecture:</strong> ${card2.arch}</p>
+        <p><strong>VRAM:</strong> ${card2.vram}</p>
+        <p><strong>TDP:</strong> ${card2.tdp}W</p>
+        <p><strong>Year:</strong> ${card2.year}</p>
+        ${renderAPI(card2)}
+      </div>
+    </div>
+    <div class="comparison-verdict">
+      <p style="font-size:1.1rem; color:var(--text-muted); margin-bottom:8px;">Comparison Result</p>
+      <p style="font-size:1.2rem;">
+        ${card2.name} is <strong class="${diffClass}" style="font-size:1.4rem;">${diffIcon}${pctDiff}%</strong> ${faster ? 'faster' : 'slower'} than ${card1.name}
+      </p>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('comparisonModal').classList.remove('active');
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('statusBar').style.display = 'none';
+  document.getElementById('suggestionsBox').classList.remove('active');
+  lastSearch = null;
+  currentView = 'gpus';
+  currentGPUPage = 0;
+  document.getElementById('loadMoreBtn').classList.add('hidden');
+  renderList(GPU_DB);
+}
+
+// ==========================================
+// 15. FILTER LOGIC (Brand Buttons)
+// ==========================================
+function filterList(filter, btn) {
+  currentView = 'gpus';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  
+  document.getElementById('loadMoreBtn').classList.add('hidden');
+  document.getElementById('modalLoadMoreBtn').classList.add('hidden');
+
+  let filtered = GPU_DB;
+  if (filter === 'nvidia') filtered = GPU_DB.filter(g => g.brand === 'nvidia');
+  else if (filter === 'amd') filtered = GPU_DB.filter(g => g.brand === 'amd');
+  else if (filter === 'intel') filtered = GPU_DB.filter(g => g.brand === 'intel');
+  else if (filter === 'igpu') filtered = GPU_DB.filter(g => g.type === 'igpu');
+  
+  // Update Title and Count based on filter
+  if (filter === 'all') {
+      document.getElementById('resultsTitle').textContent = "All GPUs in Database";
+      document.getElementById('resultsCount').textContent = `${GPU_DB.length} GPUs found`;
+  } else {
+      document.getElementById('resultsTitle').textContent = `${filter.charAt(0).toUpperCase() + filter.slice(1)} GPUs`;
+      document.getElementById('resultsCount').textContent = `${filtered.length} GPUs found`;
+  }
+  
+  currentGPUPage = 0;
+  renderList(filtered);
+}
+
+function filterLabel(f) {
+  if (f === 'all') return 'All GPUs in Database';
+  if (f === 'nvidia') return 'NVIDIA GPUs';
+  if (f === 'amd') return 'AMD GPUs';
+  if (f === 'intel') return 'Intel iGPUs';
+  if (f === 'igpu') return 'Integrated GPUs';
+  return 'GPUs';
+}
+
+function showStatus(msg, type) {
+  const bar = document.getElementById('statusBar');
+  bar.textContent = msg;
+  bar.className = `scrape-status ${type}`;
+  bar.style.display = 'block';
+  setTimeout(() => { bar.style.display = 'none'; }, 5000);
+}
+
+init();
+
+// ==========================================
+// 16. SCROLL HEADER HIDE/SHOW LOGIC
+// ==========================================
+(function initScrollHeader() {
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+  const header = document.querySelector('.header');
+  const scrollThreshold = 50; // Prevents jitter when scrolling slowly
+
+  function updateHeaderVisibility() {
+    const currentScrollY = window.scrollY;
+    
+    // Hide when scrolling down (past threshold)
+    if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+      header.classList.add('scroll-hidden');
+    } 
+    // Show when scrolling up
+    else {
+      header.classList.remove('scroll-hidden');
+    }
+    
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateHeaderVisibility);
+      ticking = true;
+    }
+  });
+})();
+</script>
+</body>
+</html>

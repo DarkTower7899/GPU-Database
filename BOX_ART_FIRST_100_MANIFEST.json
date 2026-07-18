@@ -1,0 +1,1302 @@
+[
+  {
+    "rank": 1,
+    "title": "A Plague Tale: Requiem",
+    "score": 4500,
+    "image": "assets/game-art/official/1182900.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1182900,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 2,
+    "title": "Ad Infernum",
+    "score": 4500,
+    "image": "assets/game-art/official/1390070.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1390070,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 3,
+    "title": "ARC Raiders",
+    "score": 4500,
+    "image": "assets/game-art/official/1808500.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1808500,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 4,
+    "title": "Assassin's Creed Mirage",
+    "score": 4500,
+    "image": "assets/game-art/official/3035570.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3035570,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 5,
+    "title": "Assassin's Creed Shadows",
+    "score": 4500,
+    "image": "assets/game-art/official/3159330.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3159330,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 6,
+    "title": "Atlas Rising",
+    "score": 4500,
+    "image": "assets/game-art/fallback/atlas-rising-2e875543.webp",
+    "image_type": "local edition card fallback",
+    "steam_appid": null,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 7,
+    "title": "Avatar Frontiers of Pandora",
+    "score": 4500,
+    "image": "assets/game-art/official/2840770.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2840770,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 8,
+    "title": "Baldur's Gate 3",
+    "score": 4500,
+    "image": "assets/game-art/official/1086940.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1086940,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 9,
+    "title": "Battlefield 6",
+    "score": 4500,
+    "image": "assets/game-art/official/2807960.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2807960,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 10,
+    "title": "BeamNG.drive",
+    "score": 4500,
+    "image": "assets/game-art/official/284160.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 284160,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 11,
+    "title": "Black Myth: Wukong",
+    "score": 4500,
+    "image": "assets/game-art/official/2358720.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2358720,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 12,
+    "title": "Blue Prince",
+    "score": 4500,
+    "image": "assets/game-art/official/1569580.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1569580,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 13,
+    "title": "Bodycam",
+    "score": 4500,
+    "image": "assets/game-art/official/2406770.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2406770,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 14,
+    "title": "Borderlands 4",
+    "score": 4500,
+    "image": "assets/game-art/official/1285190.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1285190,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 15,
+    "title": "Call of Duty: Black Ops 6",
+    "score": 4500,
+    "image": "assets/game-art/official/4384550.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 4384550,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 16,
+    "title": "Clair Obscur: Expedition 33",
+    "score": 4500,
+    "image": "assets/game-art/official/1903340.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1903340,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 17,
+    "title": "Diablo IV",
+    "score": 4500,
+    "image": "assets/game-art/official/2344520.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2344520,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 18,
+    "title": "Dishonored 2",
+    "score": 4500,
+    "image": "assets/game-art/official/403640.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 403640,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 19,
+    "title": "Doom: The Dark Ages",
+    "score": 4500,
+    "image": "assets/game-art/official/3017860.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3017860,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 20,
+    "title": "Dragon's Dogma 2",
+    "score": 4500,
+    "image": "assets/game-art/official/2054970.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2054970,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 21,
+    "title": "Dredge",
+    "score": 4500,
+    "image": "assets/game-art/official/1562430.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1562430,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 22,
+    "title": "Echo Point Nova",
+    "score": 4500,
+    "image": "assets/game-art/official/1836730.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1836730,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 23,
+    "title": "Expeditions: Rome",
+    "score": 4500,
+    "image": "assets/game-art/official/987840.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 987840,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 24,
+    "title": "F1 25",
+    "score": 4500,
+    "image": "assets/game-art/official/3059520.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3059520,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 25,
+    "title": "Far Cry 6",
+    "score": 4500,
+    "image": "assets/game-art/official/2369390.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2369390,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 26,
+    "title": "Forza Horizon 6",
+    "score": 4500,
+    "image": "assets/game-art/official/2483190.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2483190,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 27,
+    "title": "Fumes",
+    "score": 4500,
+    "image": "assets/game-art/official/1920430.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1920430,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 28,
+    "title": "Ghost of Tsushima Director's Cut",
+    "score": 4500,
+    "image": "assets/game-art/official/2215430.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2215430,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 29,
+    "title": "Goat Simulator 1 Remastered",
+    "score": 4500,
+    "image": "assets/game-art/official/1762930.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1762930,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 30,
+    "title": "Goat Simulator 3",
+    "score": 4500,
+    "image": "assets/game-art/official/850190.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 850190,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 31,
+    "title": "God of War (2018)",
+    "score": 4500,
+    "image": "assets/game-art/official/1593500.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1593500,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 32,
+    "title": "God of War Ragnarök",
+    "score": 4500,
+    "image": "assets/game-art/official/2322010.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2322010,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 33,
+    "title": "Gone Rogue",
+    "score": 4500,
+    "image": "assets/game-art/official/1803600.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1803600,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 34,
+    "title": "Hades II",
+    "score": 4500,
+    "image": "assets/game-art/official/1145350.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1145350,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 35,
+    "title": "Hellblade: Senua's Sacrifice",
+    "score": 4500,
+    "image": "assets/game-art/official/414340.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 414340,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 36,
+    "title": "Hellblade II",
+    "score": 4500,
+    "image": "assets/game-art/official/2461850.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2461850,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 37,
+    "title": "Helldivers 2",
+    "score": 4500,
+    "image": "assets/game-art/official/553850.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 553850,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 38,
+    "title": "Hi-Fi Rush",
+    "score": 4500,
+    "image": "assets/game-art/official/1817230.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1817230,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 39,
+    "title": "Hitman: World of Assassination",
+    "score": 4500,
+    "image": "assets/game-art/official/1659040.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1659040,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 40,
+    "title": "Hogwarts Legacy",
+    "score": 4500,
+    "image": "assets/game-art/official/990080.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 990080,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 41,
+    "title": "Immortals of Aveum",
+    "score": 4500,
+    "image": "assets/game-art/official/2009100.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2009100,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 42,
+    "title": "Infinity Nikki",
+    "score": 4500,
+    "image": "assets/game-art/official/3164330.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3164330,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 43,
+    "title": "Kingdom Come: Deliverance II",
+    "score": 4500,
+    "image": "assets/game-art/official/1771300.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1771300,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 44,
+    "title": "Killing Floor 3",
+    "score": 4500,
+    "image": "assets/game-art/official/1430190.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1430190,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 45,
+    "title": "Lords of the Fallen",
+    "score": 4500,
+    "image": "assets/game-art/official/1501750.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1501750,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 46,
+    "title": "Madden NFL 25",
+    "score": 4500,
+    "image": "assets/game-art/official/2582560.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2582560,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 47,
+    "title": "Marvel's Midnight Suns",
+    "score": 4500,
+    "image": "assets/game-art/official/368260.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 368260,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 48,
+    "title": "Metal Gear Solid 4",
+    "score": 4500,
+    "image": "assets/game-art/fallback/metal-gear-solid-4-5830453d.webp",
+    "image_type": "local edition card fallback",
+    "steam_appid": null,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 49,
+    "title": "Metal Gear Solid 5",
+    "score": 4500,
+    "image": "assets/game-art/official/287700.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 287700,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 50,
+    "title": "Metal Gear Solid Delta: Snake Eater",
+    "score": 4500,
+    "image": "assets/game-art/official/2417610.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2417610,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 51,
+    "title": "Monster Hunter Wilds",
+    "score": 4500,
+    "image": "assets/game-art/official/2246340.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2246340,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 52,
+    "title": "Morels: The Hunt",
+    "score": 4500,
+    "image": "assets/game-art/official/1156590.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1156590,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 53,
+    "title": "Mortal Kombat 1",
+    "score": 4500,
+    "image": "assets/game-art/official/1971870.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1971870,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 54,
+    "title": "Mortal Kombat 11",
+    "score": 4500,
+    "image": "assets/game-art/official/976310.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 976310,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 55,
+    "title": "MS Flight Simulator 2024",
+    "score": 4500,
+    "image": "assets/game-art/official/2537590.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2537590,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 56,
+    "title": "Once Human",
+    "score": 4500,
+    "image": "assets/game-art/official/2139460.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2139460,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 57,
+    "title": "Pacific Drive",
+    "score": 4500,
+    "image": "assets/game-art/official/1458140.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1458140,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 58,
+    "title": "Psycho-Pass: Mandatory Happiness",
+    "score": 4500,
+    "image": "assets/game-art/official/522880.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 522880,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 59,
+    "title": "Ratchet & Clank: Rift Apart",
+    "score": 4500,
+    "image": "assets/game-art/official/1895880.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1895880,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 60,
+    "title": "Resident Evil 2 Remake",
+    "score": 4500,
+    "image": "assets/game-art/official/883710.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 883710,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 61,
+    "title": "Resident Evil 3 Remake",
+    "score": 4500,
+    "image": "assets/game-art/official/952060.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 952060,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 62,
+    "title": "Resident Evil 4 Remake",
+    "score": 4500,
+    "image": "assets/game-art/official/2050650.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2050650,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 63,
+    "title": "Returnal",
+    "score": 4500,
+    "image": "assets/game-art/official/1649240.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1649240,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 64,
+    "title": "Rise of the Ronin",
+    "score": 4500,
+    "image": "assets/game-art/official/1340990.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1340990,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 65,
+    "title": "Shadows of Doubt",
+    "score": 4500,
+    "image": "assets/game-art/official/986130.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 986130,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 66,
+    "title": "Silent Hill 2 Remake",
+    "score": 4500,
+    "image": "assets/game-art/official/2124490.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2124490,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 67,
+    "title": "SILENT HILL f",
+    "score": 4500,
+    "image": "assets/game-art/official/2947440.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2947440,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 68,
+    "title": "Showgunners",
+    "score": 4500,
+    "image": "assets/game-art/official/1155330.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1155330,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 69,
+    "title": "Skate Story",
+    "score": 4500,
+    "image": "assets/game-art/official/1263240.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1263240,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 70,
+    "title": "Skull and Bones",
+    "score": 4500,
+    "image": "assets/game-art/official/2853730.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2853730,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 71,
+    "title": "Smushi Come Home",
+    "score": 4500,
+    "image": "assets/game-art/official/1740300.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1740300,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 72,
+    "title": "Sons of the Forest",
+    "score": 4500,
+    "image": "assets/game-art/official/1326470.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1326470,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 73,
+    "title": "Spider-Man: Miles Morales",
+    "score": 4500,
+    "image": "assets/game-art/official/1817190.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1817190,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 74,
+    "title": "S.T.A.L.K.E.R. 2",
+    "score": 4500,
+    "image": "assets/game-art/official/1643320.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1643320,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 75,
+    "title": "The Stanley Parable: Ultra Deluxe",
+    "score": 4500,
+    "image": "assets/game-art/official/1703340.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1703340,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 76,
+    "title": "Star Wars Jedi: Survivor",
+    "score": 4500,
+    "image": "assets/game-art/official/1774580.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1774580,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 77,
+    "title": "Star Wars Outlaws",
+    "score": 4500,
+    "image": "assets/game-art/official/2842040.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2842040,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 78,
+    "title": "Starfield",
+    "score": 4500,
+    "image": "assets/game-art/official/1716740.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1716740,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 79,
+    "title": "Stellar Blade",
+    "score": 4500,
+    "image": "assets/game-art/official/3489700.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3489700,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 80,
+    "title": "Stray",
+    "score": 4500,
+    "image": "assets/game-art/official/1332010.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1332010,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 81,
+    "title": "Street Fighter 6",
+    "score": 4500,
+    "image": "assets/game-art/official/1364780.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1364780,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 82,
+    "title": "Sumerian Six",
+    "score": 4500,
+    "image": "assets/game-art/official/1429850.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1429850,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 83,
+    "title": "Sword of the Sea",
+    "score": 4500,
+    "image": "assets/game-art/official/2453160.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2453160,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 84,
+    "title": "System Shock Remake",
+    "score": 4500,
+    "image": "assets/game-art/official/482400.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 482400,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 85,
+    "title": "The Elder Scrolls IV: Oblivion Remastered",
+    "score": 4500,
+    "image": "assets/game-art/official/2623190.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2623190,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 86,
+    "title": "The Callisto Protocol",
+    "score": 4500,
+    "image": "assets/game-art/official/1544020.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1544020,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 87,
+    "title": "The Crew Motorfest",
+    "score": 4500,
+    "image": "assets/game-art/official/2698940.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2698940,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 88,
+    "title": "The Hundred Line: Last Defense Academy",
+    "score": 4500,
+    "image": "assets/game-art/official/3014080.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 3014080,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 89,
+    "title": "The Last of Us Part I",
+    "score": 4500,
+    "image": "assets/game-art/official/1888930.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1888930,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 90,
+    "title": "The Talos Principle",
+    "score": 4500,
+    "image": "assets/game-art/official/257510.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 257510,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 91,
+    "title": "Test Drive Unlimited",
+    "score": 4500,
+    "image": "assets/game-art/fallback/test-drive-unlimited-9e9a9eb9.webp",
+    "image_type": "local edition card fallback",
+    "steam_appid": null,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 92,
+    "title": "ULTRAKILL",
+    "score": 4500,
+    "image": "assets/game-art/official/1229490.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1229490,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 93,
+    "title": "Uncharted: Legacy of Thieves Collection",
+    "score": 4500,
+    "image": "assets/game-art/official/1659420.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1659420,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 94,
+    "title": "Until Dawn Remake",
+    "score": 4500,
+    "image": "assets/game-art/official/2172010.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2172010,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 95,
+    "title": "Valheim",
+    "score": 4500,
+    "image": "assets/game-art/official/892970.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 892970,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 96,
+    "title": "Wanderstop",
+    "score": 4500,
+    "image": "assets/game-art/official/1299460.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1299460,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 97,
+    "title": "Warhammer 40,000: Space Marine 2",
+    "score": 4500,
+    "image": "assets/game-art/official/2183900.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2183900,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 98,
+    "title": "Warstride Challenges",
+    "score": 4500,
+    "image": "assets/game-art/official/1608470.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 1608470,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 99,
+    "title": "Wuchang: Fallen Feathers",
+    "score": 4500,
+    "image": "assets/game-art/official/2277560.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 2277560,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  },
+  {
+    "rank": 100,
+    "title": "Grid 2019",
+    "score": 3500,
+    "image": "assets/game-art/official/703860.jpg",
+    "image_type": "official Steam header (local)",
+    "steam_appid": 703860,
+    "dimensions": {
+      "width": 460,
+      "height": 215
+    },
+    "verified_local_file": true
+  }
+]

@@ -1,0 +1,2291 @@
+{
+  "rule": "For unresolved duplicate groups containing a score of 350 and one or more higher scores, keep the single highest score and remove the lower duplicate records.",
+  "first_processed_queue_group": 90,
+  "last_processed_queue_group": 215,
+  "groups_resolved_total": 126,
+  "manual_group_resolved_before_automatic_pass": 1,
+  "groups_resolved_automatically": 125,
+  "records_removed": 127,
+  "game_records_after": 1150,
+  "next_manual_queue_group": 216,
+  "remaining_manual_groups": 9,
+  "next_manual_title": "Call of Duty: World at War",
+  "resolved": [
+    {
+      "queue_group": 90,
+      "normalized_title": "injustice gods among us ultimate edition",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Injustice: Gods Among Us (Ultimate Edition)",
+        "score": 3500,
+        "release_year": 2016,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "manual",
+      "removed": {
+        "title": "Injustice: Gods Among Us (Ultimate Edition)",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 91,
+      "normalized_title": "just cause 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Just Cause 2",
+        "score": 450,
+        "release_year": 2010,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Just Cause 2",
+        "score": 350,
+        "release_year": 2010,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 92,
+      "normalized_title": "just cause 3",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Just Cause 3",
+        "score": 650,
+        "release_year": 2015,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Just Cause 3",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 93,
+      "normalized_title": "katana zero",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Katana Zero",
+        "score": 650,
+        "release_year": 2019,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Katana Zero",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 94,
+      "normalized_title": "kerbal space program",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Kerbal Space Program",
+        "score": 450,
+        "release_year": 2015,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Kerbal Space Program",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 95,
+      "normalized_title": "kingdom come deliverance",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Kingdom Come Deliverance",
+        "score": 3500,
+        "release_year": 2018,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Kingdom Come Deliverance",
+        "score": 350,
+        "release_year": 2018,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 96,
+      "normalized_title": "league of legends",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "League of Legends",
+        "score": 650,
+        "release_year": 2009,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "League of Legends",
+        "score": 350,
+        "release_year": 2009,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 97,
+      "normalized_title": "lies of p",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Lies of P",
+        "score": 3500,
+        "release_year": 2023,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Lies of P",
+        "score": 350,
+        "release_year": 2023,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 98,
+      "normalized_title": "life is strange",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Life is Strange",
+        "score": 650,
+        "release_year": 2015,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Life is Strange",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 99,
+      "normalized_title": "lords of the ring online",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Lords of the Ring: Online",
+        "score": 450,
+        "release_year": 2013,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Lords of the Ring: Online",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 100,
+      "normalized_title": "lost planet 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Lost Planet 2",
+        "score": 450,
+        "release_year": 2010,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Lost Planet 2",
+        "score": 350,
+        "release_year": 2010,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 101,
+      "normalized_title": "mafia definitive edition",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Mafia Definitive Edition",
+        "score": 3500,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Mafia Definitive Edition",
+        "score": 350,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 102,
+      "normalized_title": "magicka",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Magicka",
+        "score": 450,
+        "release_year": 2011,
+        "directX": "DirectX 9"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Magicka",
+        "score": 350,
+        "release_year": 2011,
+        "directX": "DirectX 9"
+      }
+    },
+    {
+      "queue_group": 103,
+      "normalized_title": "mass effect legendary edition",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Mass Effect Legendary Edition",
+        "score": 3500,
+        "release_year": 2021,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Mass Effect Legendary Edition",
+        "score": 350,
+        "release_year": 2021,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 104,
+      "normalized_title": "mercenaries 2 world in flames",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Mercenaries 2: World in Flames",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Mercenaries 2: World in Flames",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 105,
+      "normalized_title": "metal gear rising revengeance",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Metal Gear Rising: Revengeance",
+        "score": 650,
+        "release_year": 2013,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Metal Gear Rising: Revengeance",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 106,
+      "normalized_title": "metro exodus",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Metro Exodus",
+        "score": 3500,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Metro Exodus",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 107,
+      "normalized_title": "metro last light",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Metro: Last Light",
+        "score": 3500,
+        "release_year": 2013,
+        "directX": "DirectX 9"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Metro: Last Light",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 9"
+      }
+    },
+    {
+      "queue_group": 108,
+      "normalized_title": "might and magic vi the dark crown",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Might and Magic VI: The Dark Crown",
+        "score": 450,
+        "release_year": 2001,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Might and Magic VI: The Dark Crown",
+        "score": 350,
+        "release_year": 2001,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 109,
+      "normalized_title": "might and magic vii for blood and honor",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Might and Magic VII: For Blood and Honor",
+        "score": 450,
+        "release_year": 2001,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Might and Magic VII: For Blood and Honor",
+        "score": 350,
+        "release_year": 2001,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 110,
+      "normalized_title": "might and magic viii day of the destroyer",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Might and Magic VIII: Day of the Destroyer",
+        "score": 450,
+        "release_year": 2006,
+        "directX": "DirectX 7.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Might and Magic VIII: Day of the Destroyer",
+        "score": 350,
+        "release_year": 2006,
+        "directX": "DirectX 7.0"
+      }
+    },
+    {
+      "queue_group": 111,
+      "normalized_title": "might and magic x dark alliance",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Might and Magic X: Dark Alliance",
+        "score": 450,
+        "release_year": 2007,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Might and Magic X: Dark Alliance",
+        "score": 350,
+        "release_year": 2007,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 112,
+      "normalized_title": "minecraft",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Minecraft",
+        "score": 450,
+        "release_year": 2011,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Minecraft",
+        "score": 350,
+        "release_year": 2011,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 113,
+      "normalized_title": "mirror s edge",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Mirror's Edge",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Mirror's Edge",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 114,
+      "normalized_title": "mount and blade warband",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Mount & Blade: Warband",
+        "score": 450,
+        "release_year": 2010,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Mount & Blade: Warband",
+        "score": 350,
+        "release_year": 2010,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 115,
+      "normalized_title": "my friend pedro",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "My Friend Pedro",
+        "score": 650,
+        "release_year": 2019,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "My Friend Pedro",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 116,
+      "normalized_title": "naruto shippuden ultimate ninja storm 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm 2",
+        "score": 3500,
+        "release_year": 2011,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm 2",
+        "score": 350,
+        "release_year": 2011,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 117,
+      "normalized_title": "naruto shippuden ultimate ninja storm 3",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm 3",
+        "score": 3500,
+        "release_year": 2012,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm 3",
+        "score": 350,
+        "release_year": 2012,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 118,
+      "normalized_title": "naruto shippuden ultimate ninja storm 4",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm 4",
+        "score": 3500,
+        "release_year": 2014,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm 4",
+        "score": 350,
+        "release_year": 2014,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 119,
+      "normalized_title": "naruto shippuden ultimate ninja storm revolution",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm Revolution",
+        "score": 3500,
+        "release_year": 2012,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Naruto Shippuden Ultimate Ninja Storm Revolution",
+        "score": 350,
+        "release_year": 2012,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 120,
+      "normalized_title": "nights into dreams",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Nights into Dreams",
+        "score": 450,
+        "release_year": 1996,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Nights into Dreams",
+        "score": 350,
+        "release_year": 1996,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 121,
+      "normalized_title": "nine sols",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Nine Sols",
+        "score": 650,
+        "release_year": 2024,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Nine Sols",
+        "score": 350,
+        "release_year": 2024,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 122,
+      "normalized_title": "okami",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Okami",
+        "score": 650,
+        "release_year": 2009,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Okami",
+        "score": 350,
+        "release_year": 2009,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 123,
+      "normalized_title": "ori and the blind forest",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Ori and The Blind Forest",
+        "score": 3500,
+        "release_year": 2015,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Ori and The Blind Forest",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 124,
+      "normalized_title": "ori and the will of the wisps",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Ori and The Will of the Wisps",
+        "score": 3500,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Ori and The Will of the Wisps",
+        "score": 350,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 125,
+      "normalized_title": "osu",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "osu!",
+        "score": 650,
+        "release_year": 2009,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "osu!",
+        "score": 350,
+        "release_year": 2009,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 126,
+      "normalized_title": "peggle",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Peggle",
+        "score": 450,
+        "release_year": 2007,
+        "directX": "DirectX 7.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Peggle",
+        "score": 350,
+        "release_year": 2007,
+        "directX": "DirectX 7.0"
+      }
+    },
+    {
+      "queue_group": 127,
+      "normalized_title": "pico park",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Pico Park",
+        "score": 650,
+        "release_year": 2015,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Pico Park",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 128,
+      "normalized_title": "pikuniku",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Pikuniku",
+        "score": 450,
+        "release_year": 2016,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Pikuniku",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 129,
+      "normalized_title": "pinball fx 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Pinball FX 2",
+        "score": 450,
+        "release_year": 2015,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Pinball FX 2",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 130,
+      "normalized_title": "prince of persia 2008",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Prince of Persia (2008)",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Prince of Persia (2008)",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 131,
+      "normalized_title": "prototype 1",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Prototype 1",
+        "score": 650,
+        "release_year": 2009,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Prototype 1",
+        "score": 350,
+        "release_year": 2009,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 132,
+      "normalized_title": "prototype 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Prototype 2",
+        "score": 650,
+        "release_year": 2012,
+        "directX": "DirectX 9.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Prototype 2",
+        "score": 350,
+        "release_year": 2012,
+        "directX": "DirectX 9.0"
+      }
+    },
+    {
+      "queue_group": 133,
+      "normalized_title": "pure",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Pure",
+        "score": 450,
+        "release_year": 2016,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Pure",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 134,
+      "normalized_title": "quake 4",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Quake 4",
+        "score": 450,
+        "release_year": 2005,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Quake 4",
+        "score": 350,
+        "release_year": 2005,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 135,
+      "normalized_title": "quake iii arena",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Quake III Arena",
+        "score": 450,
+        "release_year": 1996,
+        "directX": "DirectX 3.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Quake III Arena",
+        "score": 350,
+        "release_year": 1996,
+        "directX": "DirectX 3.0"
+      }
+    },
+    {
+      "queue_group": 136,
+      "normalized_title": "rainbow six vegas",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Rainbow Six Vegas",
+        "score": 450,
+        "release_year": 2006,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Rainbow Six Vegas",
+        "score": 350,
+        "release_year": 2006,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 137,
+      "normalized_title": "red dead redemption 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Red Dead Redemption 2",
+        "score": 3500,
+        "release_year": 2018,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Red Dead Redemption 2",
+        "score": 350,
+        "release_year": 2018,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 138,
+      "normalized_title": "red faction armageddon",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Red Faction: Armageddon",
+        "score": 450,
+        "release_year": 2011,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Red Faction: Armageddon",
+        "score": 350,
+        "release_year": 2011,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 139,
+      "normalized_title": "red faction guerrilla",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Red Faction: Guerrilla",
+        "score": 450,
+        "release_year": 2011,
+        "directX": "DirectX 9"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Red Faction: Guerrilla",
+        "score": 350,
+        "release_year": 2011,
+        "directX": "DirectX 9"
+      }
+    },
+    {
+      "queue_group": 140,
+      "normalized_title": "return of the obra dinn",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Return of the Obra Dinn",
+        "score": 650,
+        "release_year": 2021,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Return of the Obra Dinn",
+        "score": 350,
+        "release_year": 2021,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 141,
+      "normalized_title": "riders republic",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Riders Republic",
+        "score": 3500,
+        "release_year": 2021,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Riders Republic",
+        "score": 350,
+        "release_year": 2021,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 142,
+      "normalized_title": "risk of rain 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Risk of Rain 2",
+        "score": 650,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Risk of Rain 2",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 143,
+      "normalized_title": "road rash",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Road Rash",
+        "score": 450,
+        "release_year": 1998,
+        "directX": "DirectX 9"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Road Rash",
+        "score": 350,
+        "release_year": 1998,
+        "directX": "DirectX 9"
+      }
+    },
+    {
+      "queue_group": 144,
+      "normalized_title": "rocky mountain trophy hunter",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Rocky Mountain Trophy Hunter",
+        "score": 450,
+        "release_year": 2019,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Rocky Mountain Trophy Hunter",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 145,
+      "normalized_title": "rollercoaster tycoon 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "RollerCoaster Tycoon 2",
+        "score": 450,
+        "release_year": 1999,
+        "directX": "DirectX 8.1"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "RollerCoaster Tycoon 2",
+        "score": 350,
+        "release_year": 1999,
+        "directX": "DirectX 8.1"
+      }
+    },
+    {
+      "queue_group": 146,
+      "normalized_title": "s t a l k e r call of pripyat",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "S.T.A.L.K.E.R.: Call of Pripyat",
+        "score": 450,
+        "release_year": 2009,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "S.T.A.L.K.E.R.: Call of Pripyat",
+        "score": 350,
+        "release_year": 2009,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 147,
+      "normalized_title": "s t a l k e r clear sky",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "S.T.A.L.K.E.R.: Clear Sky",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 8.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "S.T.A.L.K.E.R.: Clear Sky",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 8.0"
+      }
+    },
+    {
+      "queue_group": 148,
+      "normalized_title": "s t a l k e r shadow of chernobyl",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "S.T.A.L.K.E.R.: Shadow of Chernobyl",
+        "score": 450,
+        "release_year": 2007,
+        "directX": "DirectX 8"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "S.T.A.L.K.E.R.: Shadow of Chernobyl",
+        "score": 350,
+        "release_year": 2007,
+        "directX": "DirectX 8"
+      }
+    },
+    {
+      "queue_group": 149,
+      "normalized_title": "saints row 1",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Saints Row 1",
+        "score": 650,
+        "release_year": 2006,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Saints Row 1",
+        "score": 350,
+        "release_year": 2006,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 150,
+      "normalized_title": "sanabi",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Sanabi",
+        "score": 650,
+        "release_year": 2023,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Sanabi",
+        "score": 350,
+        "release_year": 2023,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 151,
+      "normalized_title": "scarface the world is yours",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Scarface: The World Is Yours",
+        "score": 450,
+        "release_year": 2006,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Scarface: The World Is Yours",
+        "score": 350,
+        "release_year": 2006,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 152,
+      "normalized_title": "shadow of the tomb raider",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Shadow of the Tomb Raider",
+        "score": 3500,
+        "release_year": 2018,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Shadow of the Tomb Raider",
+        "score": 350,
+        "release_year": 2018,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 153,
+      "normalized_title": "shadow warrior 3",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Shadow Warrior 3",
+        "score": 3500,
+        "release_year": 2022,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Shadow Warrior 3",
+        "score": 350,
+        "release_year": 2022,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 154,
+      "normalized_title": "shadowrun returns",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Shadowrun Returns",
+        "score": 450,
+        "release_year": 2013,
+        "directX": "DirectX 3"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Shadowrun Returns",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 3"
+      }
+    },
+    {
+      "queue_group": 155,
+      "normalized_title": "shadowrun dragonfall",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Shadowrun: Dragonfall",
+        "score": 450,
+        "release_year": 2014,
+        "directX": "DirectX 3"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Shadowrun: Dragonfall",
+        "score": 350,
+        "release_year": 2014,
+        "directX": "DirectX 3"
+      }
+    },
+    {
+      "queue_group": 156,
+      "normalized_title": "shadowrun hong kong",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Shadowrun: Hong Kong",
+        "score": 450,
+        "release_year": 2015,
+        "directX": "DirectX 3"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Shadowrun: Hong Kong",
+        "score": 350,
+        "release_year": 2015,
+        "directX": "DirectX 3"
+      }
+    },
+    {
+      "queue_group": 157,
+      "normalized_title": "shin chan summer vacation",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Shin-chan Summer Vacation",
+        "score": 650,
+        "release_year": 2023,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Shin-chan Summer Vacation",
+        "score": 350,
+        "release_year": 2023,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 158,
+      "normalized_title": "sifu",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Sifu",
+        "score": 650,
+        "release_year": 2022,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Sifu",
+        "score": 350,
+        "release_year": 2022,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 159,
+      "normalized_title": "signalis",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "SIGNALIS",
+        "score": 650,
+        "release_year": 2022,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "SIGNALIS",
+        "score": 350,
+        "release_year": 2022,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 160,
+      "normalized_title": "silent hunter 3",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Silent Hunter 3",
+        "score": 450,
+        "release_year": 2006,
+        "directX": "DirectX 9.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Silent Hunter 3",
+        "score": 350,
+        "release_year": 2006,
+        "directX": "DirectX 9.0"
+      }
+    },
+    {
+      "queue_group": 161,
+      "normalized_title": "sine mora",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Sine Mora",
+        "score": 450,
+        "release_year": 2013,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Sine Mora",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 162,
+      "normalized_title": "slay the princess",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Slay the Princess",
+        "score": 650,
+        "release_year": 2024,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Slay the Princess",
+        "score": 350,
+        "release_year": 2024,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 163,
+      "normalized_title": "sonic unleashed recompiled",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Sonic Unleashed Recompiled",
+        "score": 3500,
+        "release_year": 2024,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Sonic Unleashed Recompiled",
+        "score": 350,
+        "release_year": 2024,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 164,
+      "normalized_title": "spider man 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Spider-Man 2",
+        "score": 450,
+        "release_year": 2004,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Spider-Man 2",
+        "score": 350,
+        "release_year": 2004,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 165,
+      "normalized_title": "star trek online",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Star Trek Online",
+        "score": 450,
+        "release_year": 2010,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Star Trek Online",
+        "score": 350,
+        "release_year": 2010,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 166,
+      "normalized_title": "star wars battlefront",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Star Wars Battlefront",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Star Wars Battlefront",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 167,
+      "normalized_title": "star wars squadrons",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Star Wars Squadrons",
+        "score": 3500,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Star Wars Squadrons",
+        "score": 350,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 168,
+      "normalized_title": "starbound",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Starbound",
+        "score": 450,
+        "release_year": 2013,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Starbound",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 169,
+      "normalized_title": "still life",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Still Life",
+        "score": 450,
+        "release_year": 2011,
+        "directX": "DirectX 128"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Still Life",
+        "score": 350,
+        "release_year": 2011,
+        "directX": "DirectX 128"
+      }
+    },
+    {
+      "queue_group": 170,
+      "normalized_title": "strange brigade",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Strange Brigade",
+        "score": 3500,
+        "release_year": 2018,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Strange Brigade",
+        "score": 350,
+        "release_year": 2018,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 171,
+      "normalized_title": "strong bad s cool game for attractive people",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Strong Bad's Cool Game for Attractive People",
+        "score": 450,
+        "release_year": 2019,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Strong Bad's Cool Game for Attractive People",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 172,
+      "normalized_title": "stubbs the zombie in rebel without a pulse",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Stubbs the Zombie in Rebel Without a Pulse",
+        "score": 450,
+        "release_year": 2005,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Stubbs the Zombie in Rebel Without a Pulse",
+        "score": 350,
+        "release_year": 2005,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 173,
+      "normalized_title": "subnautica",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Subnautica",
+        "score": 450,
+        "release_year": 2018,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Subnautica",
+        "score": 350,
+        "release_year": 2018,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 174,
+      "normalized_title": "summer in mara",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Summer in Mara",
+        "score": 450,
+        "release_year": 2023,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Summer in Mara",
+        "score": 350,
+        "release_year": 2023,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 175,
+      "normalized_title": "super meat boy",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Super Meat Boy",
+        "score": 450,
+        "release_year": 2010,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Super Meat Boy",
+        "score": 350,
+        "release_year": 2010,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 176,
+      "normalized_title": "super meat boy forever",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Super Meat Boy Forever",
+        "score": 650,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Super Meat Boy Forever",
+        "score": 350,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 177,
+      "normalized_title": "superhot",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "SUPERHOT",
+        "score": 650,
+        "release_year": 2016,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "SUPERHOT",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 178,
+      "normalized_title": "swat 4 global threat",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "SWAT 4: Global Threat",
+        "score": 450,
+        "release_year": 2005,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "SWAT 4: Global Threat",
+        "score": 350,
+        "release_year": 2005,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 179,
+      "normalized_title": "the escapists",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "The Escapists",
+        "score": 650,
+        "release_year": 2016,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "The Escapists",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 180,
+      "normalized_title": "the finals",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "The Finals",
+        "score": 3500,
+        "release_year": 2023,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "The Finals",
+        "score": 350,
+        "release_year": 2023,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 181,
+      "normalized_title": "the forest",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "The Forest",
+        "score": 650,
+        "release_year": 2018,
+        "directX": "DirectX 9.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "The Forest",
+        "score": 350,
+        "release_year": 2018,
+        "directX": "DirectX 9.0"
+      }
+    },
+    {
+      "queue_group": 182,
+      "normalized_title": "the stanley parable",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "The Stanley Parable",
+        "score": 650,
+        "release_year": 2013,
+        "directX": "DirectX 9"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "The Stanley Parable",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 9"
+      }
+    },
+    {
+      "queue_group": 183,
+      "normalized_title": "the witcher 3 wild hunt v4 00",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "The Witcher 3: Wild Hunt v4.00",
+        "score": 3500,
+        "release_year": 2022,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "The Witcher 3: Wild Hunt v4.00",
+        "score": 350,
+        "release_year": 2022,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 184,
+      "normalized_title": "the wonderful 101",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "The Wonderful 101",
+        "score": 450,
+        "release_year": 2013,
+        "directX": "DirectX 9.0"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "The Wonderful 101",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 9.0"
+      }
+    },
+    {
+      "queue_group": 185,
+      "normalized_title": "tiny and big grandpa s leftovers",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Tiny and Big Grandpa's Leftovers",
+        "score": 450,
+        "release_year": 2023,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Tiny and Big Grandpa's Leftovers",
+        "score": 350,
+        "release_year": 2023,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 186,
+      "normalized_title": "tiny tina s wonderlands",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Tiny Tina's Wonderlands",
+        "score": 3500,
+        "release_year": 2021,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Tiny Tina's Wonderlands",
+        "score": 350,
+        "release_year": 2021,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 187,
+      "normalized_title": "titan quest legendary edition",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Titan Quest: Legendary Edition",
+        "score": 450,
+        "release_year": 2006,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Titan Quest: Legendary Edition",
+        "score": 350,
+        "release_year": 2006,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 188,
+      "normalized_title": "titanfall 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Titanfall 2",
+        "score": 650,
+        "release_year": 2016,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Titanfall 2",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 189,
+      "normalized_title": "tony hawk s pro skater 3",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Tony Hawk's Pro Skater 3",
+        "score": 450,
+        "release_year": 2001,
+        "directX": "DirectX 8.1"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Tony Hawk's Pro Skater 3",
+        "score": 350,
+        "release_year": 2001,
+        "directX": "DirectX 8.1"
+      }
+    },
+    {
+      "queue_group": 190,
+      "normalized_title": "tony hawk s pro skater 4",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Tony Hawk's Pro Skater 4",
+        "score": 450,
+        "release_year": 2002,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Tony Hawk's Pro Skater 4",
+        "score": 350,
+        "release_year": 2002,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 191,
+      "normalized_title": "total war pharaoh",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Total War: Pharaoh",
+        "score": 3500,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Total War: Pharaoh",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 192,
+      "normalized_title": "total war three kingdoms",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Total War: Three Kingdoms",
+        "score": 3500,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Total War: Three Kingdoms",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 193,
+      "normalized_title": "turok evolution",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Turok: Evolution",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Turok: Evolution",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 194,
+      "normalized_title": "ultrakill",
+      "action": "keep_highest_remove_others",
+      "kept": {
+        "title": "ULTRAKILL",
+        "score": 4500,
+        "release_year": 2024,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed_records": [
+        {
+          "title": "ULTRAKILL",
+          "score": 350,
+          "release_year": 2020,
+          "directX": "DirectX 11"
+        },
+        {
+          "title": "ULTRAKILL",
+          "score": 650,
+          "release_year": 2020,
+          "directX": "DirectX 11"
+        }
+      ]
+    },
+    {
+      "queue_group": 195,
+      "normalized_title": "universe simulator",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Universe Simulator",
+        "score": 450,
+        "release_year": 2016,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Universe Simulator",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 196,
+      "normalized_title": "unpacking",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Unpacking",
+        "score": 650,
+        "release_year": 2021,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Unpacking",
+        "score": 350,
+        "release_year": 2021,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 197,
+      "normalized_title": "unreal tournament 2004",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Unreal Tournament 2004",
+        "score": 450,
+        "release_year": 2004,
+        "directX": "DirectX 9.0c"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Unreal Tournament 2004",
+        "score": 350,
+        "release_year": 2004,
+        "directX": "DirectX 9.0c"
+      }
+    },
+    {
+      "queue_group": 198,
+      "normalized_title": "unreal tournament 3",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Unreal Tournament 3",
+        "score": 450,
+        "release_year": 2007,
+        "directX": "DirectX 9"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Unreal Tournament 3",
+        "score": 350,
+        "release_year": 2007,
+        "directX": "DirectX 9"
+      }
+    },
+    {
+      "queue_group": 199,
+      "normalized_title": "vampire bloodhunt",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Vampire Bloodhunt",
+        "score": 3500,
+        "release_year": 2022,
+        "directX": "DirectX 10"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Vampire Bloodhunt",
+        "score": 350,
+        "release_year": 2022,
+        "directX": "DirectX 10"
+      }
+    },
+    {
+      "queue_group": 200,
+      "normalized_title": "warframe",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Warframe",
+        "score": 450,
+        "release_year": 2013,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Warframe",
+        "score": 350,
+        "release_year": 2013,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 201,
+      "normalized_title": "warhammer 40k dawn of war",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Warhammer 40K: Dawn of War",
+        "score": 450,
+        "release_year": 2007,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Warhammer 40K: Dawn of War",
+        "score": 350,
+        "release_year": 2007,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 202,
+      "normalized_title": "warhammer online",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Warhammer Online",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Warhammer Online",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 203,
+      "normalized_title": "watch dogs",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Watch Dogs",
+        "score": 3500,
+        "release_year": 2014,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Watch Dogs",
+        "score": 350,
+        "release_year": 2014,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 204,
+      "normalized_title": "watch dogs 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Watch Dogs 2",
+        "score": 3500,
+        "release_year": 2016,
+        "directX": "DirectX 720"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Watch Dogs 2",
+        "score": 350,
+        "release_year": 2016,
+        "directX": "DirectX 720"
+      }
+    },
+    {
+      "queue_group": 205,
+      "normalized_title": "watch dogs legion",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Watch Dogs Legion",
+        "score": 3500,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Watch Dogs Legion",
+        "score": 350,
+        "release_year": 2020,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 206,
+      "normalized_title": "wolfenstein new order",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Wolfenstein: New Order",
+        "score": 450,
+        "release_year": 2014,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Wolfenstein: New Order",
+        "score": 350,
+        "release_year": 2014,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 207,
+      "normalized_title": "world of goo",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "World of Goo",
+        "score": 450,
+        "release_year": 2008,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "World of Goo",
+        "score": 350,
+        "release_year": 2008,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 208,
+      "normalized_title": "x plane 11 11",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "X-Plane 11.11",
+        "score": 3500,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "X-Plane 11.11",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 209,
+      "normalized_title": "yakuza 0",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Yakuza 0",
+        "score": 650,
+        "release_year": 2017,
+        "directX": "DirectX 12"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Yakuza 0",
+        "score": 350,
+        "release_year": 2017,
+        "directX": "DirectX 12"
+      }
+    },
+    {
+      "queue_group": 210,
+      "normalized_title": "yakuza like a dragon",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Yakuza: Like a Dragon",
+        "score": 3500,
+        "release_year": 2020,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Yakuza: Like a Dragon",
+        "score": 350,
+        "release_year": 2020,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 211,
+      "normalized_title": "yooka laylee",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Yooka-Laylee",
+        "score": 450,
+        "release_year": 2017,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Yooka-Laylee",
+        "score": 350,
+        "release_year": 2017,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 212,
+      "normalized_title": "yooka laylee and the impossible lair",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Yooka-Laylee and the Impossible Lair",
+        "score": 450,
+        "release_year": 2019,
+        "directX": "Unknown"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Yooka-Laylee and the Impossible Lair",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "Unknown"
+      }
+    },
+    {
+      "queue_group": 213,
+      "normalized_title": "zoo tycoon 2",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Zoo Tycoon 2",
+        "score": 450,
+        "release_year": 2007,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Zoo Tycoon 2",
+        "score": 350,
+        "release_year": 2007,
+        "directX": "DirectX 11"
+      }
+    },
+    {
+      "queue_group": 214,
+      "normalized_title": "battle chess",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Battle Chess",
+        "score": 450,
+        "release_year": 2019,
+        "directX": "DirectX 7"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Battle Chess",
+        "score": 350,
+        "release_year": 2019,
+        "directX": "DirectX 7"
+      }
+    },
+    {
+      "queue_group": 215,
+      "normalized_title": "carnivores dinosaur hunter reborn",
+      "action": "keep_one_remove_other",
+      "kept": {
+        "title": "Carnivores: Dinosaur Hunter Reborn",
+        "score": 450,
+        "release_year": 2003,
+        "directX": "DirectX 11"
+      },
+      "resolution_source": "automatic_350_keep_higher",
+      "removed": {
+        "title": "Carnivores: Dinosaur Hunter Reborn",
+        "score": 350,
+        "release_year": 2003,
+        "directX": "DirectX 11"
+      }
+    }
+  ]
+}
