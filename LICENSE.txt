@@ -1,0 +1,16 @@
+Personal Use License — All Rights Reserved
+
+Copyright (c) 2026 DarkTower7899
+ 
+All rights reserved.
+
+Permission is granted to the individual identified above to use this software and accompanying materials only for personal, non-commercial, non-distributable purposes on devices owned or controlled by that individual. Except as expressly set forth in the previous sentence, no rights are granted.
+
+Specifically, you MAY NOT, without prior written permission from the copyright holder:
+- Copy, reproduce, or distribute the code or any part of the information contained in this repository to any third party;
+- Modify, adapt, translate, reverse engineer, decompile, disassemble, or create derivative works of the code or materials;
+- Sublicense, rent, lease, sell, transfer, or otherwise distribute the code or materials.
+
+This software is provided "AS IS", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the copyright holder be liable for any claim, damages, or other liability arising from, out of, or in connection with the software or the use or other dealings in the software.
+
+If you require a different scope (for example, allowing backups/copies for personal use, or allowing others to view but not modify), tell me and I’ll adjust the wording.
